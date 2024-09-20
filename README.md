@@ -9,4 +9,4 @@
 
 ## Requirements
 
-## External Dependencies and 3rd party Software
+## External Dependencies and 3rd Party Software
