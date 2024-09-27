@@ -1,8 +1,8 @@
 Member number,utorid,Student name,Githubid,Status,Role(s)
-1,howai7,Morris Ho,Morilili,enrolled
-2,hukevi16,Kevin Hu,kev0921,enrolled
-3,leejae82,Jaeyong Lee,jaeyonglee3,enrolled
-4,ludanny1,Danny Lu,dannylu03,enrolled
-5,plakhot1,Daria Plakhotna,plachotnao,enrolled
-6,reedersa,Samuel Reeder,SamuelReeder,enrolled
-7,tianterr,Terry Tian,TerryTian21,enrolled
+1,howai7,Morris Ho,Morilili,enrolled,(Software Engineer, Full-stack)
+2,hukevi16,Kevin Hu,kev0921,enrolled,(Software Engineer, Full-stack)
+3,leejae82,Jaeyong Lee,jaeyonglee3,enrolled,(Software Engineer, Backend, Partner Liaison + Project Manager)
+4,ludanny1,Danny Lu,dannylu03,enrolled,(Software Engineer, Full-stack + DevOps)
+5,plakhot1,Daria Plakhotna,plachotnao,enrolled,(Software Engineer, Full-stack)
+6,reedersa,Samuel Reeder,SamuelReeder,enrolled,(Software Engineer, Backend, Project Manager)
+7,tianterr,Terry Tian,TerryTian21,enrolled,(Software Engineer, Frontend, Infra, Team Leader)
