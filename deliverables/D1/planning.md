@@ -1,51 +1,50 @@
-# YOUR PRODUCT/TEAM NAME
-> _Note:_ This document will evolve throughout your project. You commit regularly to this file while working on the project (especially edits/additions/deletions to the _Highlights_ section). 
+# 19-Machine Learning Group: Null Pointers
+
  > **This document will serve as a master plan between your team, your partner and your TA.**
 
 ## Product Details
  
 #### Q1: What is the product?
+The product is a web application that will enable users to three-dimensionally visualize, thoroughly explore, and interact with complex causal diagrams by means of a set of features including interactive information display, zoom, rotation, and highlighting. The application will feature a user management system for seamless login/logout and diagram saving.
+<img width="384" alt="Screenshot 2024-09-26 at 7 58 29 PM" src="https://github.com/user-attachments/assets/284b9ba4-23c3-4fc3-99a7-ea267315f952">
 
- > Short (1 - 2 min' read)
- * Start with a single sentence, high-level description of the product.
- * Be clear - Describe the problem you are solving in simple terms.
- * Specify if you have a partner and who they are.
- * Be concrete. For example:
-    * What are you planning to build? Is it a website, mobile app, browser extension, command-line app, etc.?      
-    * When describing the problem/need, give concrete examples of common use cases.
-    * Assume your the reader knows nothing about the partner or the problem domain and provide the necessary context. 
- * Focus on *what* your product does, and avoid discussing *how* you're going to implement it.      
-   For example: This is not the time or the place to talk about which programming language and/or framework you are planning to use.
- * **Feel free (and very much encouraged) to include useful diagrams, mock-ups and/or links**.
+This application aims to tackle a prominent issue in the world of machine learning and data science research: the challenging task of visualizing complex causal relationships, particularly those involving several hundred nodes and edges. The goal is to neatly visualize the relationships between several variables or factors in a system, showing how they influence one another. The application should be particularly useful for understanding intricate systems where variables are interdependent and can have non-linear relationships with multiple layers of causality.
+
+This project has applications across several domains including economics, environment studies, political sciences, etc. Possible use cases include exploring how political policy changes can influence the broader economy, or how variables like carbon emissions, temperature rise, and deforestation can impact climate change models.
+We are working with the Machine Learning Group, a research group within the University of Toronto’s Department of Computer Science. We are collaborating directly with research lead and PhD student Sheldon Huang. 
+
 
 
 #### Q2: Who are your target users?
 
-  > Short (1 - 2 min' read max)
- * Be specific (e.g. a 'a third-year university student studying Computer Science' and not 'a student')
- * **Feel free to use personas. You can create your personas as part of this Markdown file, or add a link to an external site (for example, [Xtensio](https://xtensio.com/user-persona/)).**
+There are several different types of users for our project. The main target users are decision-makers that frequently need to make high stake decisions. These people can vary in different domains such as business, technology, or the government. With this visualization tool, it can help them make more informed decisions as they can have more insight into the cause/reason for things that happen. 
+
+Another subset of the target users are researchers. By using our tool, they could gain more insights into the topic they are researching, helping them to approach problems with more insight. 
+
 
 #### Q3: Why would your users choose your product? What are they using today to solve their problem/need?
 
-> Short (1 - 2 min' read max)
- * We want you to "connect the dots" for us - Why does your product (as described in your answer to Q1) fits the needs of your users (as described in your answer to Q2)?
- * Explain the benefits of your product explicitly & clearly. For example:
-    * Save users time (how and how much?)
-    * Allow users to discover new information (which information? And, why couldn't they discover it before?)
-    * Provide users with more accurate and/or informative data (what kind of data? Why is it useful to them?)
-    * Does this application exist in another form? If so, how does your differ and provide value to the users?
-    * How does this align with your partner's organization's values/mission/mandate?
+With our product’s 3D data visualization, it is going to allow our users to quickly and easily identify patterns and causal relationships within the causal data uploaded by the user and gain deeper insights into human cognition and the AI systems they are developing. 
+
+For instance, users will be able to use these patterns and relationships to make accurate predictions for future events that they wouldn’t be able to without having access to such informative data and relationships, such as the outcome of the US election this year. Additionally, our users will save a lot of time by using our product because researchers in this field frequently need to visualize vast amounts of text data, so they will be able to save a lot of time compared to looking at all the data points on a piece of paper and manually identifying the causal relationships and patterns. 
+
+This sort of application exists already, but these tools can only visualize a few nodes at a time, while this product will be able to visualize hundreds or more nodes at the same time with sophisticated visualization tools to aid the user. Since our partner is part of a research team for the Machine Learning Group at UofT, more specifically for AI forecasting, this product would allow them to gain more insights in their current research, as they currently have a need for a tool like this, aligning with their goals to improve and push the boundaries of AI forecasting technology.
+
 
 #### Q4: What are the user stories that make up the Minumum Viable Product (MVP)?
 
- * At least 5 user stories concerning the main features of the application - note that this can broken down further
- * You must follow proper user story format (as taught in lecture) ```As a <user of the app>, I want to <do something in the app> in order to <accomplish some goal>```
- * User stories must contain acceptance criteria. Examples of user stories with different formats can be found here: https://www.justinmind.com/blog/user-story-examples/. **It is important that you provide a link to an artifact containing your user stories**.
- * If you have a partner, these must be reviewed and accepted by them. You need to include the evidence of partner approval (e.g., screenshot from email) or at least communication to the partner (e.g., email you sent)
+
+- As a user, I want to upload a JSON file consisting of nodes and edges that form causal relationships between events, so that I can - generate a 3D graph that visualizes my data.
+- As a user, I want to interact with my graph by zooming, panning, and rotating it, so that I can view parts of the graph in more detail.
+- As a user, I want to manipulate the graph I’ve created by filtering for particular subsets of events and relationships, so I can better understand my underlying data.
+- As a user, I want to search for specific keywords, to view pertinent nodes and observe strong relationships to those nodes. 
+- As a user, I want to identify pronounced causal paths in my data, so I can gain insight into what events are most causally affiliated with others.
+- As a user, I want to share my graph, including my manipulations, so that others can view my visualization.
+- As a user, I want to login to the website and save my graphs and files to my account, so that I can easily access them again later. 
+
 
 #### Q5: Have you decided on how you will build it? Share what you know now or tell us the options you are considering.
 
-> Short (1-2 min' read max)
  * What is the technology stack? Specify languages, frameworks, libraries, PaaS products or tools to be used or being considered. 
  * How will you deploy the application?
  * Describe the architecture - what are the high level components or patterns you will use? Diagrams are useful here. 
@@ -53,30 +52,24 @@
 
 ----
 ## Intellectual Property Confidentiality Agreement 
-> Note this section is **not marked** but must be completed briefly if you have a partner. If you have any questions, please ask on Piazza.
->  
-**By default, you own any work that you do as part of your coursework.** However, some partners may want you to keep the project confidential after the course is complete. As part of your first deliverable, you should discuss and agree upon an option with your partner. Examples include:
-1. You can share the software and the code freely with anyone with or without a license, regardless of domain, for any use.
-2. You can upload the code to GitHub or other similar publicly available domains.
-3. You will only share the code under an open-source license with the partner but agree to not distribute it in any way to any other entity or individual. 
-4. You will share the code under an open-source license and distribute it as you wish but only the partner can access the system deployed during the course.
-5. You will only reference the work you did in your resume, interviews, etc. You agree to not share the code or software in any capacity with anyone unless your partner has agreed to it.
 
-**Your partner cannot ask you to sign any legal agreements or documents pertaining to non-disclosure, confidentiality, IP ownership, etc.**
+Partner has agreed to open-source software. We will be choosing option 2 here.
 
-Briefly describe which option you have agreed to.
+“You can upload the code to GitHub or other similar publicly available domains.”
 
-----
 
 ## Teamwork Details
 
 #### Q6: Have you met with your team?
 
-Do a team-building activity in-person or online. This can be playing an online game, meeting for bubble tea, lunch, or any other activity you all enjoy.
-* Get to know each other on a more personal level.
-* Provide a few sentences on what you did and share a picture or other evidence of your team building activity.
-* Share at least three fun facts from members of you team (total not 3 for each member).
+After the partner meeting, the team gathered for some casual conversation. We discussed topics ranging from hobbies to current courses to weekend plans. 
 
+
+Fun Fact 1: One of our team members is an exchange student from Ukraine.
+
+Fun Fact 2: Our team can speak a combined total of 8 different languages.
+
+Fun Fact 3: One of our team members is 6’5.
 
 #### Q7: What are the roles & responsibilities on the team?
 
@@ -103,52 +96,41 @@ Describe meetings (and other events) you are planning to have.
   
 #### Q9: How will you organize your team?
 
-List/describe the artifacts you will produce in order to organize your team.       
+We will primarily use a Trello workspace with a Kanban board setup for organizing the team. This workspace will consist of three columns: “To Do”, “Doing”, and “Done”, that collectively demonstrate the progress on our project tasks. In addition, these tasks will be labeled with participating members, priorities, expected completion dates, and link to the coinciding branch of pull request on GitHub. We will resolve this board as a group, by mutually assigning tasks and discussing appropriate completion dates as per the weekly expectations in the project overview document.
 
- * Artifacts can be To-Do lists, Task boards, schedule(s), meeting minutes, etc.
- * We want to understand:
-   * How do you keep track of what needs to get done? (You must grant your TA and partner access to systems you use to manage work)
-   * **How do you prioritize tasks?**
-   * How do tasks get assigned to team members?
-   * How do you determine the status of work from inception to completion?
+We will use Git for repository management and version control for our software. Likewise, we will use GitHub as our remote. We will create branches for each disjoint in-progress task, use pull-requests to merge branches to main where each pull request will be reviewed and tested by two independent team-members before approval for merging. Moreover, pull requests will have Git hooks enabled for automatic pre-commit checking. We will maintain a stable main branch for serving our application. 
 
 #### Q10: What are the rules regarding how your team works?
 
-**Communications:**
- * What is the expected frequency? What methods/channels will be used? 
- * If you have a partner project, what is your process for communicating with your partner?
- 
-**Collaboration: (Share your responses to Q8 & Q9 from A1)**
- * How are people held accountable for attending meetings, completing action items? Is there a moderator or process?
- * How will you address the issue if one person doesn't contribute or is not responsive?
+We will meet with our partner at least once a week to either report our progress or discuss any difficulties we are encountering throughout the projects. The primary communication channel between the team and partner will be through discord. Weekly check ups will be done through virtual platforms like discord or google meets. Otherwise, we will be able to meet in person. 
 
-## Organisation Details
+We have a dedicated team lead and project manager to make sure everyone is doing their work and meeting deadlines. Everyone is expected to be at meetings unless communicated beforehand. If anyone misses a meeting or a deadline, the team lead or project manager be in touch with the member to check in. If a member continues to not contribute to the project, the entire team will have a meeting to discuss the next steps, whether it is giving a hard deadline to the member or escalating the issue to the teaching team. 
+
 
 #### Q11. How does your team fit within the overall team organisation of the partner?
-* Given the team structure of your partner, what role do you think your team will play?
-* Examples include product development that includes developing new features, or quality assurance that includes developing features that test the product reliability, or software maintenance that includes fixing crucial bugs in the product.
-* Provide examples of why you think you fit this role.
+
+Our team is mostly focused on creating the 3D visualization of a causal diagram. The actual nodes and edges that we have to graph in the diagram are provided by the partner team. As implementing forecasting is too complicated for the scope of this course, our team will use the forecasts from the partner team to create our graph. Thus, our team will present an interactive visual representation of the partner team’s work in forecasting. 
+
+
 
 #### Q12. How does your project fit within the overall product from the partner?
-* Look at the big picture of the product and think about how your project fits into this product.
-* Is your project the first step towards building this product? Is it the first prototype? Are you developing the frontend of a product whose backend is developed by the partner? Are you building the release pipelines for a product that is developed by the partner? Are you building a core feature set and take full ownership of these features?
-* You should also provide details of who else is contributing to what parts of the product, if you have this information. This is more important if the project that you will be working on has strong coupling with parts that will be contributed to by members other than your team (e.g. from partner).
-* You can be creative for these questions and even use a graphical or pictorial representation to demonstrate the fit.
+The partner mentioned that this visualization is an important part of the big picture since a lot of other researchers struggled to visualize and correlate the causes and effects of a certain topic. What we are creating will be the first prototype of the project. We are building a full stack web application, with a focus on frontend causal diagram visualizations. Our partner also has another CSC301 team working on a software platform that gathers global data to enhance an AI agent's ability to forecast significant future events. The partner has mentioned that at the end of the project, ideally we can integrate these two parts of the projects, as one team enables the software platform to gather global data, and our team will be visualizing the causal relationships. Below is a picture of the visualization our team would like to achieve, given the collected data provided from the software platform the other team is working on.  
+
+<img width="504" alt="Screenshot 2024-09-26 at 8 03 10 PM" src="https://github.com/user-attachments/assets/c9a1f779-cc27-4086-8480-375ff7ebfb6c">
+
 
 ## Potential Risks
 
 #### Q13. What are some potential risks to your project?
-* Now that you have defined your project, what risks can you identify that might impact it?
-* Some examples of risks at this planning stage could include:
-  * Uncertainties regarding a specific feature
-  * Lack of clarity in execution
-  * Insufficient discussion with partners
-  * User stories that are too abstract or too simple
-* For each risk, provide a brief bullet point and then explain the risk in detail. 
+- Risk of Misunderstanding by End Users
+
+ End users often misunderstand and there is a huge risk in delivering a wrong message to them or confusing them more than helping them understand the data. This can have negative impacts on decision-making.
+
+- Scalability and performance issues.
+
+Using many libraries instead of creating algorithms from scratch could lead to performance problems, particularly with larger datasets. This reliance might result in less focus on optimizing performance.
+
 
 #### Q14. What are some potential mitigation strategies for the risks you identified?
-* Examples of mitigation strategies:
-  * More communication with the partner might help with improving clarity.
-  * Adding more details for an user story might make it less abstract.
-  * Adding an extra user story might increase the project complexity, making it less simple.
-* It's ok if you are unable to find mitigation strategies for all the risks right now.
+First, the tool should allow people to visualize the same data in different ways, to explore it from different perspectives. This would at least mitigate the problems of one sided perspective.
+Second, we will carefully evaluate the underlying implementation of library functions and their time complexities. Additionally, we will conduct performance testing on large datasets to ensure scalability and efficiency.
