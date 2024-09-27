@@ -6,7 +6,10 @@
  
 #### Q1: What is the product?
 The product is a web application that will enable users to three-dimensionally visualize, thoroughly explore, and interact with complex causal diagrams by means of a set of features including interactive information display, zoom, rotation, and highlighting. The application will feature a user management system for seamless login/logout and diagram saving.
-<img width="384" alt="Screenshot 2024-09-26 at 7 58 29 PM" src="https://github.com/user-attachments/assets/284b9ba4-23c3-4fc3-99a7-ea267315f952">
+
+<p align="center">
+  <img width="384" alt="Screenshot 2024-09-26 at 7 58 29 PM" src="https://github.com/user-attachments/assets/284b9ba4-23c3-4fc3-99a7-ea267315f952">
+</p>
 
 This application aims to tackle a prominent issue in the world of machine learning and data science research: the challenging task of visualizing complex causal relationships, particularly those involving several hundred nodes and edges. The goal is to neatly visualize the relationships between several variables or factors in a system, showing how they influence one another. The application should be particularly useful for understanding intricate systems where variables are interdependent and can have non-linear relationships with multiple layers of causality.
 
@@ -116,8 +119,9 @@ Our team is mostly focused on creating the 3D visualization of a causal diagram.
 #### Q12. How does your project fit within the overall product from the partner?
 The partner mentioned that this visualization is an important part of the big picture since a lot of other researchers struggled to visualize and correlate the causes and effects of a certain topic. What we are creating will be the first prototype of the project. We are building a full stack web application, with a focus on frontend causal diagram visualizations. Our partner also has another CSC301 team working on a software platform that gathers global data to enhance an AI agent's ability to forecast significant future events. The partner has mentioned that at the end of the project, ideally we can integrate these two parts of the projects, as one team enables the software platform to gather global data, and our team will be visualizing the causal relationships. Below is a picture of the visualization our team would like to achieve, given the collected data provided from the software platform the other team is working on.  
 
-<img width="504" alt="Screenshot 2024-09-26 at 8 03 10 PM" src="https://github.com/user-attachments/assets/c9a1f779-cc27-4086-8480-375ff7ebfb6c">
-
+<p align="center">
+  <img width="504" alt="Screenshot 2024-09-26 at 8 03 10 PM" src="https://github.com/user-attachments/assets/c9a1f779-cc27-4086-8480-375ff7ebfb6c">
+</p>
 
 ## Potential Risks
 
