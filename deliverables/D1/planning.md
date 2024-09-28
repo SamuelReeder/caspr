@@ -44,7 +44,7 @@ This sort of application exists already, but these tools can only visualize a fe
 - As a user, I want to identify pronounced causal paths in my data, so I can gain insight into what events are most causally affiliated with others.
 - As a user, I want to share my graph, including my manipulations, so that others can view my visualization.
 - As a user, I want to login to the website and save my graphs and files to my account, so that I can easily access them again later. 
-
+- As a user, I want to search for other user's public graphs based on titles and keywords. This should yield a page of relevant results so that I can choose what graph(s) to view.
 
 #### Q5: Have you decided on how you will build it? Share what you know now or tell us the options you are considering.
 
