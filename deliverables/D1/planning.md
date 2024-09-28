@@ -51,7 +51,10 @@ This sort of application exists already, but these tools can only visualize a fe
 #### Q5: Have you decided on how you will build it? Share what you know now or tell us the options you are considering.
 
 <p align="center">
-  <img width="480" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/c6382114-26d3-40ad-8245-19332bf31e72">
+  <img width="720" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/c6382114-26d3-40ad-8245-19332bf31e72">
+</p>
+<p align="center">
+  Architecture Diagram of the Application
 </p>
 
 **Front-End**
