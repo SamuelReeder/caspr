@@ -14,7 +14,9 @@ The product is a web application that will enable users to three-dimensionally v
 This application aims to tackle a prominent issue in the world of machine learning and data science research: the challenging task of visualizing complex causal relationships, particularly those involving several hundred nodes and edges. The goal is to neatly visualize the relationships between several variables or factors in a system, showing how they influence one another. The application should be particularly useful for understanding intricate systems where variables are interdependent and can have non-linear relationships with multiple layers of causality.
 
 This project has applications across several domains including economics, environment studies, political sciences, etc. Possible use cases include exploring how political policy changes can influence the broader economy, or how variables like carbon emissions, temperature rise, and deforestation can impact climate change models.
-We are working with the Machine Learning Group, a research group within the University of Toronto’s Department of Computer Science. We are collaborating directly with research lead and PhD student Sheldon Huang. 
+We are working with the Machine Learning Group, a research group within the University of Toronto’s Department of Computer Science. We are collaborating directly with research lead and PhD student Sheldon Huang.
+
+Here is a link to a mock-up UI design done in Figma: https://www.figma.com/design/tgERL2Ge8QBxLZTVK8g57m/Untitled?node-id=1-1702&t=o5M6y1jZ8kojT867-1
 
 
 
