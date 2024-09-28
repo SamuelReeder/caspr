@@ -1,14 +1,24 @@
 Who are your partners?
 
 Parter Name: Sheldon Huang
-Partner Title: 
-Partner Email: 
-Primary or Secondary Contact: 
+Partner Title: Research Lead
+Partner Email: huang@cs.toronto.edu
+Primary or Secondary Contact: Primary
 
 Parter Name: Yuchen Wang
-Partner Title: 
-Partner Email: 
-Primary or Secondary Contact:
+Partner Title: Software Lead
+Partner Email: N/A - not provided
+Primary or Secondary Contact: Primary
+
+Parter Name: Ezra Karger
+Partner Title: Data Lead
+Partner Email: N/A - not provided
+Primary or Secondary Contact: Secondary
+
+Parter Name: Prof. Roger Grosse
+Partner Title: Advisor
+Partner Email: N/A - not provided
+Primary or Secondary Contact: Secondary
 
 ==================================================
 
@@ -16,4 +26,3 @@ Who is your TA and what is their email?
 
 TA Name: Aneri Gandhi
 TA Email: anu.gandhi@mail.utoronto.ca
-
