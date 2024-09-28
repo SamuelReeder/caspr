@@ -50,10 +50,57 @@ This sort of application exists already, but these tools can only visualize a fe
 
 #### Q5: Have you decided on how you will build it? Share what you know now or tell us the options you are considering.
 
- * What is the technology stack? Specify languages, frameworks, libraries, PaaS products or tools to be used or being considered. 
- * How will you deploy the application?
- * Describe the architecture - what are the high level components or patterns you will use? Diagrams are useful here. 
- * Will you be using third party applications or APIs? If so, what are they?
+<p align="center">
+  <img width="480" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/c6382114-26d3-40ad-8245-19332bf31e72">
+</p>
+
+**Front-End**
+- **Technology**: Three.js, WebGL, React, TypeScript
+- **Role**: 
+  - Render 3D causal diagrams.
+  - Manage user interactions such as zooming, rotating, and filtering.
+  - Display additional information for nodes and edges.
+
+**Back-End**
+- **Technology**: Node.js, Express, Firebase (or equivalent NoSQL database)
+- **Role**: 
+  - Handle user sessions, permissions, and data storage.
+  - Manage server-side processing.
+  - Handle user accounts, permissions, and access controls.
+
+**Database**
+- **Technology**: Firebase (or an equivalent NoSQL database)
+- **Role**: 
+  - Store user accounts, permissions, 3D diagrams, and metadata.
+  - Enable search functionality for diagrams based on attributes and content.
+
+**3D Graphics Engine**
+- **Technology**: Three.js, WebGL
+- **Role**: 
+  - Render 3D diagrams.
+  - Enable user interactions with smooth transitions, lighting, and animations.
+
+**Data Processing**
+- **Technology**: Python
+- **Role**: 
+  - Process user-uploaded data and convert large datasets into node-edge formats.
+  - Enable advanced filtering functionalities such as parent-child chains and time-based filtering.
+
+**Deployment**
+- **Technology**: AWS
+- **Role**: 
+  - Host and manage the application.
+
+**Containerization**
+- **Technology**: Docker
+- **Role**: 
+  - Containerize the front-end and back-end independently for encapsulation of dependencies and runtime environments.
+  - Containers will be used for development, with potential usage in production deployment based on environmental requirements.
+
+**Software Design Patterns**
+- **Patterns**: 
+  - Object-Oriented Programming (OOP)
+  - Data Abstraction Layer
 
 ----
 ## Intellectual Property Confidentiality Agreement 
