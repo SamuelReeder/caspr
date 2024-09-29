@@ -58,50 +58,50 @@ This sort of application exists already, but these tools can only visualize a fe
 </p>
 
 **Front-End**
-- **Technology**: Three.js, WebGL, React, TypeScript
-- **Role**: 
+- Technology: Three.js, WebGL, React, TypeScript
+- Role: 
   - Render 3D causal diagrams.
   - Manage user interactions such as zooming, rotating, and filtering.
   - Display additional information for nodes and edges.
 
 **Back-End**
-- **Technology**: Node.js, Express, Firebase (or equivalent NoSQL database)
-- **Role**: 
+- Technology: Node.js, Express, Firebase, DynamoDB
+- Role: 
   - Handle user sessions, permissions, and data storage.
   - Manage server-side processing.
   - Handle user accounts, permissions, and access controls.
 
 **Database**
-- **Technology**: Firebase (or an equivalent NoSQL database)
-- **Role**: 
+- Technology: Firebase (or an equivalent NoSQL database)
+- Role: 
   - Store user accounts, permissions, 3D diagrams, and metadata.
   - Enable search functionality for diagrams based on attributes and content.
 
 **3D Graphics Engine**
-- **Technology**: Three.js, WebGL
-- **Role**: 
+- Technology: Three.js, WebGL
+- Role: 
   - Render 3D diagrams.
   - Enable user interactions with smooth transitions, lighting, and animations.
 
 **Data Processing**
-- **Technology**: Python
-- **Role**: 
+- Technology: Python
+- Role: 
   - Process user-uploaded data and convert large datasets into node-edge formats.
   - Enable advanced filtering functionalities such as parent-child chains and time-based filtering.
 
 **Deployment**
-- **Technology**: AWS
-- **Role**: 
+- Technology: AWS
+- Role: 
   - Host and manage the application.
 
 **Containerization**
-- **Technology**: Docker
-- **Role**: 
+- Technology: Docker
+- Role: 
   - Containerize the front-end and back-end independently for encapsulation of dependencies and runtime environments.
   - Containers will be used for development, with potential usage in production deployment based on environmental requirements.
 
 **Software Design Patterns**
-- **Patterns**: 
+- Patterns: 
   - Object-Oriented Programming (OOP)
   - Data Abstraction Layer
 
