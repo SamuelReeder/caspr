@@ -158,7 +158,7 @@ List each team member and:
 
 **Kevin: Software Engineer, Full-stack**
 - Kevin will be working on the UI for the 3D visualization of the causal graphs. 
-- Kevin will also work on the search page and the database search functionality. 
+- Kevin will also work on the graph saving functionality. 
 - Kevin's interest and experiece in full stack and frontend development at various companies and his current startup makes him a great option for this task. 
 - Although Kevin does not have experience with 3D visualization, he would like to take this project as an opportunity to learn this skill. 
 
