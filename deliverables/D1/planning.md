@@ -138,17 +138,49 @@ List each team member and:
  * A description of their role(s) and responsibilities including the components they'll work on and non-software related work
  * Why did you choose them to take that role? Specify if they are interested in learning that part, experienced in it, or any other reasons. Do no make things up. This part is not graded but may be reviewed later.
 
+**Terry: Software Engineer, Frontend, Infra, Team Leader**
+- Since Terry has worked at 3 different internships for the past 12 months prior to this academic term, he has a lot of experience working in different professional environments. Thus, we believed that he would be best suited to be the team leader to help direct this project.
+
+**Jaeyong: Software Engineer, Backend, Partner Liaison + Project Manager**
+- Jaeyong’s interests and skills lie in backend development from previous internships and research lab experiences. He’s also got experience working with databases having taken CSC343, and will help out on the frontend side of things whenever necessary.
+- Specific aspects he’ll work on: overseeing meeting minutes, all communications with partner, server/API set-up and programming, database schema design, JWT auth, etc.
+- He is also organized and has good communication skills, which is why he is interested in project management and partner liaison duties.
+
+**Sam: Software Engineer, Backend, Project Manager**
+- Sam will be Project Manager, focused coordinating the team’s collective work through Trello and using the team’s input to steer the project in the right direction. In addition, he will be working on the backend of the visualization software, working on API requests related to searches, accounts, and saving and loading graphs. 
+- Sam is interested in learning about effective project management, so this course offered him a good opportunity to manage a group to successfully deliver the project. He hopes to leverage existing leadership skills and learn from his team-members to optimize his abilities. Sam also chose backend development to engage in technical work focused on system architecture and data handling. This is suitable as he has experience developing backend APIs and data-oriented programs. 
+
+**Danny: Software Engineer, Full-stack + DevOps**
+- Danny will be working on the UI for the causal graph and data management and search
+- Danny will also handle DevOps such as containerizing the project with Docker
+- As Danny has professional experience from internships for working on both frontend and backend, he would be useful as a Full-stack developer. 
+- Since he has not done much work with DevOps, he wants to take this opportunity to get more experience with it and learn more about how to incorporate it in a project. 
+
+**Kevin: Software Engineer, Full-stack**
+- Kevin will be working on the UI for the causal graph
+
+
+**Morris: Software Engineer, Full-stack**
+- Morris will be working on the UI for the casual graph
+- Morris’ interests in backend development coupled with his experience in database management, along with his willingness to learn and contribute to the frontend will help him as a full stack engineer
+
+
+**Daria: Software Engineer, Full-stack**
+- Daria will be working on implementing the UI of the application itself
+- Will be helping with the UI for the causal graph
+- Will be helping with the mockups and designs of various components of the product
+
 
 #### Q8: How will you work as a team?
 
-Describe meetings (and other events) you are planning to have. 
- * When and where? Recurring or ad hoc? In-person or online?
- * What's the purpose of each meeting?
- * Other events could be coding sessions, code reviews, quick weekly sync meeting online, etc.
- * You should have 2 meetings with your project partner (if you have one) before D1 is due. Describe them here:
-   * You must keep track of meeting minutes and add them to your repo under "deliverables/minutes" folder
-   * You must have a regular meeting schedule established for the rest of the term.  
-  
+Once we have concluded project expectations with the partner and started coding, we will send standup messages to our discord channel every Monday, Wednesday, Friday, updating each other on what we’ve done and will do. Other miscellaneous tasks will be communicated through our instagram chat. Additionally, a discord server has been set up between our team and our partner for easy communication.
+
+Events such as coding sessions and code reviews will be done in ad hoc fashion if needed and agreed upon team members. Additionally, weekly meetings will take place once a week online.
+
+First meeting with partner: Brief meeting where we first introduced ourselves, then we went through the design documents, further consolidating requirements with the partner. Further details can be found in the meeting minutes folder.
+
+Second meeting with partner: Friday Sept 27 to finalize some details and establish a regular meeting schedule.
+
 #### Q9: How will you organize your team?
 
 We will primarily use a Trello workspace with a Kanban board setup for organizing the team. This workspace will consist of three columns: “To Do”, “Doing”, and “Done”, that collectively demonstrate the progress on our project tasks. In addition, these tasks will be labeled with participating members, priorities, expected completion dates, and link to the coinciding branch of pull request on GitHub. We will resolve this board as a group, by mutually assigning tasks and discussing appropriate completion dates as per the weekly expectations in the project overview document.
