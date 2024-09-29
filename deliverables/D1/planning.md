@@ -157,8 +157,10 @@ List each team member and:
 - Since he has not done much work with DevOps, he wants to take this opportunity to get more experience with it and learn more about how to incorporate it in a project. 
 
 **Kevin: Software Engineer, Full-stack**
-- Kevin will be working on the UI for the causal graph
-
+- Kevin will be working on the UI for the 3D visualization of the causal graphs. 
+- Kevin will also work on the search page and the database search functionality. 
+- Kevin's interest and experiece in full stack and frontend development at various companies and his current startup makes him a great option for this task. 
+- Although Kevin does not have experience with 3D visualization, he would like to take this project as an opportunity to learn this skill. 
 
 **Morris: Software Engineer, Full-stack**
 - Morris will be working on the UI for the casual graph
