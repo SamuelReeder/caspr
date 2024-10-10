@@ -1,11 +1,11 @@
-import { ChakraProvider } from '@chakra-ui/react'
+import RootLayout from "./layout";
 
 export default function Home() {
   return (
-    <ChakraProvider>
+    <RootLayout>
       <div>
         <h1>Hello world!</h1>
       </div>
-    </ChakraProvider>
+    </RootLayout>
   );
 }
