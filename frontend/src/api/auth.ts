@@ -3,8 +3,9 @@
  */
 
 import { app, db, auth } from "@/config/firebaseConfig";
-import * as firebaseAuth  from "firebase/auth"; // change this
-import { User } from "@/types";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { AuthenticatedUser, User } from "@/types";
+import { getUser } from "./firestore";
 
 /**
  * Create account with email and password.
@@ -33,8 +34,19 @@ export const createAccountWithGoogle = async (): Promise<any> => {
  * @returns A promise that resolves to the authenticated user.
  * @Samuel
  */
-export const loginWithEmail = async (email: string, password: string): Promise<any> => {
-	// Implementation here
+export const loginWithEmail = async (email: string, password: string): Promise<AuthenticatedUser> => {
+	const auth = getAuth();
+	try {
+		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		const firebaseUser = userCredential.user;
+
+		const firestoreUser = await getUser(firebaseUser.uid);
+
+		return { firebaseUser, firestoreUser };
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
 
 /**
@@ -42,9 +54,40 @@ export const loginWithEmail = async (email: string, password: string): Promise<a
  * @returns A promise that resolves to the authenticated user.
  * @Samuel
  */
-export const loginWithGoogle = async (): Promise<any> => {
-	// Implementation here
+export const loginWithGoogle = async (): Promise<void> => {
+	const auth = getAuth();
+	const provider = new GoogleAuthProvider();
+	try {
+		await signInWithRedirect(auth, provider);
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
+
+/**
+ * Handle Google redirect result.
+ * @returns A promise that resolves to the authenticated user.
+ * @Samuel
+ */
+export const handleGoogleRedirect = async (): Promise<AuthenticatedUser> => {
+	const auth = getAuth();
+	try {
+	  const result = await getRedirectResult(auth);
+	  if (result) {
+		const firebaseUser = result.user;
+  
+		const firestoreUser = await getUser(firebaseUser.uid);
+  
+		return { firebaseUser, firestoreUser };
+	  } else {
+		throw new Error("no redirect");
+	  }
+	} catch (error) {
+	  console.error(error);
+	  throw error;
+	}
+  };
 
 /**
  * Universal logout.

@@ -4,15 +4,29 @@
 
 import { db } from "@/config/firebaseConfig";
 import { User } from "@/types";
-import * as firestore from "firebase/firestore"; // change
+import { doc, DocumentData, getDoc } from "firebase/firestore";
 
 /**
  * Get a user document from Firestore.
  * @param uid - The user's UID.
  * @returns A promise that resolves to the user document.
+ * @Samuel
  */
-export const getUser = async (uid: string): Promise<void> => {
-	// return user
+export const getUser = async (uid: string): Promise<User> => {
+	try {
+		// assuming we use "users" collection
+		const userDocRef = doc(db, "users", uid);
+		const userDoc = await getDoc(userDocRef);
+
+		if (userDoc.exists()) {
+			return userDoc.data() as User; // cast to type; ensure fields are correct
+		} else {
+			throw new Error("document not found");
+		}
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
 
 /**
