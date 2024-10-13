@@ -1,0 +1,10 @@
+.node-tooltip {
+    color: white;
+    background: rgba(0, 0, 0, 0.75);
+    padding: 8px;
+    border-radius: 5px;
+    display: inline-block;
+    white-space: nowrap;
+    user-select: none;
+  }
+  
