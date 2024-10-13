@@ -16,6 +16,10 @@
     "@emotion/styled": "^11.13.0",
     "@react-three/drei": "^9.114.3",
     "@react-three/fiber": "^8.17.10",
+    "@types/d3-force": "^3.0.10",
+    "d3": "^7.9.0",
+    "d3-force": "^3.0.0",
+    "d3-force-3d": "^3.0.5",
     "firebase": "^10.14.0",
     "framer-motion": "^11.11.8",
     "next": "14.2.14",
@@ -24,6 +28,7 @@
     "three": "^0.169.0"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

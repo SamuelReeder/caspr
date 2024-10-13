@@ -17,12 +17,13 @@ const Node: React.FC<NodeProps> = ({ position, label, value, category, color }) 
 
   return (
     <mesh
+    scale={[2, 2, 2]}
       ref={meshRef}
       position={position}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-      <sphereGeometry args={[0.5, 32, 32]} />
+     <sphereGeometry args={[2, 32, 32]} /> 
       <meshStandardMaterial color={color} /> 
       {hovered && (
         <Html>

@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import * as d3 from 'd3';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import Node from './Node';
 import Edge from './Edge';
+import CameraController from './CameraController';
 import { NodeType } from '../types/node';
 import { EdgeType } from '../types/edge';
 
@@ -10,7 +11,6 @@ interface CausalDiagramProps {
   nodes: NodeType[];
   edges: EdgeType[];
 }
-
 const colors = [
   '#195c90',
   '#ffffff',
@@ -34,41 +34,38 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
   };
 
   useEffect(() => {
-    const initialPositions: { [key: string]: [number, number, number] } = {};
-    const width = 800;
-    const height = 600;
+    // use d3.js for nodes positions
+    const simulation = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(edges).id((d: any) => d.id).distance(10))
+      .force('charge', d3.forceManyBody().strength(-10))
+      .force('center', d3.forceCenter(0, 0))
+      .force('collision', d3.forceCollide().radius(20))
+      .on('tick', () => {
+        const positions: { [key: string]: [number, number, number] } = {};
+        nodes.forEach((node: any) => {
+          positions[node.id] = [node.x ?? 0, node.y ?? 0, 0];
+        });
+        setNodePositions(positions);
+      });
 
-    nodes.forEach((node, index) => {
-      const x = (Math.random() - 0.5) * width * 0.05;
-      const y = (Math.random() - 0.5) * height * 0.05;
-      const z = (Math.random() - 0.5) * width * 0.1; 
-      initialPositions[node.id] = [x, y, z];
-    });
-
-    edges.forEach((edge) => {
-      const sourcePos = initialPositions[edge.source];
-      const targetPos = initialPositions[edge.target];
-
-      const adjustmentFactor = 0.2;
-      const midX = (sourcePos[0] + targetPos[0]) / 2;
-      const midY = (sourcePos[1] + targetPos[1]) / 2;
-      const midZ = (sourcePos[2] + targetPos[2]) / 2;
-
-      initialPositions[edge.target] = [
-        midX * (1 - adjustmentFactor) + targetPos[0] * adjustmentFactor,
-        midY * (1 - adjustmentFactor) + targetPos[1] * adjustmentFactor,
-        midZ * (1 - adjustmentFactor) + targetPos[2] * adjustmentFactor,
-      ];
-    });
-
-    setNodePositions(initialPositions);
+    return () => {
+      simulation.stop();
+    };
   }, [nodes, edges]);
-  
+
   return (
-    <Canvas style={{ width: '1280px', height: '720px' }}>
-      <ambientLight intensity={1} />
-      <pointLight position={[10, 10, 10]} />
-      <OrbitControls enableZoom={true} enablePan={true} panSpeed={2} />
+    <Canvas
+      camera={{
+        position: [0, 0, 100],
+        fov: 50,
+        near: 0.1,
+        far: 5000, 
+      }}
+      style={{ width: '100%', height: '720px' }}
+    >
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 10]} intensity={1} />
+      <CameraController nodePositions={nodePositions} />
 
       {Object.keys(nodePositions).length > 0 &&
         nodes.map((node) => (
@@ -81,16 +78,23 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
             color={getColorByCategory(node.category)}
           />
         ))}
+      {Object.keys(nodePositions).length > 0 &&
+        edges.map((edge) => {
+          const sourcePosition = nodePositions[(edge.source as any).id];
+          const targetPosition = nodePositions[(edge.target as any).id];
 
-      {edges.map((edge, index) => (
-        <Edge
-          key={index}
-          sourcePosition={nodePositions[edge.source]}
-          targetPosition={nodePositions[edge.target]}
-          relationship={edge.relationship}
-          strength={edge.strength}
-        />
-      ))}
+          if (!sourcePosition || !targetPosition) return null;
+
+          return (
+            <Edge
+              key={`${(edge.source as any).id}-${(edge.target as any).id}`}
+              sourcePosition={sourcePosition}
+              targetPosition={targetPosition}
+              relationship={edge.relationship}
+              strength={edge.strength}
+            />
+          );
+        })}
     </Canvas>
   );
 };
