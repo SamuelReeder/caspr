@@ -24,6 +24,8 @@ const colors = [
 const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
   const categoryColorMap = useRef<{ [key: string]: string }>({}).current;
   const [nodePositions, setNodePositions] = useState<{ [key: string]: [number, number, number] }>({});
+  const zPositions = useRef<{ [key: string]: number }>({});
+  const [isInteracting, setIsInteracting] = useState(false); 
 
   // function to assign colors based on category (same color for nodes from one category)
   const getColorByCategory = (category: string): string => {
@@ -34,16 +36,22 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
   };
 
   useEffect(() => {
+    nodes.forEach((node) => {
+      if (!zPositions.current[node.id]) {
+        zPositions.current[node.id] = Math.random() * 100 - 50;
+      }
+    });
+
     // use d3.js for nodes positions
     const simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(edges).id((d: any) => d.id).distance(10))
-      .force('charge', d3.forceManyBody().strength(-10))
+      .force('charge', d3.forceManyBody().strength(-5))
       .force('center', d3.forceCenter(0, 0))
-      .force('collision', d3.forceCollide().radius(20))
+      .force('collision', d3.forceCollide().radius(40))
       .on('tick', () => {
         const positions: { [key: string]: [number, number, number] } = {};
         nodes.forEach((node: any) => {
-          positions[node.id] = [node.x ?? 0, node.y ?? 0, 0];
+          positions[node.id] = [node.x ?? 0, node.y ?? 0,  zPositions.current[node.id]];
         });
         setNodePositions(positions);
       });
@@ -61,11 +69,11 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
         near: 0.1,
         far: 5000, 
       }}
-      style={{ width: '100%', height: '720px' }}
+      style={{ width: '100%', height: '910px' }}
     >
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={1.0} />
       <directionalLight position={[10, 10, 10]} intensity={1} />
-      <CameraController nodePositions={nodePositions} />
+      <CameraController nodePositions={nodePositions} setIsInteracting={setIsInteracting}/>
 
       {Object.keys(nodePositions).length > 0 &&
         nodes.map((node) => (
@@ -76,6 +84,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
             value={node.value}
             category={node.category}
             color={getColorByCategory(node.category)}
+            isInteracting={isInteracting}
           />
         ))}
       {Object.keys(nodePositions).length > 0 &&

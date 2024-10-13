@@ -9,9 +9,10 @@ interface NodeProps {
   value: number;
   category: string;
   color: string;
+  isInteracting: boolean;
 }
 
-const Node: React.FC<NodeProps> = ({ position, label, value, category, color }) => {
+const Node: React.FC<NodeProps> = ({ position, label, value, category, color, isInteracting }) => {
   const meshRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -20,10 +21,10 @@ const Node: React.FC<NodeProps> = ({ position, label, value, category, color }) 
     scale={[2, 2, 2]}
       ref={meshRef}
       position={position}
-      onPointerOver={() => setHovered(true)}
+      onPointerOver={() => !isInteracting && setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-     <sphereGeometry args={[2, 32, 32]} /> 
+     <sphereGeometry args={[6, 32, 32]} /> 
       <meshStandardMaterial color={color} /> 
       {hovered && (
         <Html>
