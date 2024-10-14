@@ -17,7 +17,7 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   );
 };
 
-export const useSearch = (p0?: { name: string; }[]) => {
+export const useSearch = () => {
   const context = useContext(SearchResultsContext);
   if (!context) {
     throw new Error('useSearch must be used within a SearchProvider');

@@ -24,7 +24,7 @@ export default function Sidebar() {
                 <Link href="/" className="hover:text-gray-400">
                     My Graphs
                 </Link>
-                <Link href="#" className="hover:text-gray-400">
+                <Link href="/SharedWithMe" className="hover:text-gray-400">
                     Shared With Me
                 </Link>
                 <Link href="/SearchPage" className="hover:text-gray-400">
