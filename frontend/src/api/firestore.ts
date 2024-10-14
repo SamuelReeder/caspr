@@ -2,9 +2,9 @@
  * Firestore API
  */
 
-import { db } from "@/config/firebaseConfig";
+import { db, app } from "@/config/firebaseConfig";
 import { User } from "@/types";
-import * as firestore from "firebase/firestore"; // change
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 /**
  * Get a user document from Firestore.
@@ -12,7 +12,7 @@ import * as firestore from "firebase/firestore"; // change
  * @returns A promise that resolves to the user document.
  */
 export const getUser = async (uid: string): Promise<void> => {
-	// return user
+  // return user
 };
 
 /**
@@ -22,16 +22,32 @@ export const getUser = async (uid: string): Promise<void> => {
  * @Danny
  */
 export const createUser = async (user: User): Promise<void> => {
-	// implement
-};
+  const firestore = getFirestore(app);
 
+  try {
+    const userDocumentRef = doc(firestore, "users", user.uid);
+
+    await setDoc(userDocumentRef, {
+      uid: user.uid,
+      name: user.name,
+      email: user.email,
+      photoURL: user.photoURL,
+      createdAt: user.createdAt,
+      roles: user.roles,
+    });
+
+    console.log("success");
+  } catch (error) {
+    throw error;
+  }
+};
 /**
  * Update a user document in Firestore.
  * @param user - The user object.
  * @returns A promise that resolves to the updated user document.
  */
 export const updateUser = async (user: User): Promise<void> => {
-	// implement
+  // implement
 };
 
 /**
@@ -40,7 +56,5 @@ export const updateUser = async (user: User): Promise<void> => {
  * @returns A promise that resolves when the user document is deleted.
  */
 export const deleteUser = async (uid: string): Promise<void> => {
-	// implement
+  // implement
 };
-
-
