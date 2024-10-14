@@ -3,14 +3,14 @@
  */
 
 import React from 'react';
-// import Sidebar from '../components/sidebar';
+import Sidebar from '../components/Sidebar';
 // import Sidebar from '@/components/Sidebar';
 
-export default function searchPage() {
+const SearchPage = () => {
 	return (
 		<div className="flex h-screen">
 			{/* Sidebar */}
-			{/* <Sidebar /> */}
+			<Sidebar />
 			{/* Main Content */}
 			<div className="flex-1 p-6">
 				{/* Search Bar */}
@@ -51,3 +51,5 @@ export default function searchPage() {
 		</div>
 	);
 }
+
+export default SearchPage;
