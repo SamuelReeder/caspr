@@ -7,7 +7,7 @@ const GraphSideBar: React.FC = () => {
   };
 
   return (
-    <Box width="350px" p={4} backgroundColor="gray.100" height="calc(100vh - 50px)">
+    <Box width="100%" minWidth="295px" p={4} backgroundColor="gray.100" height="100%">
       <Flex mb={4}>
         <Input
           placeholder="Search..."

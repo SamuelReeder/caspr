@@ -1,6 +1,6 @@
 import React from 'react';
-import { Tabs, TabList, Tab, IconButton, Flex, Avatar, Spacer } from '@chakra-ui/react';
-import { AddIcon, CloseIcon, ArrowBackIcon } from '@chakra-ui/icons';
+import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer } from '@chakra-ui/react';
+import { AddIcon, CloseIcon, ArrowBackIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 
 interface Diagram {
   id: number;
@@ -28,8 +28,13 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
     // Function to handle avatar click
   };
 
+  const handleShareClick = () => {
+    // Function to handle share button click
+
+  };
+
   return (
-    <Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300" width="100vw" min-width="100%">
+    <Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300" width="100%" minWidth="1800px">
       <IconButton
         aria-label="Go Back"
         icon={<ArrowBackIcon />}
@@ -71,6 +76,17 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         p={2}
       />
       <Spacer />
+      <Button
+        leftIcon={<ExternalLinkIcon />}
+        size="md"
+        ml={2}
+        onClick={handleShareClick}
+        p={4}
+        borderRadius="md"
+        width="150px"
+      >
+        Share
+      </Button>
       <Avatar
         name="Hello World"
         src="path_to_image.jpg"
