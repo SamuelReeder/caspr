@@ -12,22 +12,22 @@ import {
     Input,
     InputGroup,
     InputRightElement,
-	Text,
-	useToast,
+    Text,
+    useToast,
 } from "@chakra-ui/react"
+import { FormEvent, useState } from "react"
+import { loginWithEmail, loginWithGoogle } from '@/api';
 
 import { ArrowForwardIcon, } from '@chakra-ui/icons'
-import { FormEvent, useState } from "react"
-import { useRouter } from 'next/router';
-import { loginWithEmail, loginWithGoogle } from '@/api';
+import Link from 'next/link';
 import { useAuth } from '@/app/authContext';
+import { useRouter } from 'next/router';
 
 export default function Index() {
 	const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 	const [show, setShow] = useState(false)
 	const [loading, setLoading] = useState<boolean>(false);
-	const handleSubmit = () => {}
 	const toast = useToast();
 	const router = useRouter();
 	const { firebaseUser } = useAuth();
@@ -118,9 +118,9 @@ export default function Index() {
 								onChange={(e) => setPassword(e.target.value)}
 								value={password}
 							/>
-							<InputRightElement width='4.5rem' className='mt-1'>
-								<Button variant='solid' colorScheme='teal' h='1.75rem' size='sm' onClick={() => {setShow(!show)}}>
-								{show ? 'Hide' : 'Show'}
+							<InputRightElement width='4.5rem'>
+								<Button variant="ghost" h='1.75rem' size='sm' onClick={() => {setShow(!show)}}>
+									{show ? 'Hide' : 'Show'}
 								</Button>
 							</InputRightElement>
 						</InputGroup>
@@ -128,14 +128,16 @@ export default function Index() {
 						<div className="flex gap-7 justify-center mt-7">
 							{/* TODO - disable button while it is loading */}
 							<Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="submit">
-								Log in
+								Log In
 							</Button>
 
 							{/* TODO - disable button while it is loading */}
-							<Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="submit">
-								Sign up
-							</Button>
-								</div>
+                            <Link href="/create-account">
+                                <Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="button"> 
+                                    Sign Up Instead
+                                </Button>
+                            </Link>
+						</div>
 								
 						{/* <div className="flex justify-center mt-4">
 							<Button
