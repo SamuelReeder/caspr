@@ -17,7 +17,7 @@ const dummyData = [
 
 export default function Searchbar() {
     const [search, setSearch] = React.useState("");
-    const {searchResults, setSearchResults} = useSearch();
+    const {setSearchResults} = useSearch();
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;

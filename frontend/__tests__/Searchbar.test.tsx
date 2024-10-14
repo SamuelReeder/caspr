@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
-import Searchbar from './Searchbar';
+import Searchbar from '../src/components/Searchbar';
 import '@testing-library/jest-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-import { SearchProvider } from '../context/SearchResultsContext';
+import { SearchProvider } from '../src/context/SearchResultsContext';
 import userEvent from '@testing-library/user-event';
 
 test('renders Searchbar component', () => {

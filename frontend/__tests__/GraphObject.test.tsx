@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import GraphObject from './GraphObject';
+import GraphObject from '../src/components/GraphObject';
 import '@testing-library/jest-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 
