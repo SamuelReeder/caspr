@@ -127,16 +127,16 @@ export default function Index() {
 
 						<div className="flex gap-7 justify-center mt-7">
 							{/* TODO - disable button while it is loading */}
-							<Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="submit">
-								Log In
-							</Button>
-
-							{/* TODO - disable button while it is loading */}
                             <Link href="/create-account">
                                 <Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="button"> 
                                     Sign Up Instead
                                 </Button>
                             </Link>
+
+							{/* TODO - disable button while it is loading */}
+							<Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="submit">
+								Log In
+							</Button>
 						</div>
 								
 						{/* <div className="flex justify-center mt-4">
