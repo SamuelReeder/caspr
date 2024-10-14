@@ -9,8 +9,6 @@ interface GraphObjectProps {
 }
 
 const GraphObject = ({ title, description }: GraphObjectProps) => {
-    console.log(title, description)
-
     return (
         <Card my='5'>
             <CardHeader>

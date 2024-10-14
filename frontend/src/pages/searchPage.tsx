@@ -7,7 +7,7 @@ import Sidebar from '../components/Sidebar';
 import Searchbar from '../components/Searchbar';
 import { SearchProvider, useSearch } from '../context/SearchResultsContext';
 import { Box } from '@chakra-ui/react';
-import GraphObject from '@/components/GraphObject';
+import GraphObject from '../components/GraphObject';
 
 const SearchPage = () => {
   return (
