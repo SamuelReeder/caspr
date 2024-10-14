@@ -94,10 +94,17 @@ export const handleGoogleRedirect = async (): Promise<AuthenticatedUser> => {
 /**
  * Universal logout.
  * @returns A promise that resolves when the user is logged out.
- * @Jaeyong
+ * @Samuel
  */
 export const universalLogout = async (): Promise<void> => {
-	// Implementation here
+	const auth = getAuth();
+    try {
+        await auth.signOut();
+        console.log('Logged out');
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 };
 
 /**

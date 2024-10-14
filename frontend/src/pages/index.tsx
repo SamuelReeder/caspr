@@ -60,23 +60,23 @@ export default function Index() {
 	const handleGoogleLogin = async (e: FormEvent<HTMLFormElement>) => {
 		setLoading(true);
 		try {
-		await loginWithGoogle();
-		toast({
-			title: 'login with Google successful.',
-			status: 'success',
-			duration: 3000,
-			isClosable: true,
-		});
+			await loginWithGoogle();
+			toast({
+				title: 'login with Google successful.',
+				status: 'success',
+				duration: 3000,
+				isClosable: true,
+			});
 		} catch (error: any) {
-		toast({
-			title: 'Google login failed.',
-			description: error.message,
-			status: 'error',
-			duration: 3000,
-			isClosable: true,
-		});
+			toast({
+				title: 'Google login failed.',
+				description: error.message,
+				status: 'error',
+				duration: 3000,
+				isClosable: true,
+			});
 		} finally {
-		setLoading(false);
+			setLoading(false);
 		}
 	};
 
