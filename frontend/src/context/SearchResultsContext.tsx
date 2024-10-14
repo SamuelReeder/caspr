@@ -1,14 +1,20 @@
 import React, { createContext, useContext, useState } from 'react';
 
+interface SearchResult {
+  description: string;
+  id: number;
+  title: string;
+}
+
 interface SearchResultsContextProps {
-  searchResults: any[];
-  setSearchResults: React.Dispatch<React.SetStateAction<any[]>>;
+  searchResults: SearchResult[];
+  setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>;
 }
 
 const SearchResultsContext = createContext<SearchResultsContextProps | undefined>(undefined);
 
 export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   return (
     <SearchResultsContext.Provider value={{ searchResults, setSearchResults }}>

@@ -1,5 +1,5 @@
 
-import { Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Text } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 
 interface GraphObjectProps {
