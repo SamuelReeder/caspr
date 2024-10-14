@@ -23,7 +23,7 @@ export default function Searchbar() {
         const value = e.target.value;
         setSearch(value);
     
-        if (value.length > 0) {
+        if (value.length > 0) {  // Might have to change the filter to filter by words not letters
           const filteredResults = dummyData.filter(item =>
             item.title.toLowerCase().includes(value.toLowerCase())
           );

@@ -26,7 +26,7 @@ const SearchPage = () => {
   );
 };
 
-const SearchResults = () => {  // Make search results component and graph result component??
+const SearchResults = () => {  // Make Search Results file?
   const { searchResults } = useSearch();
 
   return (
