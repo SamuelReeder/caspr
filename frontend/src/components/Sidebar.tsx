@@ -16,19 +16,16 @@ export default function Sidebar() {
         >
             <VStack spacing="4" align="stretch">
                 <Text fontSize="2xl" fontWeight="bold">
-                    Sidebar
+                    Caspr
                 </Text>
-                <Link href="#" className="hover:text-gray-400">
-                    Home
+                <Link href="/" className="hover:text-gray-400">
+                    My Graphs
                 </Link>
                 <Link href="#" className="hover:text-gray-400">
-                    About
+                    Shared With Me
                 </Link>
-                <Link href="#" className="hover:text-gray-400">
-                    Services
-                </Link>
-                <Link href="#" className="hover:text-gray-400">
-                    Contact
+                <Link href="/SearchPage" className="hover:text-gray-400">
+                    Explore
                 </Link>
             </VStack>
         </Box>
