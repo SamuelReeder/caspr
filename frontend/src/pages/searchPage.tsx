@@ -7,6 +7,7 @@ import Sidebar from '../components/Sidebar';
 import Searchbar from '../components/Searchbar';
 import { SearchProvider, useSearch } from '../context/SearchResultsContext';
 import { Box } from '@chakra-ui/react';
+import GraphObject from '@/components/GraphObject';
 
 const SearchPage = () => {
   return (
@@ -15,26 +16,23 @@ const SearchPage = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <Box className="flex-1 p-6">
+		<Box className="flex-1 p-6 ml-72 overflow-y-auto" height="100vh">
           <Searchbar />
           <SearchResults />
         </Box>
-		
+
       </Box>
     </SearchProvider>
   );
 };
 
-const SearchResults = () => {
+const SearchResults = () => {  // Make search results component and graph result component??
   const { searchResults } = useSearch();
 
   return (
     <div className="mt-4">
       {searchResults.map((result, index) => (
-        <div key={index} className="bg-gray-100 p-4 rounded-lg my-4">
-          <div className="w-full h-64 bg-gray-300 mb-4"></div>
-          <span className="text-sm font-semibold">{result.name}</span>
-        </div>
+		<GraphObject title={result.title} description={result.description || 'No description available'}/>
       ))}
     </div>
   );

@@ -9,10 +9,13 @@ export default function Sidebar() {
             as="nav"
             bg="gray.800"
             color="white"
-            w="250px"
-            h="100vh"
+            w="18rem"
             p="4"
             className="shadow-lg"
+            height="100vh"
+            position="fixed"
+            top="0"
+            left="0"
         >
             <VStack spacing="4" align="stretch">
                 <Text fontSize="2xl" fontWeight="bold">
