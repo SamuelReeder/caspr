@@ -40,9 +40,10 @@ export const loginWithEmail = async (email: string, password: string): Promise<A
 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
 		const firebaseUser = userCredential.user;
 
-		const firestoreUser = await getUser(firebaseUser.uid);
+		// enable once create user works
+		// const firestoreUser = await getUser(firebaseUser.uid);
 
-		return { firebaseUser, firestoreUser };
+		return { firebaseUser, firestoreUser: null, loading: false };
 	} catch (error) {
 		console.error(error);
 		throw error;
@@ -76,10 +77,11 @@ export const handleGoogleRedirect = async (): Promise<AuthenticatedUser> => {
 	  const result = await getRedirectResult(auth);
 	  if (result) {
 		const firebaseUser = result.user;
+		
+		// enable once create user works
+		// const firestoreUser = await getUser(firebaseUser.uid);
   
-		const firestoreUser = await getUser(firebaseUser.uid);
-  
-		return { firebaseUser, firestoreUser };
+		return { firebaseUser, firestoreUser: null, loading: false };
 	  } else {
 		throw new Error("no redirect");
 	  }

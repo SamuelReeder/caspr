@@ -14,6 +14,7 @@ export interface User {
 }
 
 export interface AuthenticatedUser {
-  firebaseUser: FirebaseUser;
-  firestoreUser: User;
+  firebaseUser: FirebaseUser | null;
+  firestoreUser: User | null;
+  loading: boolean;
 }

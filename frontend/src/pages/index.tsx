@@ -12,18 +12,79 @@ import {
     Input,
     InputGroup,
     InputRightElement,
-    Text
+	Text,
+	useToast,
 } from "@chakra-ui/react"
 
-import { ArrowForwardIcon } from '@chakra-ui/icons'
-import { useState } from "react"
+import { ArrowForwardIcon, } from '@chakra-ui/icons'
+import { FormEvent, useState } from "react"
+import { useRouter } from 'next/router';
+import { loginWithEmail, loginWithGoogle } from '@/api';
+import { useAuth } from '@/app/authContext';
 
 export default function Index() {
 	const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 	const [show, setShow] = useState(false)
+	const [loading, setLoading] = useState<boolean>(false);
 	const handleSubmit = () => {}
+	const toast = useToast();
+	const router = useRouter();
+	const { firebaseUser } = useAuth();
 
+	const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setLoading(true);
+		try {
+			await loginWithEmail(username, password);
+			toast({
+				title: 'login successful',
+				status: 'success',
+				duration: 3000,
+				isClosable: true,
+			});
+			router.push('/home');
+		} catch (error: any) {
+			toast({
+				title: 'login failed',
+				description: error.message,
+				status: 'error',
+				duration: 3000,
+				isClosable: true,
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleGoogleLogin = async (e: FormEvent<HTMLFormElement>) => {
+		setLoading(true);
+		try {
+		await loginWithGoogle();
+		toast({
+			title: 'login with Google successful.',
+			status: 'success',
+			duration: 3000,
+			isClosable: true,
+		});
+		} catch (error: any) {
+		toast({
+			title: 'Google login failed.',
+			description: error.message,
+			status: 'error',
+			duration: 3000,
+			isClosable: true,
+		});
+		} finally {
+		setLoading(false);
+		}
+	};
+
+	if (firebaseUser) {
+        router.push('/home');
+        return null;
+    }
+	
 	return (
 	<div className="bg-primary-200 h-screen">
 		<div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
@@ -32,7 +93,7 @@ export default function Index() {
 					<Heading className="text-center text-4xl">Welcome to Caspr</Heading>
 					<Text className="pt-2">Log in to your account</Text>
 
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleLogin}>
 					<FormControl>
 						<FormLabel className="pt-7">Username</FormLabel>
 						
@@ -74,7 +135,16 @@ export default function Index() {
 							<Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="submit">
 								Sign up
 							</Button>
-						</div>
+								</div>
+								
+						{/* <div className="flex justify-center mt-4">
+							<Button
+								className="w-full border rounded-lg p-2"
+								colorScheme="red"
+								onClick={handleGoogleLogin}>
+								Sign up with Google
+							</Button>
+						</div> */}
 					</FormControl>
 					</form>
 				</Box>
