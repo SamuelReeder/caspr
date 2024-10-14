@@ -6,21 +6,21 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 import Searchbar from '../components/Searchbar';
 import { SearchProvider, useSearch } from '../context/SearchResultsContext';
+import { Box } from '@chakra-ui/react';
 
 const SearchPage = () => {
   return (
     <SearchProvider>
-      <div className="flex h-screen">
+      <Box className="flex h-screen">
         <Sidebar />
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          {/* Search Bar */}
-          <Searchbar />
 
-          {/* Display Search Results */}
+        {/* Main Content */}
+        <Box className="flex-1 p-6">
+          <Searchbar />
           <SearchResults />
-        </div>
-      </div>
+        </Box>
+		
+      </Box>
     </SearchProvider>
   );
 };
