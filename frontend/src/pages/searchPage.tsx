@@ -32,7 +32,7 @@ const SearchResults = () => {  // Make Search Results file?
   return (
     <div className="mt-4">
       {searchResults.map((result, index) => (
-		<GraphObject key={index} title={result.title} description={result.description || 'No description available'}/>
+		<GraphObject title={result.title} key={index} description={result.description || 'No description available'}/>
       ))}
     </div>
   );
