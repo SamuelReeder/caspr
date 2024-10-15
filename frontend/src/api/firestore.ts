@@ -2,9 +2,15 @@
  * Firestore API
  */
 
-import { db } from "@/config/firebaseConfig";
+import { db, app } from "@/config/firebaseConfig";
 import { User } from "@/types";
-import { doc, DocumentData, getDoc } from "firebase/firestore";
+import {
+	doc,
+	DocumentData,
+	getDoc,
+	getFirestore,
+	setDoc
+} from "firebase/firestore";
 
 /**
  * Get a user document from Firestore.
@@ -36,9 +42,25 @@ export const getUser = async (uid: string): Promise<User> => {
  * @Danny
  */
 export const createUser = async (user: User): Promise<void> => {
-	// implement
-};
+	const firestore = getFirestore(app);
 
+	try {
+		const userDocumentRef = doc(firestore, "users", user.uid);
+
+		await setDoc(userDocumentRef, {
+			uid: user.uid,
+			name: user.name,
+			email: user.email,
+			photoURL: user.photoURL,
+			createdAt: user.createdAt,
+			roles: user.roles
+		});
+
+		console.log("success");
+	} catch (error) {
+		throw error;
+	}
+};
 /**
  * Update a user document in Firestore.
  * @param user - The user object.
@@ -56,5 +78,3 @@ export const updateUser = async (user: User): Promise<void> => {
 export const deleteUser = async (uid: string): Promise<void> => {
 	// implement
 };
-
-
