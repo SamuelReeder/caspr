@@ -1,5 +1,6 @@
 import React from 'react';
-import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer } from '@chakra-ui/react';
+import Link from 'next/link';
+import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, Center } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, ArrowBackIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 
 interface Diagram {
@@ -20,6 +21,8 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const goBack = () => {
     // Function to go back to the last page
   };
@@ -29,21 +32,22 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
   };
 
   const handleShareClick = () => {
-    // Function to handle share button click
-
+    onOpen();
   };
 
   return (
     <Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300" width="100%" minWidth="1800px">
-      <IconButton
-        aria-label="Go Back"
-        icon={<ArrowBackIcon />}
-        size="lg"
-        ml={2}
-        mr={2}
-        onClick={goBack}
-        p={2}
-      />
+      <Link href="/home">
+        <IconButton
+          aria-label="Go Back"
+          icon={<ArrowBackIcon />}
+          size="lg"
+          ml={2}
+          mr={2}
+          onClick={goBack}
+          p={2}
+        />
+      </Link>
       <Tabs index={selectedTab} onChange={(index) => setSelectedTab(index)}>
         <TabList>
           {diagrams.map((diagram) => (
@@ -96,6 +100,29 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         cursor="pointer"
         p={2}
       />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Shared with:</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Button width="100%" mb={2}>List Item</Button>
+            <Button width="100%" mb={2}>List Item</Button>
+            <Button width="100%" mb={2}>List Item</Button>
+            <Center mt={4}>
+              <Input placeholder="Search for people to add..." width="75%" />
+            </Center>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="gray" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };
