@@ -1,129 +1,217 @@
-"use client";
-
-import {
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Stack,
-  Text,
-  InputGroup,
-  InputRightElement,
-  Link,
-  useToast,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { createAccountWithEmail } from "@/api";
 /**
  * Create Account (Landing Page)
  */
-import 'tailwindcss/tailwind.css'
+import "tailwindcss/tailwind.css";
 
 import {
-    Box,
-    Button,
-    FormControl,
-    FormLabel,
-    Heading,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Text
-} from "@chakra-ui/react"
+	Box,
+	Button,
+	FormControl,
+	FormLabel,
+	Heading,
+	Input,
+	InputGroup,
+	InputRightElement,
+	Text,
+	useToast
+} from "@chakra-ui/react";
 
-import { ArrowForwardIcon } from '@chakra-ui/icons'
-import Link from 'next/link';
-import { useState } from "react"
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import Link from "next/link";
+import { useState } from "react";
+import { createAccountWithEmail, createAccountWithGoogle } from "@/api";
 
 export default function CreateAccount() {
-	const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-	const [confirmPassword, setConfirmPassword] = useState('')
-	const [showPassword, setShowPassword] = useState(false)
-	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-	const handleSubmit = () => {}
+	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [loading, setLoading] = useState(false);
+
+	const toast = useToast();
+
+	const handleSubmit = async () => {
+		// If user mistyped the password
+		if (password != confirmPassword) {
+			toast({
+				title: "Make sure that passwords are matching",
+				status: "error",
+				duration: 3000,
+				isClosable: true
+			});
+			return;
+		}
+
+		// If passwords do match
+		setLoading(true);
+
+		try {
+			const user = await createAccountWithEmail(email, password, username);
+
+			toast({
+				title: "Account created",
+				description: `Welcome ${user.email}`,
+				status: "success",
+				duration: 5000,
+				isClosable: true
+			});
+		} catch (error) {
+			toast({
+				title: "Error while creating account",
+				description: `Error: ${error}`,
+				status: "error",
+				duration: 5000,
+				isClosable: true
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleGoogleLogin = async () => {
+		try {
+			setLoading(true);
+
+			const user = await createAccountWithGoogle();
+		} catch (error) {
+			toast({
+				title: "Error while creating account",
+				description: `Error: ${error}`,
+				status: "error",
+				duration: 5000,
+				isClosable: true
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
-	<div className="bg-primary-200 h-screen">
-		<div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
-			<div className="bg-white rounded-lg p-8 shadow-md w-[80%]">
-				<Box className="text-center">
-					<Heading className="text-center text-4xl">Welcome to Caspr</Heading>
-					<Text className="pt-2">Create a new account</Text>
+		<div className="bg-primary-200 h-screen">
+			<div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
+				<div className="bg-white rounded-lg p-8 shadow-md w-[80%]">
+					<Box className="text-center">
+						<Heading className="text-center text-4xl">Welcome to Caspr</Heading>
+						<Text className="pt-2">Create a new account</Text>
 
-					<form onSubmit={handleSubmit}>
-					<FormControl>
-						<FormLabel className="pt-7">Username</FormLabel>
-						
-						<Input
-							className="w-full p-2 border rounded-lg"
-							placeholder='Enter username'
-							_placeholder={{ opacity: 1, color: 'gray.600' }}
-							type='username'
-							onChange={(e) => setUsername(e.target.value)}
-							value={username}
-						/>
+						<form>
+							<FormControl>
+								<FormLabel className="pt-7">Email</FormLabel>
 
-						<FormLabel className="pt-7">Password</FormLabel>
-						
-						<InputGroup size='md'>
-							<Input
-								className="w-full p-2 border rounded-lg"
-								pr='4.5rem'
-								type={showPassword ? 'text' : 'password'}
-								placeholder='Enter password'
-								_placeholder={{ opacity: 1, color: 'gray.600' }}
-								onChange={(e) => setPassword(e.target.value)}
-								value={password}
-							/>
-							<InputRightElement width='4.5rem'>
-								<Button variant='ghost' h='1.75rem' size='sm' onClick={() => {setShowPassword(!showPassword)}}>
-								{showPassword ? 'Hide' : 'Show'}
-								</Button>
-							</InputRightElement>
-						</InputGroup>
+								<Input
+									className="w-full p-2 border rounded-lg"
+									placeholder="Enter email"
+									_placeholder={{ opacity: 1, color: "gray.600" }}
+									type="username"
+									onChange={(e) => setEmail(e.target.value)}
+									value={email}
+								/>
 
-						<FormLabel className="pt-7">Confirm Password</FormLabel>
-						
-						<InputGroup size='md'>
-							<Input
-								className="w-full p-2 border rounded-lg"
-								pr='4.5rem'
-								type={showConfirmPassword ? 'text' : 'password'}
-								placeholder='Enter password'
-								_placeholder={{ opacity: 1, color: 'gray.600' }}
-								onChange={(e) => setConfirmPassword(e.target.value)}
-								value={confirmPassword}
-							/>
-							<InputRightElement width='4.5rem'>
-								<Button variant='ghost' h='1.75rem' size='sm' onClick={() => {setShowConfirmPassword(!showConfirmPassword)}}>
-								{showConfirmPassword ? 'Hide' : 'Show'}
-								</Button>
-							</InputRightElement>
-						</InputGroup>
+								<FormLabel className="pt-7">Username</FormLabel>
 
-						<div className="flex gap-7 justify-center mt-7">
-							{/* TODO - disable button while it is loading */}
-							<Link href="/">
-								<Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="submit">
-									Login Instead
-								</Button>
-							</Link>
-							
-							{/* TODO - disable button while it is loading */}
-							<Button rightIcon={<ArrowForwardIcon />} className="border rounded-lg p-2" type="submit">
-								Create Account
-							</Button>
-						</div>
-					</FormControl>
-					</form>
-				</Box>
+								<Input
+									className="w-full p-2 border rounded-lg"
+									placeholder="Enter username"
+									_placeholder={{ opacity: 1, color: "gray.600" }}
+									type="username"
+									onChange={(e) => setUsername(e.target.value)}
+									value={username}
+								/>
+
+								<FormLabel className="pt-7">Password</FormLabel>
+
+								<InputGroup size="md">
+									<Input
+										className="w-full p-2 border rounded-lg"
+										pr="4.5rem"
+										type={showPassword ? "text" : "password"}
+										placeholder="Enter password"
+										_placeholder={{ opacity: 1, color: "gray.600" }}
+										onChange={(e) => setPassword(e.target.value)}
+										value={password}
+									/>
+									<InputRightElement width="4.5rem">
+										<Button
+											variant="ghost"
+											h="1.75rem"
+											size="sm"
+											onClick={() => {
+												setShowPassword(!showPassword);
+											}}
+										>
+											{showPassword ? "Hide" : "Show"}
+										</Button>
+									</InputRightElement>
+								</InputGroup>
+
+								<FormLabel className="pt-7">Confirm Password</FormLabel>
+
+								<InputGroup size="md">
+									<Input
+										className="w-full p-2 border rounded-lg"
+										pr="4.5rem"
+										type={showConfirmPassword ? "text" : "password"}
+										placeholder="Enter password"
+										_placeholder={{ opacity: 1, color: "gray.600" }}
+										onChange={(e) => setConfirmPassword(e.target.value)}
+										value={confirmPassword}
+									/>
+									<InputRightElement width="4.5rem">
+										<Button
+											variant="ghost"
+											h="1.75rem"
+											size="sm"
+											onClick={() => {
+												setShowConfirmPassword(!showConfirmPassword);
+											}}
+										>
+											{showConfirmPassword ? "Hide" : "Show"}
+										</Button>
+									</InputRightElement>
+								</InputGroup>
+
+								<div className="flex gap-7 justify-center mt-7">
+									{/* TODO - disable button while it is loading */}
+									<Link href="/">
+										<Button
+											rightIcon={<ArrowForwardIcon />}
+											className="border rounded-lg p-2"
+											type="submit"
+										>
+											Login Instead
+										</Button>
+									</Link>
+
+									{/* TODO - disable button while it is loading */}
+									<Button
+										rightIcon={<ArrowForwardIcon />}
+										className="border rounded-lg p-2"
+										type="submit"
+										isLoading={loading}
+										loadingText="Creating Account"
+										onClick={handleSubmit}
+									>
+										Create Account
+									</Button>
+								</div>
+
+								<div className="flex flex-col gap-4 justify-center mt-7">
+									<Button
+										colorScheme="blue"
+										className="w-full"
+										isLoading={loading}
+										onClick={handleGoogleLogin}
+									>
+										Sign in with Google
+									</Button>
+								</div>
+							</FormControl>
+						</form>
+					</Box>
+				</div>
 			</div>
 		</div>
-	</div>
 	);
-  }
+}
