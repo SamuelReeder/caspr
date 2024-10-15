@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/config/firebaseConfig";
 import { AuthenticatedUser, User } from "@/types";
+import { getUser } from "@/api";
 
 const AuthContext = createContext<AuthenticatedUser>({ firebaseUser: null, firestoreUser: null, loading: true });
 
@@ -12,7 +13,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
 	useEffect(() => {
 	  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-		setFirebaseUser(user);
+		setFirebaseUser(user); // incase of logout, it sets to null
+        if (user) {
+            try {
+                const firestoreUser = await getUser(user.uid);
+                setFirestoreUser(firestoreUser);
+            } catch (error) {
+                console.error("Error fetching Firestore user:", error);
+            }
+        } else {
+            setFirestoreUser(null);
+        }
 		setLoading(false);
 	  });
   

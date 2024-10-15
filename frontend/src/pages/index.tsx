@@ -15,16 +15,16 @@ import {
 	Text,
 	useToast
 } from "@chakra-ui/react";
-import { FormEvent, useState } from "react";
-import { loginWithEmail, loginWithGoogle } from "@/api";
+import { FormEvent, useEffect, useState } from "react";
+import { handleGoogleRedirect, loginWithEmail, loginWithGoogle } from "@/api";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { useAuth } from "@/app/authContext";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router";	
 
 export default function Index() {
-	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [show, setShow] = useState(false);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -36,9 +36,9 @@ export default function Index() {
 		e.preventDefault();
 		setLoading(true);
 		try {
-			await loginWithEmail(username, password);
+			await loginWithEmail(email, password);
 			toast({
-				title: "login successful",
+				title: "Login successful",
 				status: "success",
 				duration: 3000,
 				isClosable: true
@@ -46,7 +46,7 @@ export default function Index() {
 			router.push("/home");
 		} catch (error: any) {
 			toast({
-				title: "login failed",
+				title: "Login failed",
 				description: error.message,
 				status: "error",
 				duration: 3000,
@@ -57,28 +57,41 @@ export default function Index() {
 		}
 	};
 
-	const handleGoogleLogin = async (e: FormEvent<HTMLFormElement>) => {
-		setLoading(true);
-		try {
-			await loginWithGoogle();
-			toast({
-				title: "login with Google successful.",
-				status: "success",
-				duration: 3000,
-				isClosable: true
-			});
-		} catch (error: any) {
-			toast({
-				title: "Google login failed.",
-				description: error.message,
-				status: "error",
-				duration: 3000,
-				isClosable: true
-			});
-		} finally {
-			setLoading(false);
-		}
+	const handleGoogleLogin = async () => {
+        setLoading(true);
+        try {
+            await loginWithGoogle();
+        } catch (error: any) {
+            toast({
+                title: "Google login failed",
+                description: error.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true
+            });
+            setLoading(false);
+        }
 	};
+	
+	useEffect(() => {
+        const handleRedirect = async () => {
+            setLoading(true);
+            try {
+                await handleGoogleRedirect();
+                router.push("/home");
+            } catch (error: any) {
+				console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        handleRedirect();
+    }, [loginWithGoogle]);
+
+	const handleSignUp = () => {
+        router.push("/createAccount");
+    };
 
 	if (firebaseUser) {
 		router.push("/home");
@@ -95,15 +108,15 @@ export default function Index() {
 
 						<form onSubmit={handleLogin}>
 							<FormControl>
-								<FormLabel className="pt-7">Username</FormLabel>
+								<FormLabel className="pt-7">Email</FormLabel>
 
 								<Input
 									className="w-full p-2 border rounded-lg"
-									placeholder="Enter username"
+									placeholder="Enter email"
 									_placeholder={{ opacity: 1, color: "gray.600" }}
-									type="username"
-									onChange={(e) => setUsername(e.target.value)}
-									value={username}
+									type="email"
+									onChange={(e) => setEmail(e.target.value)}
+									value={email}
 								/>
 
 								<FormLabel className="pt-7">Password</FormLabel>
@@ -150,6 +163,7 @@ export default function Index() {
 											rightIcon={<ArrowForwardIcon />}
 											className="border rounded-lg p-2"
 											type="button"
+											onClick={handleSignUp}
 										>
 											Sign Up Instead
 										</Button>
@@ -160,19 +174,23 @@ export default function Index() {
 										rightIcon={<ArrowForwardIcon />}
 										className="border rounded-lg p-2"
 										type="submit"
+										isLoading={loading}
+										loadingText="Logging In"
 									>
 										Log In
 									</Button>
 								</div>
-
-								{/* <div className="flex justify-center mt-4">
-							<Button
-								className="w-full border rounded-lg p-2"
-								colorScheme="red"
-								onClick={handleGoogleLogin}>
-								Sign up with Google
-							</Button>
-						</div> */}
+								<div className="flex flex-col gap-4 justify-center mt-7">
+									<Button
+										colorScheme="blue"
+										className="w-full"
+										isLoading={loading}
+										type="button"
+										onClick={handleGoogleLogin}
+									>
+										Sign in with Google
+									</Button>
+								</div>
 							</FormControl>
 						</form>
 					</Box>

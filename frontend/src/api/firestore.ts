@@ -25,7 +25,12 @@ export const getUser = async (uid: string): Promise<User> => {
 		const userDoc = await getDoc(userDocRef);
 
 		if (userDoc.exists()) {
-			return userDoc.data() as User; // cast to type; ensure fields are correct
+			const userData = userDoc.data();
+            if (userData) {
+                return userData as User; // cast to type; ensure fields are correct
+            } else {
+                throw new Error("failed to cast user data");
+            }
 		} else {
 			throw new Error("document not found");
 		}
