@@ -25,7 +25,8 @@ function Home() {
     }
 
     if (!firebaseUser) {
-        return <div>Please log in</div>;
+        router.push('/');
+        return null;
     }
 
     return (

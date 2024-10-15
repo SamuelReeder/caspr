@@ -113,7 +113,6 @@ export const loginWithEmail = async (
 	email: string,
 	password: string
 ): Promise<AuthenticatedUser> => {
-	const auth = getAuth();
 	try {
 		const userCredential = await signInWithEmailAndPassword(
 			auth,
@@ -122,10 +121,12 @@ export const loginWithEmail = async (
 		);
 		const firebaseUser = userCredential.user;
 
-		// enable once create user works
-		// const firestoreUser = await getUser(firebaseUser.uid);
+		const firestoreUser = await getUser(firebaseUser.uid);
+		if (!firestoreUser) {
+			throw new Error("No user document found");
+		}
 
-		return { firebaseUser, firestoreUser: null, loading: false };
+		return { firebaseUser, firestoreUser, loading: false };
 	} catch (error) {
 		console.error(error);
 		throw error;
@@ -138,10 +139,9 @@ export const loginWithEmail = async (
  * @Samuel
  */
 export const loginWithGoogle = async (): Promise<void> => {
-	const auth = getAuth();
 	const provider = new GoogleAuthProvider();
 	try {
-		await signInWithRedirect(auth, provider);
+		await signInWithPopup(auth, provider); // popup instead of redirect to cover if session storage unavailable
 	} catch (error) {
 		console.error(error);
 		throw error;
@@ -154,16 +154,17 @@ export const loginWithGoogle = async (): Promise<void> => {
  * @Samuel
  */
 export const handleGoogleRedirect = async (): Promise<AuthenticatedUser> => {
-	const auth = getAuth();
 	try {
 		const result = await getRedirectResult(auth);
 		if (result) {
 			const firebaseUser = result.user;
 
-			// enable once create user works
-			// const firestoreUser = await getUser(firebaseUser.uid);
+			const firestoreUser = await getUser(firebaseUser.uid);
+			if (!firestoreUser) {
+				throw new Error("Create account first");
+			}
 
-			return { firebaseUser, firestoreUser: null, loading: false };
+			return { firebaseUser, firestoreUser, loading: false };
 		} else {
 			throw new Error("no redirect");
 		}
@@ -179,7 +180,6 @@ export const handleGoogleRedirect = async (): Promise<AuthenticatedUser> => {
  * @Samuel
  */
 export const universalLogout = async (): Promise<void> => {
-	const auth = getAuth();
 	try {
 		await auth.signOut();
 		console.log("Logged out");
