@@ -1,0 +1,66 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Index from '@/pages';
+import { useRouter } from 'next/router';
+import { loginWithEmail } from '@/api';
+
+const email = 'test@123.com';
+
+jest.mock('next/router', () => ({
+  useRouter: jest.fn().mockReturnValue({ push: jest.fn() }),
+}));
+
+jest.mock('@/api', () => ({
+  loginWithEmail: jest.fn(),
+}));
+
+jest.mock('@chakra-ui/react', () => ({
+  ...jest.requireActual('@chakra-ui/react'),
+  toast: jest.fn(),
+}));
+
+describe('Index (Landing Page)', () => {
+  const mockPush = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+  });
+
+  test('renders Login component', () => {
+    render(<Index />);
+    const headingElement = screen.getByText(/Welcome to Caspr/i);
+    expect(headingElement).toBeInTheDocument();
+  });
+
+  test('allows user to input email', () => {
+    render(<Index />);
+    const emailInput = screen.getByPlaceholderText(/Enter email/i);
+    fireEvent.change(emailInput, { target: { value: email } });
+    expect(emailInput).toHaveValue(email);
+  });
+
+  test('allows user to input password', () => {
+    render(<Index />);
+    const passwordInput = screen.getByPlaceholderText(/Enter password/i);
+    fireEvent.change(passwordInput, { target: { value: 'password' } });
+    expect(passwordInput).toHaveValue('password');
+  });
+
+  test('redirects to home on form submit', async () => {
+    (loginWithEmail as jest.Mock).mockResolvedValueOnce({});
+    render(<Index />);
+    const emailInput = screen.getByPlaceholderText(/Enter email/i);
+    const passwordInput = screen.getByPlaceholderText(/Enter password/i);
+    const loginButton = screen.getByRole('button', { name: /Log In/i });
+
+    fireEvent.change(emailInput, { target: { value: email} });
+    fireEvent.change(passwordInput, { target: { value: 'password' } });
+    fireEvent.click(loginButton);
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/home');
+    });
+  });
+});
