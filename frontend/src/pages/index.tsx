@@ -89,10 +89,6 @@ export default function Index() {
         handleRedirect();
     }, [loginWithGoogle]);
 
-	const handleSignUp = () => {
-        router.push("/createAccount");
-    };
-
 	if (firebaseUser) {
 		router.push("/home");
 		return null;
@@ -158,12 +154,10 @@ export default function Index() {
 
 								<div className="flex gap-7 justify-center mt-7">
 									{/* TODO - disable button while it is loading */}
-									<Link href="/create-account">
+									<Link href="/createAccount">
 										<Button
 											rightIcon={<ArrowForwardIcon />}
 											className="border rounded-lg p-2"
-											type="button"
-											onClick={handleSignUp}
 										>
 											Sign Up Instead
 										</Button>
