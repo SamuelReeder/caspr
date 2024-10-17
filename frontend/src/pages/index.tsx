@@ -21,16 +21,17 @@ import { handleGoogleRedirect, loginWithEmail, loginWithGoogle } from "@/api";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { useAuth } from "@/app/authContext";
-import { useRouter } from "next/router";	
+import { useRouter } from "next/router";
 
 export default function Index() {
+	const toast = useToast();
+	const router = useRouter();
+	const { firebaseUser } = useAuth();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [show, setShow] = useState(false);
 	const [loading, setLoading] = useState<boolean>(false);
-	const toast = useToast();
-	const router = useRouter();
-	const { firebaseUser } = useAuth();
 
 	const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -58,36 +59,36 @@ export default function Index() {
 	};
 
 	const handleGoogleLogin = async () => {
-        setLoading(true);
-        try {
-            await loginWithGoogle();
-        } catch (error: any) {
-            toast({
-                title: "Google login failed",
-                description: error.message,
-                status: "error",
-                duration: 3000,
-                isClosable: true
-            });
-            setLoading(false);
-        }
+		setLoading(true);
+		try {
+			await loginWithGoogle();
+		} catch (error: any) {
+			toast({
+				title: "Google login failed",
+				description: error.message,
+				status: "error",
+				duration: 3000,
+				isClosable: true
+			});
+			setLoading(false);
+		}
 	};
-	
-	useEffect(() => {
-        const handleRedirect = async () => {
-            setLoading(true);
-            try {
-                await handleGoogleRedirect();
-                router.push("/home");
-            } catch (error: any) {
-				console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        handleRedirect();
-    }, [loginWithGoogle]);
+	useEffect(() => {
+		const handleRedirect = async () => {
+			setLoading(true);
+			try {
+				await handleGoogleRedirect();
+				router.push("/home");
+			} catch (error: any) {
+				console.error(error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		handleRedirect();
+	}, [loginWithGoogle]);
 
 	if (firebaseUser) {
 		router.push("/home");
@@ -142,7 +143,7 @@ export default function Index() {
 								</InputGroup>
 
 								<div className="flex justify-end mt-2">
-									<Link href="/forgotPassword">
+									<Link href="/forgot-password">
 										<Text
 											color="blue.500"
 											_hover={{ textDecoration: "underline" }}
@@ -152,18 +153,9 @@ export default function Index() {
 									</Link>
 								</div>
 
-								<div className="flex gap-7 justify-center mt-7">
-									{/* TODO - disable button while it is loading */}
-									<Link href="/createAccount">
-										<Button
-											rightIcon={<ArrowForwardIcon />}
-											className="border rounded-lg p-2"
-										>
-											Sign Up Instead
-										</Button>
-									</Link>
+								<hr className="mt-4" />
 
-									{/* TODO - disable button while it is loading */}
+								<div className="flex flex-col gap-3 justify-center mt-5">
 									<Button
 										rightIcon={<ArrowForwardIcon />}
 										className="border rounded-lg p-2"
@@ -173,9 +165,20 @@ export default function Index() {
 									>
 										Log In
 									</Button>
-								</div>
-								<div className="flex flex-col gap-4 justify-center mt-7">
+
 									<Button
+										rightIcon={<ArrowForwardIcon />}
+										className="border rounded-lg p-2"
+										type="button"
+										onClick={() => {
+											router.push("/create-account");
+										}}
+									>
+										Create a new account
+									</Button>
+
+									<Button
+										rightIcon={<ArrowForwardIcon />}
 										colorScheme="blue"
 										className="w-full"
 										isLoading={loading}
