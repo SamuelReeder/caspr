@@ -2,14 +2,15 @@
 
 <!-- PROJECT LOGO HERE IN THE FUTURE -->
 <br />
-<div>
-  <h1>Complex Causal Diagram Visualization</h1>
-
-  <p>
-    By Team #19 for the Machine Learning Group, Department of Computer Science, University of Toronto (CSC301 Fall 2024)
-  </p>
+<div">
+  <h1>Caspr - Causal Analysis of Structure Paths and Relationships</h1>
 </div>
 
+<!-- PARTNER INTRO -->
+## Project Partner Introduction
+This is an open source project built for the Machine Learning Group in the Department of Computer Science at the University of Toronto. The Department of Computer Science at the University of Toronto has several faculty members working in the area of machine learning, neural networks, statistical pattern recognition, probabilistic planning, and adaptive systems.
+- **Sheldon Huang, Research Lead, Primary Contact**: huang@cs.toronto.edu
+- **Yuchen Wang, Software Lead, Secondary Contact**: https://www.yuchenwyc.com/
 
 <!-- ABOUT THE PROJECT -->
 ## Introduction
@@ -22,12 +23,18 @@ This project is a web application designed to allow users to explore and interac
 ## Project Management
 - Our team uses Trello for project management.
 
+## Instructions
+- TBD
+
 <!-- RUNNING THE APPLICATION SECTION -->
-## Running the Application
+## Development Requirements
 - TBD
 
-### Requirements
+## Deployment and Github Workflow
 - TBD
 
-### External Dependencies and 3rd Party Software
+## Coding Standards and Guidelines
+- TBD
+
+## Licences
 - TBD
