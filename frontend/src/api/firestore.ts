@@ -2,15 +2,19 @@
  * Firestore API
  */
 
-import { db, app } from "@/config/firebaseConfig";
-import { User } from "@/types";
 import {
-	doc,
 	DocumentData,
+	addDoc,
+	collection,
+	doc,
 	getDoc,
 	getFirestore,
 	setDoc
 } from "firebase/firestore";
+import { app, db } from "@/config/firebaseConfig";
+
+import { Graph } from "@/types/graph";
+import { User } from "@/types";
 
 /**
  * Get a user document from Firestore.
@@ -66,6 +70,28 @@ export const createUser = async (user: User): Promise<void> => {
 		throw error;
 	}
 };
+
+/**
+ * Create a user document in Firestore.
+ * @param user - The user object.
+ * @returns A promise that resolves to the created user document.
+ * @Danny
+ */
+export const createGraph = async (graph: Graph): Promise<void> => {
+	try {
+		const graphsCollection = collection(db, "graphs");
+		await addDoc(graphsCollection, {
+			owner: graph.owner,
+			graphName: graph.graphName,
+			graphDescription: graph.graphDescription,
+			graphFileURL: graph.graphFileURL,
+			createdAt: graph.createdAt
+		});
+	} catch (error) {
+		throw error;
+	}
+};
+
 /**
  * Update a user document in Firestore.
  * @param user - The user object.

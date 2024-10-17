@@ -2,19 +2,21 @@
  * Auth related functions
  */
 
-import { app, db, auth } from "@/config/firebaseConfig";
-import {
-	getAuth,
-	createUserWithEmailAndPassword,
-	sendEmailVerification,
-	signInWithPopup,
-	signInWithEmailAndPassword,
-	GoogleAuthProvider,
-	signInWithRedirect,
-	getRedirectResult
-} from "firebase/auth";
 import { AuthenticatedUser, User } from "@/types";
-import { getUser, createUser } from "./firestore";
+import {
+	GoogleAuthProvider,
+	createUserWithEmailAndPassword,
+	getAuth,
+	getRedirectResult,
+	sendEmailVerification,
+	sendPasswordResetEmail,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+	signInWithRedirect
+} from "firebase/auth";
+import { app, auth, db } from "@/config/firebaseConfig";
+import { createUser, getUser } from "./firestore";
+
 import { Timestamp } from "firebase/firestore";
 
 /**
@@ -176,25 +178,27 @@ export const handleGoogleRedirect = async (): Promise<AuthenticatedUser> => {
 
 /**
  * Universal logout.
- * @returns A promise that resolves when the user is logged out.
+ * @returns A promise that resolves when the user is logged out successfully.
  * @Samuel
  */
 export const universalLogout = async (): Promise<void> => {
 	try {
 		await auth.signOut();
-		console.log("Logged out");
 	} catch (error) {
-		console.error(error);
-		throw error;
+		console.error("Error logging out user: ", error);
 	}
 };
 
 /**
- * Reset password.
+ * Send a password change email to the user.
  * @param email - The user's email address.
- * @returns A promise that resolves when the password reset email is sent.
+ * @returns A promise that resolves when the password reset request email is sent.
  * @Jaeyong
  */
-export const resetPassword = async (email: string): Promise<void> => {
-	// Implementation here
+export const sendResetPasswordEmail = async (email: string): Promise<void> => {
+	try {
+		await sendPasswordResetEmail(getAuth(app), email);
+	} catch (error) {
+		console.error("Error sending password reset email: ", error);
+	}
 };

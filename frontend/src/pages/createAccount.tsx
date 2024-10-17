@@ -15,13 +15,16 @@ import {
 	Text,
 	useToast
 } from "@chakra-ui/react";
-
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import Link from "next/link";
-import { useState } from "react";
 import { createAccountWithEmail, createAccountWithGoogle } from "@/api";
 
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 export default function CreateAccount() {
+	const toast = useToast();
+	const router = useRouter();
+
 	const [email, setEmail] = useState("");
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -29,8 +32,6 @@ export default function CreateAccount() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
-
-	const toast = useToast();
 
 	const handleSubmit = async () => {
 		// If user mistyped the password
@@ -172,19 +173,9 @@ export default function CreateAccount() {
 									</InputRightElement>
 								</InputGroup>
 
-								<div className="flex gap-7 justify-center mt-7">
-									{/* TODO - disable button while it is loading */}
-									<Link href="/">
-										<Button
-											rightIcon={<ArrowForwardIcon />}
-											className="border rounded-lg p-2"
-											type="submit"
-										>
-											Login Instead
-										</Button>
-									</Link>
+								<hr className="mt-4" />
 
-									{/* TODO - disable button while it is loading */}
+								<div className="flex flex-col gap-3 justify-center mt-7">
 									<Button
 										rightIcon={<ArrowForwardIcon />}
 										className="border rounded-lg p-2"
@@ -195,12 +186,23 @@ export default function CreateAccount() {
 									>
 										Create Account
 									</Button>
-								</div>
 
-								<div className="flex flex-col gap-4 justify-center mt-7">
+									<Button
+										rightIcon={<ArrowForwardIcon />}
+										className="border rounded-lg p-2"
+										type="submit"
+										onClick={() => {
+											router.push("/");
+										}}
+									>
+										Login Instead
+									</Button>
+
+									{/* TODO - This should be a create account with google button */}
 									<Button
 										colorScheme="blue"
 										className="w-full"
+										// TODO - this button also loads when create account button is also loading
 										isLoading={loading}
 										onClick={handleGoogleLogin}
 									>
