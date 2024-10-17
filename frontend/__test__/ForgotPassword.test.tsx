@@ -1,0 +1,42 @@
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import ForgotPassword from "@/pages/forgotPassword";
+import { useRouter } from "next/router";
+
+const email = "test@123.com";
+
+jest.mock("next/router", () => ({
+	useRouter: jest.fn().mockReturnValue({ push: jest.fn() })
+}));
+
+jest.mock("@/api", () => ({
+	loginWithEmail: jest.fn()
+}));
+
+jest.mock("@chakra-ui/react", () => ({
+	...jest.requireActual("@chakra-ui/react"),
+	toast: jest.fn()
+}));
+
+describe("Forgot Password (Landing Page)", () => {
+	const mockPush = jest.fn();
+
+	beforeEach(() => {
+		jest.clearAllMocks();
+		(useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+	});
+
+	test("renders Forgot Password component", () => {
+		render(<ForgotPassword />);
+		const headingElement = screen.getByText(/Forgot Password/i);
+		expect(headingElement).toBeInTheDocument();
+	});
+
+	test("allows user to input email", () => {
+		render(<ForgotPassword />);
+		const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+		fireEvent.change(emailInput, { target: { value: email } });
+		expect(emailInput).toHaveValue(email);
+	});
+});
