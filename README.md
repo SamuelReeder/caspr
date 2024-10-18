@@ -1,33 +1,51 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/ZzmLl-eM)
+## Intro
 
-<!-- PROJECT LOGO HERE IN THE FUTURE -->
-<br />
-<div>
-  <h1>Complex Causal Diagram Visualization</h1>
+This README will detail the components and elements for subteam 2's submissions. The deployed version of the application can be found at: 
 
-  <p>
-    By Team #19 for the Machine Learning Group, Department of Computer Science, University of Toronto (CSC301 Fall 2024)
-  </p>
-</div>
+Note that due to limitations on projects on a free-tier of Vercel, we kindly as the TA to sign into vercel using the team credentials provided in Quercus. As a result, they will be able to view each of the subteam's deployments separately without incurring additional cost to the team.
 
+Some prerequisities include
+1. Git
+2. npm
 
-<!-- ABOUT THE PROJECT -->
-## Introduction
-This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. It helps visualize relationships between variables in systems with many interdependent factors. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. The application also includes a user management system for easy login, logout, and diagram saving. To summarize, key features include: 
-- **3D Visualization of Causal Diagrams**: Users can interact with and explore complex cause-and-effect diagrams in a three-dimensional space.
-- **Interactive Features**: Includes zooming, rotating, and highlighting to focus on specific parts of the diagrams.
-- **User Management System**: Allows users to save their diagrams and access them through a login system.
+## Getting Started
 
-<!-- PROJECT MANAGEMENT SECTION-->
-## Project Management
-- Our team uses Trello for project management.
+Pull the git repository via command
 
-<!-- RUNNING THE APPLICATION SECTION -->
-## Running the Application
-- TBD
+```bash
+git clone https://github.com/csc301-2024-f/project-19-Machine-Learning-Group.git
+```
 
-### Requirements
-- TBD
+Next checout the D2-3 branch
+```
+git checkout D2-3
+```
 
-### External Dependencies and 3rd Party Software
-- TBD
+We can now run the developmental version of the application by running the following commands
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000/searchPage) with your browser to see the result.
+
+To verify the integrity of our components we included a series of tests in `frontend/__tests__`
+```
+npm test
+```
+will run tests in your terminal.
+
+## Detailed Description
+
+Our subteam covered the following main components
+1. Created 3 different views of graph meatadata (Own Graphs, Shared with Me and Explore)
+2. Create a search-bar which allows users to filter for specific keywords in title and description
+3. Fetech graph metadata from Firebase
+4. Allow users to share graphs with others
+
+![Alt text](frontend/static/Explore.png)
+![Alt text](frontend/static/Filter.png)
+![Alt text](frontend/static/MyGraphs.png)
+![Alt text](frontend/static/Shared.png)
