@@ -5,7 +5,7 @@
 ## Database
 
 Subteam 3’s user story requires 2 database objects (User and GraphMetaData). The following tables depict the data model.  
-![][image1]![][image2]  
+![Alt text](frontend/static/Object.png)
 **User (Subset of Fields):**
 
 1. MyGraphs: IDs of graphs a user has uploaded  
@@ -22,7 +22,7 @@ Subteam 3’s user story requires 2 database objects (User and GraphMetaData). T
 7. AccessControls: List of mapping between User and Access Level (Owner, Editor, Viewer)
 
 ## APIs
-
+![Alt text](frontend/static/api.png)
 For any user-level API calls, it is implicitly assumed the request body contains the userID and authentication headers are set when making a request to DB.
 
 | // User PathPOST /user/graphs \-\> \[ GraphMetaData.IDs \]POST /user/graphs/bookmark \-\> \[ GraphMetaData.IDs \]// Graphs PathPOST /graphs/metadata \-\> \[ GraphMetaData.IDs \]{    userID: varchar}POST /graphs/metadata/public \-\> \[ GraphMetaData.IDs, totalCount: int \]{    Offset: int}DELETE /graphs/metadata \-\> 200{    graphID: varchar}GET /graphs/{ID} \-\> GraphObject |
@@ -31,7 +31,7 @@ For any user-level API calls, it is implicitly assumed the request body contains
 
 ## Client
 
-![][image3]  
+![Alt text](frontend/static/page.png)
 **Functionality**
 
 1. Search For Graphs (Default is my graphs)  
