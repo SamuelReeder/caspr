@@ -2,13 +2,16 @@
  * Storage related functions. ie. upload, download, etc.
  */
 
+import { Graph, GraphData } from "@/types/graph";
 import { app, auth } from "@/config/firebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { createGraph } from "./firestore";
+import { db } from "@/config/firebaseConfig";
+import { useAuth } from "@/app/authContext";
 
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
@@ -45,5 +48,42 @@ export const uploadGraph = async (
 		return graph;
 	} catch (error) {
 		console.error("Error uploading file or storing metadata: ", error);
+	}
+};
+
+/**
+ * Fetches the graphs belonging to the user from firestore.
+ * @returns A promise that resolves to the array of graphs.
+ * @Jaeyong
+ */
+export const fetchGraphs = async () => {
+	const { firebaseUser } = useAuth();
+
+	if (!firebaseUser) {
+		return [];
+	}
+
+	if (firebaseUser) {
+		try {
+			const graphsRef = collection(db, "graphs");
+			const q = query(graphsRef, where("owner", "==", firebaseUser.uid));
+			const querySnapshot = await getDocs(q);
+
+			const graphData: GraphData[] = [];
+
+			querySnapshot.forEach((doc) => {
+				const data = doc.data();
+				graphData.push({
+					createdAt: data.createdAt.toDate(),
+					graphName: data.graphName,
+					graphDescription: data.graphDescription
+				});
+			});
+
+			return graphData;
+		} catch (error) {
+			console.error("Error fetching graphs:", error);
+			return [];
+		}
 	}
 };
