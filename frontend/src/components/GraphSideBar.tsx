@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Input, Flex } from '@chakra-ui/react';
 
 const GraphSideBar: React.FC = () => {
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // event: React.ChangeEvent<HTMLInputElement>
+  const handleSearchChange = () => {
     // Function to handle search input change
+
   };
 
   return (

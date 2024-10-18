@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, TabPanels, TabPanel, Box, Grid, GridItem } from '@chakra-ui/react';
+import { Tabs, TabPanels, TabPanel, Box } from '@chakra-ui/react';
 import CausalDiagram from '../components/CausalDiagram';
 import jsonData from '../data/100nodes_example.json';
 import NavBar from '../components/GraphNavbar';
