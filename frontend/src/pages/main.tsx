@@ -43,7 +43,7 @@ const Data = () => {
             <Heading>{page}</Heading>
 
             {data.map((graph, index) => (
-                page === 'My Graph Page' || page === 'Shared With Me' ? (
+                page === 'My Graphs' || page === 'Shared With Me' ? (
                     <MyGraphObject key={index} title={graph.title} description={graph.description} author={graph.author} />
                 ) : (
                     <SearchedGraphObject key={index} title={graph.title} description={graph.description} author={graph.author} />

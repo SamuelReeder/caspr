@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 
-interface Data {
+export interface Data {
   description: string;
-  id: number;
+  id: string;
   title: string;
   author: string;
 }
