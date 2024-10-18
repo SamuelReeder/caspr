@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Intro
+
+This README will detail the components and elements for subteam 2's submissions. The deployed version of the application can be found at: 
+
+Note that due to limitations on projects on a free-tier of Vercel, we kindly as the TA to sign into vercel using the team credentials provided in Quercus. As a result, they will be able to view each of the subteam's deployments separately without incurring additional cost to the team.
+
+Some prerequisities include
+1. Git
+2. npm
 
 ## Getting Started
 
-First, run the development server:
+Pull the git repository via command
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/csc301-2024-f/project-19-Machine-Learning-Group.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Next checout the D2-3 branch
+```
+git checkout D2-3
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+We can now run the developmental version of the application by running the following commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000/searchPage) with your browser to see the result.
 
-To learn more about Next.js, take a look at the following resources:
+To verify the integrity of our components we included a series of tests in `frontend/__tests__`
+```
+npm test
+```
+will run tests in your terminal.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Detailed Description
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Our subteam covered the following main components
+1. Created 3 different views of graph meatadata (Own Graphs, Shared with Me and Explore)
+2. Create a search-bar which allows users to filter for specific keywords in title and description
+3. Fetech graph metadata from Firebase
+4. Allow users to share graphs with others
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
