@@ -1,15 +1,70 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-<<<<<<<< HEAD:frontend/__tests__/SearchPage.test.tsx
-import SearchPage from '../src/pages/SearchPage';
-========
-import SearchPage from '../searchPage';
->>>>>>>> ddecf6e (Modify Folder Structure for Production Builds):frontend/src/__tests__/SearchPage.test.tsx
+import { render, screen, act } from '@testing-library/react';
+import SearchPage from '../src/pages/searchPage';
 import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 
-test('renders SearchPage component', () => {
-    render(<SearchPage />);
-    const searchPageElement = screen.getByText(/Explore/i);
-    expect(searchPageElement).toBeInTheDocument();
-    expect(true).toBe(true);
+describe('Search functionality working correctly with dummy data', () => {
+    beforeEach(() => {
+        render(<SearchPage />);
+    });
+
+    test('Shows all graphs', async () => {
+
+        const user = userEvent.setup();
+        const searchBarInput = screen.getByPlaceholderText(/Search/i);
+        await act(async () => {
+            await user.type(searchBarInput, 'Graph');
+        });
+        expect(searchBarInput).toHaveValue('Graph');
+
+        expect(screen.getAllByText(/Graph /i)).toHaveLength(8);
+    });
+
+    test('Shows one graph', async () => {
+        const user = userEvent.setup();
+        const searchBarInput = screen.getByPlaceholderText(/Search/i);
+
+        await act(async () => {
+            await user.clear(searchBarInput);
+            await user.type(searchBarInput, 'Graph 1');
+        });
+        expect(searchBarInput).toHaveValue('Graph 1');
+
+        expect(screen.getAllByText(/Graph /i)).toHaveLength(1);
+        expect(screen.getByText(/Graph 1/i)).toBeInTheDocument();
+    });
 });
+
+
+// describe('Search functionality working correctly with firebase data', () => {
+//     beforeEach(() => {
+//         render(<SearchPage />);
+//     });
+
+//     test('Shows all graphs', async () => {
+
+//         const user = userEvent.setup();
+//         const searchBarInput = screen.getByPlaceholderText(/Search/i);
+//         await act(async () => {
+//             await user.type(searchBarInput, 'Graph');
+//         });
+//         expect(searchBarInput).toHaveValue('Graph');
+
+//         expect(screen.getAllByText(/Graph /i)).toHaveLength(8);
+//     });
+
+//     test('Shows one graph', async () => {
+//         const user = userEvent.setup();
+//         const searchBarInput = screen.getByPlaceholderText(/Search/i);
+
+//         await act(async () => {
+//             await user.clear(searchBarInput);
+//             await user.type(searchBarInput, 'Graph 1');
+//         });
+//         expect(searchBarInput).toHaveValue('Graph 1');
+
+//         expect(screen.getAllByText(/Graph /i)).toHaveLength(1);
+//         expect(screen.getByText(/Graph 1/i)).toBeInTheDocument();
+//     });
+// });
