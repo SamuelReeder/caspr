@@ -206,7 +206,7 @@ export default function CreateAccount() {
 										isLoading={googleLoading}
 										onClick={handleGoogleCreateAccount}
 									>
-										Create Account with Google
+										Sign-up with Google
 									</Button>
 								</div>
 							</FormControl>

@@ -40,7 +40,7 @@ describe("Create Account (Landing Page)", () => {
 	test("renders Google sign-up button", () => {
 		render(<CreateAccount />);
 		const googleSignUpButton = screen.getByRole("button", {
-			name: /Sign in with Google/i
+			name: /Sign-up with Google/i
 		});
 		expect(googleSignUpButton).toBeInTheDocument();
 	});
@@ -87,7 +87,7 @@ describe("Create Account (Landing Page)", () => {
 		const mockGoogleAccountCreation = createAccountWithGoogle as jest.Mock;
 
 		const googleSignUpButton = screen.getByRole("button", {
-			name: /Sign in with Google/i
+			name: /Sign-up with Google/i
 		});
 
 		fireEvent.click(googleSignUpButton);
