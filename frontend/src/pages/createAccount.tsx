@@ -58,6 +58,7 @@ export default function CreateAccount() {
 				duration: 5000,
 				isClosable: true
 			});
+			router.push("/");
 		} catch (error) {
 			toast({
 				title: "Error while creating account",
