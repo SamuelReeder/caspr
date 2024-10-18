@@ -4,6 +4,7 @@ import CausalDiagram from '../components/CausalDiagram';
 import jsonData from '../data/100nodes_example.json';
 import NavBar from '../components/GraphNavbar';
 import GraphSideBar from '../components/GraphSideBar';
+import { NodeType } from '../types/node';
 
 interface Diagram {
   id: number;
@@ -17,6 +18,11 @@ interface Diagram {
 const GraphPage = () => {
   const [diagrams, setDiagrams] = useState<Diagram[]>([]);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedNode, setSelectedNode] = useState<NodeType | null>(null);
+
+  const handleNodeSelect = (node: NodeType | null) => {
+    setSelectedNode(node);
+  };
 
   useEffect(() => {
     // Set initial state on the client side
@@ -53,14 +59,18 @@ const GraphPage = () => {
             <TabPanels>
               {diagrams.map((diagram) => (
                 <TabPanel key={diagram.id}>
-                  <CausalDiagram nodes={diagram.data.nodes} edges={diagram.data.edges} />
+                  <CausalDiagram nodes={diagram.data.nodes} edges={diagram.data.edges} selectedNode={selectedNode} />
                 </TabPanel>
               ))}
             </TabPanels>
           </Tabs>
         </Box>
         <Box width="350px">
-          <GraphSideBar />
+          <GraphSideBar 
+            onNodeSelect={handleNodeSelect} 
+            nodes={[]} 
+            edges={[]} 
+          />
         </Box>
       </Box>
     </Box>

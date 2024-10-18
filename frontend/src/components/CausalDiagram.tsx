@@ -10,6 +10,7 @@ import { EdgeType } from '../types/edge';
 interface CausalDiagramProps {
   nodes: NodeType[];
   edges: EdgeType[];
+  selectedNode?: NodeType | null; 
 }
 
 const colors = [
@@ -22,7 +23,7 @@ const colors = [
   '#cf6766'
 ];
 
-const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
+const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNode }) => {
   const categoryColorMap = useRef<{ [key: string]: string }>({}).current;
   const [nodePositions, setNodePositions] = useState<{ [key: string]: [number, number, number] }>({});
   const zPositions = useRef<{ [key: string]: number }>({});
@@ -121,7 +122,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
               label={node.label}
               value={node.value}
               category={node.category}
-              color={getColorByCategory(node.category)}
+              color={selectedNode && selectedNode.id === node.id ? '#00FFFF' : getColorByCategory(node.category)}
               isInteracting={isInteracting}
             />
           ))}
