@@ -25,7 +25,9 @@ Subteam 1 is responsible for the frontend, backend logic, and database setup req
 ![Screenshot 2024-10-18 at 5 21 46 PM](https://github.com/user-attachments/assets/659fdc7c-930a-48f0-9ba7-b4ceac87f0c2)
 
 ### User Home Page (After Logging in):
-
+![image](https://github.com/user-attachments/assets/8cbab77f-c9e0-4581-be1f-5371fc019154)
 
 ### JSON File Upload Page:
 ![Screenshot 2024-10-18 at 5 24 56 PM](https://github.com/user-attachments/assets/028449d6-babc-4dc8-a07b-05e25c00970d)
+![image](https://github.com/user-attachments/assets/d9fdd83a-2bd5-4cf4-bf43-354a5455ed19)
+
