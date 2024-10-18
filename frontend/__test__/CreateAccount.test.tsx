@@ -1,9 +1,11 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import CreateAccount from "@/pages/createAccount";
-import { useRouter } from "next/router";
+
 import { createAccountWithEmail, createAccountWithGoogle } from "@/api";
+import { fireEvent, render, screen } from "@testing-library/react";
+
+import CreateAccount from "@/pages/createAccount";
+import React from "react";
+import { useRouter } from "next/router";
 
 const email = "test@123.com";
 
