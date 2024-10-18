@@ -12,7 +12,6 @@ import {
 	Heading,
 	IconButton,
 	Input,
-	Link,
 	SlideFade,
 	Text,
 	Textarea,
@@ -109,15 +108,17 @@ export default function UploadFile() {
 
 	return (
 		<div className="bg-primary-200 h-screen relative">
-			<Link href="/" className="absolute top-4 left-4">
-				<Button
-					leftIcon={<ArrowBackIcon />}
-					variant="ghost"
-					colorScheme="primary"
-				>
-					Back to Home
-				</Button>
-			</Link>
+			<Button
+				leftIcon={<ArrowBackIcon />}
+				className="absolute top-4 left-4"
+				variant="ghost"
+				colorScheme="primary"
+				onClick={() => {
+					router.push("/home");
+				}}
+			>
+				Back to Home
+			</Button>
 			<div className="h-screen max-w-4xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-full">
 					<Box className="text-center">
