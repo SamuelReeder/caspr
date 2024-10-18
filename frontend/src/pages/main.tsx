@@ -5,40 +5,52 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Searchbar from '../components/Searchbar';
-import { SearchProvider, useSearch } from '../context/SearchResultsContext';
+import { DataProvider, useData } from '../context/DataContext';
 import { Box, Heading } from '@chakra-ui/react';
-import GraphObject from '../components/SearchedGraphObject';
+import { usePage } from '../context/PageContext';
+import SearchedGraphObject from '../components/SearchedGraphObject';
+import MyGraphObject from '@/components/MyGraphObject';
+import { PageProvider } from '../context/PageContext';
 
 const Main = () => {
-  return (
-    <SearchProvider>
-      <Box className="flex h-screen">
-        <Sidebar />
+    return (
+        <PageProvider>
+            <DataProvider>
 
-        {/* Main Content */}
-        <Box className="flex-1 p-6 ml-72 overflow-y-auto" height="100vh">
-          <Searchbar />
-          <Data />
-        </Box>
+                <Box className="flex h-screen">
+                    <Sidebar />
 
-      </Box>
-    </SearchProvider>
-  );
+                    {/* Main Content */}
+                    <Box className="flex-1 p-6 ml-72 overflow-y-auto" height="100vh">
+                        <Searchbar />
+                        <Data />
+                    </Box>
+
+                </Box>
+            </DataProvider>
+        </PageProvider>
+    );
 };
 
-const Data = () => {  // Make Search Results file?
-  const { searchResults } = useSearch();
-  const [sharedGraphs, setSharedGraphs] = useState();
+const Data = () => {
+    const { data } = useData();
+    const { page } = usePage();
 
-  return (
-      <Box>
-        <Heading>{}</Heading>
+    console.log("data", data)
 
-        {searchResults.map((graph, index) => (
-          <GraphObject title={graph.title} description={graph.description} owner=''></GraphObject>
-        ))}
-      </Box>
-  );
+    return (
+        <Box>
+            <Heading>{page}</Heading>
+
+            {data.map((graph, index) => (
+                page === 'My Graph Page' || page === 'Shared With Me' ? (
+                    <MyGraphObject key={index} title={graph.title} description={graph.description} author={graph.author} />
+                ) : (
+                    <SearchedGraphObject key={index} title={graph.title} description={graph.description} author={graph.author} />
+                )
+            ))}
+        </Box>
+    );
 };
 
 export default Main;

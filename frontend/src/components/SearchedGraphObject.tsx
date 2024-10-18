@@ -6,16 +6,16 @@ import ShareButton from './ShareButton';
 interface GraphObjectProps {
     title: string;
     description: string;
-    owner: string;
+    author: string;
     // Add more props here
 }
 
-const SearchedGraphObject = ({ title, description, owner }: GraphObjectProps) => {
+const SearchedGraphObject = ({ title, description, author }: GraphObjectProps) => {
     return (
         <Card my='5'>
             <CardHeader className='flex justify-between'>
                 <Heading size='md'>{title}</Heading>
-                <Text>{owner}</Text> 
+                <Text>{author}</Text> 
             </CardHeader>
 
             <CardBody className='flex justify-between'>
