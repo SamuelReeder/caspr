@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Input } from '@chakra-ui/react';
 import { useSearch } from '../context/SearchResultsContext';
 
@@ -32,6 +32,10 @@ export default function Searchbar() {
           setSearchResults(dummyData);
         }
       };
+
+    useEffect(() => {
+        setSearchResults(dummyData);
+    }, []);
 
     return (
         <Box className="mb-6">

@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
-import SearchPage from '../src/pages/searchPage';
+import Main from '../src/pages/main';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 
 describe('Search functionality working correctly with dummy data', () => {
     beforeEach(() => {
-        render(<SearchPage />);
+        render(<Main />);
     });
 
     test('Shows all graphs', async () => {
