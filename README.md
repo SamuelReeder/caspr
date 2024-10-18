@@ -45,4 +45,7 @@ Our subteam covered the following main components
 3. Fetech graph metadata from Firebase
 4. Allow users to share graphs with others
 
-
+![Alt text](frontend/static/Explore.png)
+![Alt text](frontend/static/Filter.png)
+![Alt text](frontend/static/MyGraphs.png)
+![Alt text](frontend/static/Shared.png)
