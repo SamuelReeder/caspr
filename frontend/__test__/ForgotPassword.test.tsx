@@ -1,7 +1,9 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
+
+import { fireEvent, render, screen } from "@testing-library/react";
+
 import ForgotPassword from "@/pages/forgotPassword";
+import React from "react";
 import { useRouter } from "next/router";
 
 const email = "test@123.com";
