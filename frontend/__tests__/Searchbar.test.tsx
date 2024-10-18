@@ -3,16 +3,16 @@ import { render, screen, act } from '@testing-library/react';
 import Searchbar from '../src/components/Searchbar';
 import '@testing-library/jest-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-import { SearchProvider } from '../src/context/SearchResultsContext';
 import userEvent from '@testing-library/user-event';
+import { DataProvider } from '@/context/DataContext';
 
 describe('Searchbar renders correctly', () => {
     test('renders Searchbar component', () => {
         render(
             <ChakraProvider>
-                <SearchProvider>
+                <DataProvider>
                     <Searchbar />
-                </SearchProvider>
+                </DataProvider>
             </ChakraProvider>
         );
     
@@ -24,9 +24,9 @@ describe('Searchbar renders correctly', () => {
     test('renders Searchbar component with search value', async () => {
         render(
             <ChakraProvider>
-                <SearchProvider>
+                <DataProvider>
                     <Searchbar />
-                </SearchProvider>
+                </DataProvider>
             </ChakraProvider>
         );
     

@@ -36,7 +36,7 @@ const Data = () => {
     const { data } = useData();
     const { page } = usePage();
 
-    console.log("data", data)
+    // console.log("data", data)
 
     return (
         <Box>
