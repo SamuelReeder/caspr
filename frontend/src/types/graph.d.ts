@@ -10,3 +10,9 @@ export interface Graph {
 	graphFileURL: string;
 	createdAt: Timestamp;
 }
+
+export interface GraphData {
+	createdAt: Date;
+	graphName: string;
+	graphDescription: string;
+}
