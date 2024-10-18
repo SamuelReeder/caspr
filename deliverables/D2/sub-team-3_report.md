@@ -1,9 +1,5 @@
 # **Sub-Team Report**
 
-Each sub-team will also draft a sub-team report and place the file such as “deliverables/D2/sub-  
-team-X\_report.md” following a structure similar to D1. This report should provide details of the  
-Following:
-
 1. **A summary of your decisions and the options you considered for your component(s) (UI/frontend, logic/backend, database) so your TA knows what you have built and why. (Soft limit of 600 words. This doesn’t mean you have to write 600 words. Quality is more important than quantity).**
 
 ## Database
