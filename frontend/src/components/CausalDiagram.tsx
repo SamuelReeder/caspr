@@ -11,6 +11,7 @@ interface CausalDiagramProps {
   nodes: NodeType[];
   edges: EdgeType[];
 }
+
 const colors = [
   '#195c90',
   '#ffffff',
@@ -26,6 +27,8 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
   const [nodePositions, setNodePositions] = useState<{ [key: string]: [number, number, number] }>({});
   const zPositions = useRef<{ [key: string]: number }>({});
   const [isInteracting, setIsInteracting] = useState(false); 
+  const [minStrength, setMinStrength] = useState(0);
+  const [maxStrength, setMaxStrength] = useState(1); 
 
   // function to assign colors based on category (same color for nodes from one category)
   const getColorByCategory = (category: string): string => {
@@ -61,50 +64,88 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges }) => {
     };
   }, [nodes, edges]);
 
+  // Input handlers for min and max strength fields
+  const handleMinStrengthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMinStrength(parseFloat(event.target.value));
+  };
+
+  const handleMaxStrengthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMaxStrength(parseFloat(event.target.value));
+  };
+
   return (
-    <Canvas
-      camera={{
-        position: [0, 0, 100],
-        fov: 50,
-        near: 0.1,
-        far: 5000, 
-      }}
-      style={{ width: '100%', height: '910px' }}
-    >
-      <ambientLight intensity={1.0} />
-      <directionalLight position={[10, 10, 10]} intensity={1} />
-      <CameraController nodePositions={nodePositions} setIsInteracting={setIsInteracting}/>
+    <div>
+      <div style={{ marginBottom: '10px' }}>
+        <label htmlFor="min-strength" style={{ marginRight: '10px' }}>Min Strength:</label>
+        <input 
+          type="number" 
+          id="min-strength" 
+          value={minStrength}
+          onChange={handleMinStrengthChange}
+          step="0.1" 
+          min="0" 
+          max="1" 
+          style={{ marginRight: '20px' }}
+        />
 
-      {Object.keys(nodePositions).length > 0 &&
-        nodes.map((node) => (
-          <Node
-            key={node.id}
-            position={nodePositions[node.id]}
-            label={node.label}
-            value={node.value}
-            category={node.category}
-            color={getColorByCategory(node.category)}
-            isInteracting={isInteracting}
-          />
-        ))}
-      {Object.keys(nodePositions).length > 0 &&
-        edges.map((edge) => {
-          const sourcePosition = nodePositions[(edge.source as any).id];
-          const targetPosition = nodePositions[(edge.target as any).id];
+        <label htmlFor="max-strength" style={{ marginRight: '10px' }}>Max Strength:</label>
+        <input 
+          type="number" 
+          id="max-strength" 
+          value={maxStrength}
+          onChange={handleMaxStrengthChange}
+          step="0.1" 
+          min="0" 
+          max="1"
+        />
+      </div>
 
-          if (!sourcePosition || !targetPosition) return null;
+      <Canvas
+        camera={{
+          position: [0, 0, 100],
+          fov: 50,
+          near: 0.1,
+          far: 5000, 
+        }}
+        style={{ width: '100%', height: '910px' }}
+      >
+        <ambientLight intensity={1.0} />
+        <directionalLight position={[10, 10, 10]} intensity={1} />
+        <CameraController nodePositions={nodePositions} setIsInteracting={setIsInteracting}/>
 
-          return (
-            <Edge
-              key={`${(edge.source as any).id}-${(edge.target as any).id}`}
-              sourcePosition={sourcePosition}
-              targetPosition={targetPosition}
-              relationship={edge.relationship}
-              strength={edge.strength}
+        {Object.keys(nodePositions).length > 0 &&
+          nodes.map((node) => (
+            <Node
+              key={node.id}
+              position={nodePositions[node.id]}
+              label={node.label}
+              value={node.value}
+              category={node.category}
+              color={getColorByCategory(node.category)}
+              isInteracting={isInteracting}
             />
-          );
-        })}
-    </Canvas>
+          ))}
+        {Object.keys(nodePositions).length > 0 &&
+          edges
+            .filter((edge) => edge.strength >= minStrength && edge.strength <= maxStrength) 
+            .map((edge) => {
+              const sourcePosition = nodePositions[(edge.source as any).id];
+              const targetPosition = nodePositions[(edge.target as any).id];
+
+              if (!sourcePosition || !targetPosition) return null;
+
+              return (
+                <Edge
+                  key={`${(edge.source as any).id}-${(edge.target as any).id}`}
+                  sourcePosition={sourcePosition}
+                  targetPosition={targetPosition}
+                  relationship={edge.relationship}
+                  strength={edge.strength}
+                />
+              );
+            })}
+      </Canvas>
+    </div>
   );
 };
 
