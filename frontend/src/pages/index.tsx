@@ -32,6 +32,7 @@ export default function Index() {
 	const [password, setPassword] = useState("");
 	const [show, setShow] = useState(false);
 	const [loading, setLoading] = useState<boolean>(false);
+	const [googleLoginLoading, setGoogleLoginLoading] = useState<boolean>(false);
 
 	const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -59,7 +60,7 @@ export default function Index() {
 	};
 
 	const handleGoogleLogin = async () => {
-		setLoading(true);
+		setGoogleLoginLoading(true);
 		try {
 			await loginWithGoogle();
 		} catch (error: any) {
@@ -70,7 +71,7 @@ export default function Index() {
 				duration: 3000,
 				isClosable: true
 			});
-			setLoading(false);
+			setGoogleLoginLoading(false);
 		}
 	};
 
@@ -181,7 +182,7 @@ export default function Index() {
 										rightIcon={<ArrowForwardIcon />}
 										colorScheme="blue"
 										className="w-full"
-										isLoading={loading}
+										isLoading={googleLoginLoading}
 										type="button"
 										onClick={handleGoogleLogin}
 									>

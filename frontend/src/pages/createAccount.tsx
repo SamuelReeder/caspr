@@ -32,6 +32,7 @@ export default function CreateAccount() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [googleLoading, setGoogleLoading] = useState<boolean>(false);
 
 	const handleSubmit = async () => {
 		// If user mistyped the password
@@ -71,9 +72,9 @@ export default function CreateAccount() {
 		}
 	};
 
-	const handleGoogleLogin = async () => {
+	const handleGoogleCreateAccount = async () => {
 		try {
-			setLoading(true);
+			setGoogleLoading(true);
 
 			const user = await createAccountWithGoogle();
 		} catch (error) {
@@ -85,7 +86,7 @@ export default function CreateAccount() {
 				isClosable: true
 			});
 		} finally {
-			setLoading(false);
+			setGoogleLoading(false);
 		}
 	};
 
@@ -198,15 +199,13 @@ export default function CreateAccount() {
 										Login Instead
 									</Button>
 
-									{/* TODO - This should be a create account with google button */}
 									<Button
 										colorScheme="blue"
 										className="w-full"
-										// TODO - this button also loads when create account button is also loading
-										isLoading={loading}
-										onClick={handleGoogleLogin}
+										isLoading={googleLoading}
+										onClick={handleGoogleCreateAccount}
 									>
-										Sign in with Google
+										Create Account with Google
 									</Button>
 								</div>
 							</FormControl>
