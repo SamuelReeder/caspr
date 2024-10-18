@@ -11,7 +11,7 @@ Subteam 1 is responsible for the frontend, backend logic, and database setup req
 2. Run “cd frontend” in your terminal,  from the root of the project to go to the frontend directory.
 3. Run “npm install” in the terminal, from the frontend directory to install all the necessary packages
 4. Run “npm run dev” in the terminal, to start a local host instance of the code. You can access the website by going to http://localhost:3000 on your browser. 
-5. Run “npm test” to run all the unit tests 
+5. Run “npm test” to run all the unit tests
 
 ## Screenshots:
 ### Main Login Page:
@@ -28,6 +28,6 @@ Subteam 1 is responsible for the frontend, backend logic, and database setup req
 ![image](https://github.com/user-attachments/assets/8cbab77f-c9e0-4581-be1f-5371fc019154)
 
 ### JSON File Upload Page:
-![Screenshot 2024-10-18 at 5 24 56 PM](https://github.com/user-attachments/assets/028449d6-babc-4dc8-a07b-05e25c00970d)
+![image](https://github.com/user-attachments/assets/23feba3c-33f2-467c-90d2-8a62f46e861f)
 ![image](https://github.com/user-attachments/assets/d9fdd83a-2bd5-4cf4-bf43-354a5455ed19)
 
