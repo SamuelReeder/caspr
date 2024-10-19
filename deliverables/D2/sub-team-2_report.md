@@ -38,13 +38,13 @@ Both Morris and Daria made pull requests, reviewed each other's code, provided f
 - **Hover Information**:
   - Hover over any node or edge to see detailed information such as labels, values, categories, and connection strengths.
 - **Filtering Edges by Strength**:
- - Enter values between 0 and 1 in the 'Min Strength' and 'Max Strength' fields to filter edges based on their connection strength.
+  - Enter values between 0 and 1 in the 'Min Strength' and 'Max Strength' fields to filter edges based on their connection strength.
 - **Node Search and Highlighting**:
- - Use the search bar to find nodes by ID, name, or category. Clicking on a search result will highlight the node in cyan on the graph.
+  - Use the search bar to find nodes by ID, name, or category. Clicking on a search result will highlight the node in cyan on the graph.
 - **Connection Types and Directions**:
- - Red edges indicate inhibitory connections, black edges indicate causal connections, and arrows show the direction of the connection. Edge thickness represents the strength of the connection.
+  - Red edges indicate inhibitory connections, black edges indicate causal connections, and arrows show the direction of the connection. Edge thickness represents the strength of the connection.
 - **Node Categories**:
- - Nodes are color-coded by category, providing quick identification of different groups within the graph.
+  - Nodes are color-coded by category, providing quick identification of different groups within the graph.
 ### Testing: 
 - **Graph Page test**:
 The graph page tests mocks the different components required on the page, then it verifies that the page renders correctly and different diagrams can be added and removed from the NavBar area.
@@ -66,6 +66,7 @@ This is due to some next js configuration. The project cannot be run when the fo
 
 - **Other notes**:
 The team is using dummy data provided by the partner for the node visualization. This data is located in the `/frontend/src/data directory`.
+
 Our work can be verified by the commit history: [https://github.com/csc301-2024-f/project-19-Machine-Learning-Group/compare/main...D2-2](https://github.com/csc301-2024-f/project-19-Machine-Learning-Group/compare/main...D2-2)
 
 ## 4. Application
