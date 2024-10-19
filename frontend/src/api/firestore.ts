@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+
 /**
  * Firestore API
  */
@@ -14,6 +16,7 @@ import {
 import { app, db } from "@/config/firebaseConfig";
 
 import { Graph } from "@/types/graph";
+
 import { User } from "@/types";
 
 /**

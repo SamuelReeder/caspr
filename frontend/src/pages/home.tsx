@@ -37,7 +37,7 @@ function Home() {
 
 	const fetchUsersGraphs = async () => {
 		try {
-			const usersGraphs = await fetchGraphs();
+			const usersGraphs = await fetchGraphs(firebaseUser.uid);
 			setGraphs(usersGraphs);
 		} catch (error) {
 			console.error("Error fetching graphs:", error);

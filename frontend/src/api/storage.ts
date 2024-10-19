@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+
 /**
  * Storage related functions. ie. upload, download, etc.
  */
@@ -56,17 +58,16 @@ export const uploadGraph = async (
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong
  */
-export const fetchGraphs = async () => {
-	const { firebaseUser } = useAuth();
+export const fetchGraphs = async (id: string) => {
 
-	if (!firebaseUser) {
+	if (!id) {
 		return [];
 	}
 
-	if (firebaseUser) {
+	if (id) {
 		try {
 			const graphsRef = collection(db, "graphs");
-			const q = query(graphsRef, where("owner", "==", firebaseUser.uid));
+			const q = query(graphsRef, where("owner", "==", id));
 			const querySnapshot = await getDocs(q);
 
 			const graphData: GraphData[] = [];
