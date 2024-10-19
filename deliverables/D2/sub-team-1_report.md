@@ -15,16 +15,16 @@ This effectively summarizes our development choices. We prioritized using modern
 
 ### 2. Individual contributions:
 
-#### **Danny:**
+**Danny:**
 As a full-stack engineer, I worked on both the frontend and backend for deliverable 2 with my main contributions being to the user authentication system. In the backend, I developed the functionality for creating accounts with email and password. Using firebase authentication service, I caught any account creation errors as if the email entered has already been signed up with, it would throw an error. In addition to creating an account with email and password, I also implemented the functionality for Google sign-in, allowing a convenient alternative sign-in method. Upon clicking on the google sign-in button, the user would be taken to a pop-up screen prompting them to sign into their Gmail account. The system would then create an account in the database using their Gmail credentials. For frontend, I created the create account page that is hooked onto the backend that handles creating accounts and setting them up in the database. Additionally, I created a forgot password page which is on the main login page to help users reset their password in case they forgot it.
 
-### **Jaeyong:**
+**Jaeyong:**
 My primary backend responsibilities were the features that allow the users to change their password and upload JSON files for their graphs to save to their accounts. For password changes, I took advantage of the firebase authentication service to send an email with a link to update password to the user's inbox. Within the Firebase development console, I wrote out the email that facilitates this. For JSON file upload, I utilized a combination of Firebase Cloud Storage (to store the raw JSON file content) and Firestore (to store graph metadata). I wrote functions to upload graphs and to fetch all graphs belonging to the user. On the frontend, I built the very first page, the login page, which was used as the template to build the create account and forgot password pages. I also built the upload JSON page and the graph list component used on the home page to display a list of the users graphs fetched from the db. Lastly, I hooked up my backend functions for executing a password change to the forgot password page Danny built.
 
-## **Samuel:**
+**Samuel:**
 My primary responsibilities in this deliverable were in my role as a backend engineer. I wrote the logic for email and password login, Google login, logout, Firestore document fetching, and user types, as well as writing and integrating the full authentication context to ensure that authentication state is preserved and accessible throughout the web app. Additionally, I developed a preliminary home page to display Firestore data and implemented a logout button. I also set up the testing framework using Jest and troubleshooted its compatibility with Next.js. Following this, I wrote the login page tests, which comprehensively cover all actions a user can perform on that page, including logging in with an eligible account. In my capacity as project manager, I created our team Firebase account and integrated its configuration into our project, including setting up environment variables for sensitive keys. I also created the skeleton code for our subteam to build on during development. Beyond this subteam, I managed our tasks on Trello and provided consultation on design choices to other subteams, particularly concerning the database, as I have the most familiarity with Firebase. Lastly, I wrote the summary for this subteam’s report.
 
-### Steps for Verification:
+### 3. Steps for Verification:
 
 1. **Access the Deployment**:  
    Head over to our deployment at the link below, where you'll first find yourself on a login page.
