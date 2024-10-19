@@ -14,9 +14,6 @@
 <!-- ABOUT THE PROJECT -->
 ## Introduction
 This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. It helps visualize relationships between variables in systems with many interdependent factors. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. The application also includes a user management system for easy login, logout, and diagram saving. To summarize, key features include: 
-- **3D Visualization of Causal Diagrams**: Users can interact with and explore complex cause-and-effect diagrams in a three-dimensional space.
-- **Interactive Features**: Includes zooming, rotating, and highlighting to focus on specific parts of the diagrams.
-- **User Management System**: Allows users to save their diagrams and access them through a login system.
 
 ### Key Features
 - **Dynamic 3D Graph Visualization**: Our app brings causal diagrams to life! The 3D graph is generated dynamically from JSON data, where each node and edge represents crucial connections between elements. You can explore complex systems with ease.
@@ -34,10 +31,6 @@ This project is a web application designed to allow users to explore and interac
 
 - **Connection Type and Direction Indicators**: Easily differentiate between causal and inhibitory connections using color-coded edges (black for causal, red for inhibitory), and follow the arrows to see the direction of influence between nodes.
  <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="50%">
-
-<!-- PROJECT MANAGEMENT SECTION-->
-## Project Management
-- Our team uses Trello for project management.
 
 <!-- RUNNING THE APPLICATION SECTION -->
 ## Running the Application
