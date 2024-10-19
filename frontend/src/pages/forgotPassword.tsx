@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+
 /**
  * Forgot password page
  */
@@ -60,7 +62,7 @@ export default function ForgotPassword() {
 					<Box className="text-center">
 						<Heading className="text-center text-4xl">Forgot Password</Heading>
 						<Text className="pt-2">
-							Enter the email associated with your account. We'll send you a
+							Enter the email associated with your account. We&apos;ll send you a
 							link to change your password.
 						</Text>
 
@@ -94,7 +96,7 @@ export default function ForgotPassword() {
 										>
 											<CheckCircleIcon mr={2} />
 											An email has been sent to your inbox with a link to reset
-											your password. Once you've reset your password, you can
+											your password. Once you&apos;ve reset your password, you can
 											close that tab, come back to this one, and log in with
 											your new password.
 										</Box>

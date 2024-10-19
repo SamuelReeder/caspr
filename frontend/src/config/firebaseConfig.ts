@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+
 // Import the functions you need from the SDKs you need
 import { getApp, initializeApp } from "firebase/app";
 

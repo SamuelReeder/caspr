@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+
 /**
  * Index (Landing Page)
  */
@@ -89,7 +91,7 @@ export default function Index() {
 		};
 
 		handleRedirect();
-	}, [loginWithGoogle]);
+	}, [router]);
 
 	if (firebaseUser) {
 		router.push("/home");
