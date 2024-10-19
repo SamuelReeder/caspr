@@ -71,4 +71,4 @@ Our work can be verified by the commit history: [https://github.com/csc301-2024-
 
 ## 4. Application
 ### Deployment Link: 
-https://project-19-machine-learning-group-5u0ilpwc5.vercel.app/
+https://project-19-machine-learning-group-bedngb99d.vercel.app/
