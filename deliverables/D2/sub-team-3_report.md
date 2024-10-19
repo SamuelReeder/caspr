@@ -5,7 +5,7 @@
 ## Database
 
 Subteam 3’s user story requires 2 database objects (User and GraphMetaData). The following tables depict the data model.  
-<img src="Static/Object.png" alt="Screenshot" width="500"/>
+<img src="project-19-Machine-Learning-Group/deliverables/frontend/Static/Object.png" alt="Screenshot" width="500"/>
 **User (Subset of Fields):**
 
 1. MyGraphs: IDs of graphs a user has uploaded  
