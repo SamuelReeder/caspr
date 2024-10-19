@@ -44,5 +44,5 @@ My primary responsibilities in this deliverable were in my role as a backend eng
 5. **Test Logout and Password Reset**:  
    Log out by clicking the "Log Out" button. Then, test the "Forgot Password" functionality on the main login page by sending an email to reset your password. Verify that you can log in with the newly created password.
 
-### Deployment Link:  
-<< PUT THE LINK HERE >>
+### Deployment Link: 
+[Deployment](https://project-19-machine-learning-group-5u0ilpwc5.vercel.app/)
