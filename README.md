@@ -10,10 +10,11 @@
   </p>
 </div>
 
+[Try the project here!](https://project-19-machine-learning-group-bedngb99d.vercel.app/)
 
 <!-- ABOUT THE PROJECT -->
 ## Introduction
-This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. It helps visualize relationships between variables in systems with many interdependent factors. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. The application also includes a user management system for easy login, logout, and diagram saving. To summarize, key features include: 
+This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. It helps visualize relationships between variables in systems with many interdependent factors. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. To summarize, key features include: 
 
 ### Key Features
 - **Dynamic 3D Graph Visualization**: Our app brings causal diagrams to life! The 3D graph is generated dynamically from JSON data, where each node and edge represents crucial connections between elements. You can explore complex systems with ease.
@@ -34,7 +35,11 @@ This project is a web application designed to allow users to explore and interac
 
 <!-- RUNNING THE APPLICATION SECTION -->
 ## Running the Application
+
+There are two options to run try the application. The first one is to use the [live deployment here](https://project-19-machine-learning-group-bedngb99d.vercel.app/), and the second one is to run it locally. The instruction below details how to run it locally.
+
 To get started with the 3D Causal Diagram Explorer, please follow the step-by-step instructions below to ensure a smooth setup and start-up process.
+
 ### Requirements
 - Node.js: The runtime environment required to run the application. Download and install it from [Node.js official website](https://nodejs.org/en).
 - npm: Comes with [Node.js](https://nodejs.org/en) and is necessary for managing the application's dependencies
