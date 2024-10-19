@@ -46,6 +46,19 @@ To get started with the 3D Causal Diagram Explorer, please follow the step-by-st
 - Start the development server: `npm run dev`
 - Access the app: Open your browser and go to [http://localhost:3000/graph](http://localhost:3000/graph)
 
+### Testing
+- Create `.bablerc` file with the following code in the `frontend` directory
+- Run the test: `npm test` 
+```bash
+// .babelrc
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ]
+}
+```
 
 ### External Dependencies and 3rd Party Software
 Our project relies on several external dependencies and third-party libraries to enhance functionality and simplify development. Below is a summary of the key dependencies:
