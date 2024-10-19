@@ -70,5 +70,5 @@ The team is using dummy data provided by the partner for the node visualization.
 Our work can be verified by the commit history: [https://github.com/csc301-2024-f/project-19-Machine-Learning-Group/compare/main...D2-2](https://github.com/csc301-2024-f/project-19-Machine-Learning-Group/compare/main...D2-2)
 
 ## 4. Application
-### Deployment
-<PUT LINK HERE>
+### Deployment Link: 
+[https://project-19-machine-learning-group-bedngb99d.vercel.app/](https://project-19-machine-learning-group-bedngb99d.vercel.app/)
