@@ -24,13 +24,9 @@ Subteam 3’s user story requires 2 database objects (User and GraphMetaData). T
 
 ## APIs
 
-<img src="./assets/Api.png" alt="Screenshot" width="500"/>
-
 For any user-level API calls, it is implicitly assumed the request body contains the userID and authentication headers are set when making a request to DB.
 
-| // User PathPOST /user/graphs \-\> \[ GraphMetaData.IDs \]POST /user/graphs/bookmark \-\> \[ GraphMetaData.IDs \]// Graphs PathPOST /graphs/metadata \-\> \[ GraphMetaData.IDs \]{    userID: varchar}POST /graphs/metadata/public \-\> \[ GraphMetaData.IDs, totalCount: int \]{    Offset: int}DELETE /graphs/metadata \-\> 200{    graphID: varchar}GET /graphs/{ID} \-\> GraphObject |
-| :---- |
-|  |
+<img src="./assets/Api.png" alt="Screenshot" width="500"/>
 
 ## Client
 
