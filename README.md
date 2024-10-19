@@ -30,8 +30,10 @@ This project is a web application designed to allow users to explore and interac
  </div>
 
 - **Powerful Filtering and Searching**: Customize your view with filtering based on connection strength, or search for nodes by name, category, or ID. The graph instantly adjusts to show exactly what you need.
+ <img src="/images/search.gif" alt="Node Description" width="60%" height="60%">
 
 - **Connection Type and Direction Indicators**: Easily differentiate between causal and inhibitory connections using color-coded edges (black for causal, red for inhibitory), and follow the arrows to see the direction of influence between nodes.
+ <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="50%">
 
 <!-- PROJECT MANAGEMENT SECTION-->
 ## Project Management
