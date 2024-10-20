@@ -71,5 +71,7 @@ Kevin: Wrote out ideas and rough draft for the Sub-Team report and Team report. 
 
 Terry: Drafted the high-level architecture and component design for the subteam. Mainly worked on backed-end, strategic decisions (i.e. How to design the DB, what components to include, how to structure components), and backend API calls. Also handled deployment of all three branches for each user story.
 
+**Your application (see deployment section below for details)**
 
+[Application Link](https://project-19-machine-learning-group-1nvwqj6ru.vercel.app/main)
 
