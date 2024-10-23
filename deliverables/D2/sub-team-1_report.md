@@ -40,6 +40,7 @@ My primary responsibilities in this deliverable were in my role as a backend eng
    Check that your uploaded graph(s) appear on the home page by making sure you see the graph name and description for the graph you just uploaded. You should see a green "graph saved" message indicating a successful upload to the database.  
 
    **Note (10/18)**: ~~Due to a Firebase daily database read quota limitation, the graph data has been temporarily filled with dummy data. The code that pulls the user’s uploaded graphs from Firebase has been commented out. I (Jaeyong) will attempt to fix this over the weekend of 10/19/2024, but for now, the green “graph saved” message indicates a successful upload.~~
+
    **Note (10/22)**: The code causing the firebase query limit has been fixed. Please see the deployment link section at the bottom where we've provided a link to the new deployment.
 
 6. **Test Logout and Password Reset**:  
