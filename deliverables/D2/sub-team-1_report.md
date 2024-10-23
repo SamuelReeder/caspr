@@ -30,20 +30,25 @@ My primary responsibilities in this deliverable were in my role as a backend eng
    Head over to our deployment at the link below, where you'll first find yourself on a login page.
 
 2. **Create an Account**:  
-   Create an account, ideally **do not use Google login** so you can create a password and later test the login page.
+   Create an account, ideally **do not use Google account creation** (for now) so you can create a password and later test the login page. Google login and account creation has been implemented so you can come back to it later to try it out.
 
 3. **Home Page & File Upload**:  
-   After creating your account, you will be redirected to the home page. On this page, upload the following JSON file, which contains dummy data for nodes and edges of a graph:  
+   After creating your account, you will be redirected to the home page. On this page, upload the following JSON file, which contains dummy data for nodes and edges of a graph, by clicking on the upload file button in the top right:  
    [Dummy JSON Data for Testing](https://drive.google.com/drive/folders/1Bgcx9l224UFH2GCEW-DQcYPc2k1sJJfJ?usp=sharing)
 
 4. **Verify Graph Upload**:  
-   Check that your uploaded graph(s) appear on the home page. You should see a green "graph saved" message indicating a successful upload to the database.  
+   Check that your uploaded graph(s) appear on the home page by making sure you see the graph name and description for the graph you just uploaded. You should see a green "graph saved" message indicating a successful upload to the database.  
 
-   **Note**: Due to a Firebase daily database read quota limitation, the graph data has been temporarily filled with dummy data. The code that pulls the user’s uploaded graphs from Firebase has been commented out. I (Jaeyong) will attempt to fix this over the weekend of 10/19/2024, but for now, the green “graph saved” message indicates a successful upload.
+   **Note (10/18)**: ~~Due to a Firebase daily database read quota limitation, the graph data has been temporarily filled with dummy data. The code that pulls the user’s uploaded graphs from Firebase has been commented out. I (Jaeyong) will attempt to fix this over the weekend of 10/19/2024, but for now, the green “graph saved” message indicates a successful upload.~~
+   **Note (10/22)**: The code causing the firebase query limit has been fixed. Please see the deployment link section at the bottom where we've provided a link to the new deployment.
 
-5. **Test Logout and Password Reset**:  
+6. **Test Logout and Password Reset**:  
    Log out by clicking the "Log Out" button. Then, test the "Forgot Password" functionality on the main login page by sending an email to reset your password. Verify that you can log in with the newly created password.
 
-### Deployment Link:  
-[Deployment](https://project-19-machine-learning-group-5u0ilpwc5.vercel.app/)
+### Deployment Link:  
+[~~Deployment~~](https://project-19-machine-learning-group-5u0ilpwc5.vercel.app/) <- this is the old deployment link which has the potential for "query limit reached" error if left running for too long.
+
+To access sub-team 1's deployment, please use:
+- [This one](https://project-19-machine-learning-git-42d99a-terrys-projects-2a9e0002.vercel.app/)
+- [Or this back up one if the above gives you any trouble](project-19-machine-learning-group-2a1aq6q84.vercel.app)
 
