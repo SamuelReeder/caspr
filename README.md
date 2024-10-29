@@ -2,15 +2,16 @@
 
 <!-- PROJECT LOGO HERE IN THE FUTURE -->
 <br />
-<div>
-  <h1>Complex Causal Diagram Visualization</h1>
-
-  <p>
-    By Team #19 for the Machine Learning Group, Department of Computer Science, University of Toronto (CSC301 Fall 2024)
-  </p>
+<div">
+  <h1>Caspr - Causal Analysis of Structure Paths and Relationships</h1>
 </div>
 
 [Try the project here!](https://project-19-machine-learning-group-bedngb99d.vercel.app/)
+<!-- PARTNER INTRO -->
+## Project Partner Introduction
+This is an open source project built for the Machine Learning Group in the Department of Computer Science at the University of Toronto. The Department of Computer Science at the University of Toronto has several faculty members working in the area of machine learning, neural networks, statistical pattern recognition, probabilistic planning, and adaptive systems.
+- **Sheldon Huang, Research Lead, Primary Contact**: huang@cs.toronto.edu
+- **Yuchen Wang, Software Lead, Secondary Contact**: https://www.yuchenwyc.com/
 
 <!-- ABOUT THE PROJECT -->
 ## Introduction
@@ -32,6 +33,9 @@ This project is a web application designed to allow users to explore and interac
 
 - **Connection Type and Direction Indicators**: Easily differentiate between causal and inhibitory connections using color-coded edges (black for causal, red for inhibitory), and follow the arrows to see the direction of influence between nodes.
  <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="50%">
+
+## Instructions
+- TBD
 
 <!-- RUNNING THE APPLICATION SECTION -->
 ## Running the Application
@@ -79,3 +83,15 @@ Our project relies on several external dependencies and third-party libraries to
   - [Chakra UI Documentation](https://v2.chakra-ui.com/docs/components)
 - **npm**: The Node package manager is used to manage the project’s dependencies and run scripts.
   - [npm Documentation](https://docs.npmjs.com/)
+
+## Development Requirements
+- TBD
+
+## Deployment and Github Workflow
+- TBD
+
+## Coding Standards and Guidelines
+- TBD
+
+## Licences
+- TBD

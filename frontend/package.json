@@ -24,9 +24,12 @@
     "firebase": "^10.14.0",
     "framer-motion": "^11.11.8",
     "next": "14.2.14",
+    "three": "^0.169.0"
+    "esm": "^3.2.25",
+    "firebase": "^10.14.0",
     "react": "^18",
     "react-dom": "^18",
-    "three": "^0.169.0"
+    "tailwindcss": "^3.4.13"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.8",
@@ -34,12 +37,14 @@
     "@babel/preset-typescript": "^7.25.7",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
+    "@babel/plugin-transform-runtime": "^7.25.7",
     "@types/d3": "^7.4.3",
     "@types/jest": "^29.5.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "babel-jest": "^29.7.0",
+    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
     "identity-obj-proxy": "^3.0.0",
@@ -50,5 +55,6 @@
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.2.5",
     "typescript": "^5"
+    "prettier": "^3.3.3",
   }
 }
