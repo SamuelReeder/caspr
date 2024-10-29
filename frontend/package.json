@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.13.0",
     "esm": "^3.2.25",
     "firebase": "^10.14.0",
+    "framer-motion": "^11.11.7",
     "next": "14.2.14",
     "react": "^18",
     "react-dom": "^18",
