@@ -1,10 +1,4 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/ZzmLl-eM)
-
-<!-- PROJECT LOGO HERE IN THE FUTURE -->
-<br />
-<div">
-  <h1>Caspr - Causal Analysis of Structure Paths and Relationships</h1>
-</div>
+# Caspr - Causal Analysis of Structure Paths and Relationships
 
 [Try the project here!](https://project-19-machine-learning-group-bedngb99d.vercel.app/)
 <!-- PARTNER INTRO -->
