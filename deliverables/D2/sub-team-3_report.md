@@ -5,7 +5,8 @@
 ## Database
 
 Subteam 3’s user story requires 2 database objects (User and GraphMetaData). The following tables depict the data model.  
-<img src="../../frontend/static/Object.png" alt="Screenshot" width="500"/>
+<img src="./assets/Object.png" alt="Screenshot" width="500"/>
+
 **User (Subset of Fields):**
 
 1. MyGraphs: IDs of graphs a user has uploaded  
@@ -32,6 +33,15 @@ For any user-level API calls, it is implicitly assumed the request body contains
 ## Client
 
 <img src="../../frontend/static/Page.png" alt="Screenshot" width="500"/>
+
+For any user-level API calls, it is implicitly assumed the request body contains the userID and authentication headers are set when making a request to DB.
+
+<img src="./assets/Api.png" alt="Screenshot" width="500"/>
+
+## Client
+
+<img src="./assets/Page.png" alt="Screenshot" width="500"/>
+
 **Functionality**
 
 1. Search For Graphs (Default is my graphs)  
@@ -69,6 +79,9 @@ For our web framework we chose to use React with Next.js for its routing feature
 
 Kevin: Wrote out ideas and rough draft for the Sub-Team report and Team report. Mainly worked on the frontend part of our application, including the UI for all the pages, the search function logic, and global data context needed for searching and sharing graphs. Also wrote all the basic tests for the frontend components in the application. 
 
-Terry:
+Terry: Drafted the high-level architecture and component design for the subteam. Mainly worked on backed-end, strategic decisions (i.e. How to design the DB, what components to include, how to structure components), and backend API calls. Also handled deployment of all three branches for each user story.
 
+**Your application (see deployment section below for details)**
+
+[Application Link](https://project-19-machine-learning-group-1nvwqj6ru.vercel.app/main)
 
