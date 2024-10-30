@@ -1,6 +1,4 @@
-<div">
-  <h1>Caspr - Causal Analysis of Structure Paths and Relationships</h1>
-</div>
+# Caspr - Causal Analysis of Structure Paths and Relationships
 
 [Try the project here!](https://project-19-machine-learning-group-bedngb99d.vercel.app/)
 <!-- PARTNER INTRO -->
