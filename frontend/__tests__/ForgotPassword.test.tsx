@@ -5,6 +5,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import ForgotPassword from "@/pages/forgotPassword";
 import React from "react";
 import { useRouter } from "next/router";
+import customRender from "@/test-utils/render";
 
 const email = "test@123.com";
 
@@ -30,13 +31,13 @@ describe("Forgot Password (Landing Page)", () => {
 	});
 
 	test("renders Forgot Password component", () => {
-		render(<ForgotPassword />);
+		customRender(<ForgotPassword />);
 		const headingElement = screen.getByText(/Forgot Password/i);
 		expect(headingElement).toBeInTheDocument();
 	});
 
 	test("allows user to input email", () => {
-		render(<ForgotPassword />);
+		customRender(<ForgotPassword />);
 		const emailInput = screen.getByPlaceholderText(/Enter your email/i);
 		fireEvent.change(emailInput, { target: { value: email } });
 		expect(emailInput).toHaveValue(email);

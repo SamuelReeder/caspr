@@ -6,6 +6,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import CreateAccount from "@/pages/createAccount";
 import React from "react";
 import { useRouter } from "next/router";
+import customRender from "@/test-utils/render";
 
 const email = "test@123.com";
 
@@ -32,13 +33,13 @@ describe("Create Account (Landing Page)", () => {
 	});
 
 	test("renders Create Account component", () => {
-		render(<CreateAccount />);
+		customRender(<CreateAccount />);
 		const headingElement = screen.getByText(/Welcome to Caspr/i);
 		expect(headingElement).toBeInTheDocument();
 	});
 
 	test("renders Google sign-up button", () => {
-		render(<CreateAccount />);
+		customRender(<CreateAccount />);
 		const googleSignUpButton = screen.getByRole("button", {
 			name: /Sign-up with Google/i
 		});
@@ -46,21 +47,21 @@ describe("Create Account (Landing Page)", () => {
 	});
 
 	test("allows user to input email", () => {
-		render(<CreateAccount />);
+		customRender(<CreateAccount />);
 		const emailInput = screen.getByPlaceholderText(/Enter email/i);
 		fireEvent.change(emailInput, { target: { value: email } });
 		expect(emailInput).toHaveValue(email);
 	});
 
 	test("allows user to input username", () => {
-		render(<CreateAccount />);
+		customRender(<CreateAccount />);
 		const usernameInput = screen.getByPlaceholderText(/Enter username/i);
 		fireEvent.change(usernameInput, { target: { value: "username" } });
 		expect(usernameInput).toHaveValue("username");
 	});
 
 	test("allows user to input password", () => {
-		render(<CreateAccount />);
+		customRender(<CreateAccount />);
 		const passwordInput = screen.getByLabelText(/Password/i);
 		fireEvent.change(passwordInput, { target: { value: "password" } });
 		expect(passwordInput).toHaveValue("password");
@@ -70,7 +71,7 @@ describe("Create Account (Landing Page)", () => {
 		(createAccountWithEmail as jest.Mock).mockRejectedValueOnce(
 			new Error("Passwords don't match")
 		);
-		render(<CreateAccount />);
+		customRender(<CreateAccount />);
 		const emailInput = screen.getByPlaceholderText(/Enter email/i);
 		const passwordInput = screen.getByLabelText(/Password/i);
 		const signUpButton = screen.getByRole("button", {
@@ -83,7 +84,7 @@ describe("Create Account (Landing Page)", () => {
 	});
 
 	test("triggers Google sign-up when button is clicked", async () => {
-		render(<CreateAccount />);
+		customRender(<CreateAccount />);
 		const mockGoogleAccountCreation = createAccountWithGoogle as jest.Mock;
 
 		const googleSignUpButton = screen.getByRole("button", {

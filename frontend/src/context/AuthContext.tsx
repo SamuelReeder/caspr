@@ -10,31 +10,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
 	const [firestoreUser, setFirestoreUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
-  
+
 	useEffect(() => {
-	  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-		setFirebaseUser(user); // incase of logout, it sets to null
-        if (user) {
-            try {
-                const firestoreUser = await getUser(user.uid);
-                setFirestoreUser(firestoreUser);
-            } catch (error) {
-                console.error("Error fetching Firestore user:", error);
-            }
-        } else {
-            setFirestoreUser(null);
-        }
-		setLoading(false);
-	  });
-  
-	  return () => unsubscribe();
+		const unsubscribe = onAuthStateChanged(auth, async (user) => {
+			setFirebaseUser(user); // incase of logout, it sets to null
+			if (user) {
+				try {
+					const firestoreUser = await getUser(user.uid);
+					setFirestoreUser(firestoreUser);
+				} catch (error) {
+					console.error("Error fetching Firestore user:", error);
+				}
+			} else {
+				setFirestoreUser(null);
+			}
+			setLoading(false);
+		});
+
+		return () => unsubscribe();
 	}, []);
-  
+
 	return (
-	  <AuthContext.Provider value={{ firebaseUser, firestoreUser, loading }}>
-		{children}
-	  </AuthContext.Provider>
+		<AuthContext.Provider value={{ firebaseUser, firestoreUser, loading }}>
+			{children}
+		</AuthContext.Provider>
 	);
-  };
-  
-  export const useAuth = () => useContext(AuthContext);
+};
+
+export const useAuth = () => useContext(AuthContext);

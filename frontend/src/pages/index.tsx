@@ -22,7 +22,7 @@ import { handleGoogleRedirect, loginWithEmail, loginWithGoogle } from "@/api";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { useAuth } from "@/app/authContext";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 
 export default function Index() {

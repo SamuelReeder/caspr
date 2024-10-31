@@ -3,13 +3,12 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import MyGraphObject from '../src/components/MyGraphObject';
+import customRender from '@/test-utils/render';
 
 describe('GraphObject renders correctly', () => {
     test('renders GraphObject component', () => {
-        render(
-            <ChakraProvider>
+        customRender(
                 <MyGraphObject title="Test Title" description="Test Description" author="Kevin@gmail.com" />
-            </ChakraProvider>
         );
 
         const titleElement = screen.getByText(/Test Title/i);
@@ -22,10 +21,8 @@ describe('GraphObject renders correctly', () => {
     });
 
     test('renders GraphObject button', () => {
-        render(
-            <ChakraProvider>
+        customRender(
                 <MyGraphObject title="Test Title" description="Test Description" author="Kevin@gmail.com" />
-            </ChakraProvider>
         );
 
         const buttonElement = screen.getByText(/Share/i);
