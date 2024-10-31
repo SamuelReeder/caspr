@@ -13,7 +13,6 @@ import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { createGraph } from "./firestore";
 import { db } from "@/config/firebaseConfig";
-import { useAuth } from "@/app/authContext";
 
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
@@ -28,7 +27,7 @@ export const uploadGraph = async (
 	graphFile: File,
 	graphName: string,
 	graphDescription: string
-): Promise<any> => {
+): Promise<Graph | undefined> => {
 	try {
 		const storage = getStorage(app);
 		const storageRef = ref(
@@ -50,6 +49,7 @@ export const uploadGraph = async (
 		return graph;
 	} catch (error) {
 		console.error("Error uploading file or storing metadata: ", error);
+		return undefined;
 	}
 };
 
@@ -58,16 +58,15 @@ export const uploadGraph = async (
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong
  */
-export const fetchGraphs = async (id: string) => {
-
-	if (!id) {
+export const fetchGraphs = async (firebaseUser: User | null) => {
+	if (!firebaseUser) {
 		return [];
 	}
 
-	if (id) {
+	if (firebaseUser) {
 		try {
 			const graphsRef = collection(db, "graphs");
-			const q = query(graphsRef, where("owner", "==", id));
+			const q = query(graphsRef, where("owner", "==", firebaseUser.uid));
 			const querySnapshot = await getDocs(q);
 
 			const graphData: GraphData[] = [];
