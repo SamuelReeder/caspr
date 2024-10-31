@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import GraphPage from '../src/pages/graph';
 import '@testing-library/jest-dom';
+import customRender from '@/test-utils/render';
 
 // Mock the components that are imported in GraphPage
 jest.mock('../src/components/CausalDiagram', () => () => <div>CausalDiagram</div>);
@@ -19,7 +20,7 @@ jest.mock('../src/components/GraphNavbar', () => (props: any) => (
 jest.mock('../src/components/GraphSideBar', () => () => <div>GraphSideBar</div>);
 
 test('renders GraphPage component', () => {
-  render(<GraphPage />);
+  customRender(<GraphPage />);
 
   expect(screen.getByText('GraphNavbar')).toBeInTheDocument();
   expect(screen.getByText('CausalDiagram')).toBeInTheDocument();
@@ -27,7 +28,7 @@ test('renders GraphPage component', () => {
 });
 
 test('adds and removes diagrams', () => {
-  render(<GraphPage />);
+  customRender(<GraphPage />);
   
   fireEvent.click(screen.getByText('Add Diagram'));
   expect(screen.getAllByText('CausalDiagram').length).toBe(2);

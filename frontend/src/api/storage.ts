@@ -13,7 +13,6 @@ import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { createGraph } from "./firestore";
 import { db } from "@/config/firebaseConfig";
-import { useAuth } from "@/app/authContext";
 
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.

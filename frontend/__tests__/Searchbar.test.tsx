@@ -5,15 +5,12 @@ import '@testing-library/jest-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import userEvent from '@testing-library/user-event';
 import { DataProvider } from '@/context/DataContext';
+import customRender from '@/test-utils/render';
 
 describe('Searchbar renders correctly', () => {
     test('renders Searchbar component', () => {
-        render(
-            <ChakraProvider>
-                <DataProvider>
+        customRender(
                     <Searchbar />
-                </DataProvider>
-            </ChakraProvider>
         );
     
         const searchElement = screen.getByPlaceholderText(/Search/i);
@@ -22,12 +19,8 @@ describe('Searchbar renders correctly', () => {
     });
     
     test('renders Searchbar component with search value', async () => {
-        render(
-            <ChakraProvider>
-                <DataProvider>
+        customRender(
                     <Searchbar />
-                </DataProvider>
-            </ChakraProvider>
         );
     
         const searchElement = screen.getByPlaceholderText(/Search/i);

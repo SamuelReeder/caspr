@@ -4,16 +4,13 @@ import Main from '../src/pages/main';
 import '@testing-library/jest-dom';
 import { DataProvider } from '@/context/DataContext';
 import { PageProvider } from '@/context/PageContext';
+import customRender from '@/test-utils/render';
 
 describe('Main page renders correctly', () => {
   beforeEach(() => {
-    render(
-      <PageProvider>
-        <DataProvider>
-          <Main />
-        </DataProvider>
-      </PageProvider>
-    )
+    customRender(
+      <Main />
+    );
   });
 
   test('Main Component Loads with My Graphs page', () => {
@@ -23,13 +20,9 @@ describe('Main page renders correctly', () => {
 
 describe('Main component', () => {
   beforeEach(() => {
-    render(
-      <PageProvider>
-        <DataProvider>
-          <Main />
-        </DataProvider>
-      </PageProvider>
-    )
+    customRender(
+      <Main />
+    );
   });
 
   test('renders Sidebar and Searchbar components', () => {

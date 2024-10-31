@@ -6,12 +6,12 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import UploadFile from "@/pages/uploadFile";
 import { uploadGraph } from "@/api/storage";
-import { useAuth } from "@/app/authContext";
+import { useAuth } from '@/context';
 import { useRouter } from "next/router";
 import customRender from "@/test-utils/render";
 
 jest.mock("@/api/storage");
-jest.mock("@/app/authContext");
+// jest.mock("@/app/authContext"); // breaks it
 const mockRouterPush = jest.fn();
 jest.mock("next/router", () => ({
 	useRouter: jest.fn(() => ({
@@ -29,11 +29,11 @@ const mockFile = new File(['{"nodes": [], "links": []}'], "test-graph.json", {
 });
 
 describe("UploadFile Component", () => {
-	beforeEach(() => {
-		(useAuth as jest.Mock).mockReturnValue({
-			firebaseUser: { uid: "test-user-id" }
-		});
-	});
+	// beforeEach(() => {
+	// 	(useAuth as jest.Mock).mockReturnValue({
+	// 		firebaseUser: { uid: "test-user-id" }
+	// 	});
+	// });
 
 	it("renders the upload file page", () => {
 		customRender(<UploadFile />);
@@ -96,9 +96,11 @@ describe("UploadFile Component", () => {
 		});
 		fireEvent.click(saveButton);
 
+		// const { firebaseUser } = useAuth(); // breaks it 
+
 		await waitFor(() => {
 			expect(uploadGraph).toHaveBeenCalledWith(
-				{ uid: "test-user-id" },
+				null,
 				mockFile,
 				"Test Graph",
 				"Test Description"

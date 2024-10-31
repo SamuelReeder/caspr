@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 
 import { uploadGraph } from "@/api/storage";
-import { useAuth } from "@/app/authContext";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { useState } from "react";
 

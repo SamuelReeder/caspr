@@ -3,13 +3,12 @@ import { render, screen } from '@testing-library/react';
 import SearchedGraphObject from '../src/components/SearchedGraphObject';
 import '@testing-library/jest-dom';
 import { ChakraProvider } from '@chakra-ui/react';
+import customRender from '@/test-utils/render';
 
 describe('GraphObject renders correctly', () => {
     test('renders GraphObject component', () => {
-        render(
-            <ChakraProvider>
+        customRender(
                 <SearchedGraphObject title="Test Title" description="Test Description" author='Kevin@gmail.com'/>
-            </ChakraProvider>
         );
 
         const titleElement = screen.getByText(/Test Title/i);

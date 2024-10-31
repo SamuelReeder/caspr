@@ -8,7 +8,7 @@ import { GraphData } from "@/types/graph";
 import { GraphList } from "../components/graphList";
 import { fetchGraphs } from "@/api/storage";
 import { universalLogout } from "@/api/auth";
-import { useAuth } from "@/app/authContext";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
