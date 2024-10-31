@@ -1,6 +1,6 @@
 // fetchCollection.ts
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "@/config/firebaseConfig";
 
 interface GraphMetadata {
   id: string;

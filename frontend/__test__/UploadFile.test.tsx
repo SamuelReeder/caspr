@@ -1,3 +1,5 @@
+import React from 'react';
+
 import "@testing-library/jest-dom";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
@@ -6,6 +8,7 @@ import UploadFile from "@/pages/uploadFile";
 import { uploadGraph } from "@/api/storage";
 import { useAuth } from "@/app/authContext";
 import { useRouter } from "next/router";
+import customRender from "@/test-utils/render";
 
 jest.mock("@/api/storage");
 jest.mock("@/app/authContext");
@@ -33,7 +36,7 @@ describe("UploadFile Component", () => {
 	});
 
 	it("renders the upload file page", () => {
-		render(<UploadFile />);
+		customRender(<UploadFile />);
 		expect(screen.getByText(/File Upload/i)).toBeInTheDocument();
 		expect(
 			screen.getByText(/Browse your computer or drag and drop here/i)
@@ -41,7 +44,7 @@ describe("UploadFile Component", () => {
 	});
 
 	it("updates the selected file when a JSON file is chosen", () => {
-		render(<UploadFile />);
+		customRender(<UploadFile />);
 		const fileInput = screen.getByLabelText(
 			/Browse your computer or drag and drop here/i
 		);
@@ -52,7 +55,7 @@ describe("UploadFile Component", () => {
 	});
 
 	it("removes the selected file when the remove button is clicked", () => {
-		render(<UploadFile />);
+		customRender(<UploadFile />);
 		const fileInput = screen.getByLabelText(
 			/Browse your computer or drag and drop here/i
 		);
@@ -70,7 +73,7 @@ describe("UploadFile Component", () => {
 		});
 		const router = useRouter();
 
-		render(<UploadFile />);
+		customRender(<UploadFile />);
 		const fileInput = screen.getByLabelText(
 			/Browse your computer or drag and drop here/i
 		);
@@ -118,7 +121,7 @@ describe("UploadFile Component", () => {
 			new Error("Upload failed")
 		);
 
-		render(<UploadFile />);
+		customRender(<UploadFile />);
 		const fileInput = screen.getByLabelText(
 			/Browse your computer or drag and drop here/i
 		);
