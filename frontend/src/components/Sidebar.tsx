@@ -23,31 +23,30 @@ export default function Sidebar() {
 	};
 
 	return (
-		<div className="bg-gray-800 text-white w-60 p-4 shadow-lg top-0 left-0 h-full">
-			<VStack spacing="4" align="stretch">
+		<div className="bg-gray-800 text-white w-60 p-7 shadow-lg top-0 left-0 h-full">
+			<div className="flex flex-col gap-4 w-full h-full">
 				<Text fontSize="2xl" fontWeight="bold">
 					Caspr
 				</Text>
-				<div className="flex flex-row gap-4 justify-center items-center	">
-					<Button colorScheme="blue" onClick={handleLogout} size="sm">
-						Logout
+
+				<Link href="/upload-file">
+					<Button
+						colorScheme="gray"
+						size="md"
+						className="w-full"
+						rightIcon={<ArrowForwardIcon />}
+					>
+						Upload a File
 					</Button>
-					<Link href="/upload-file">
-						<Button
-							className="border rounded-lg p-2"
-							size="sm"
-							rightIcon={<ArrowForwardIcon />}
-						>
-							Upload a File
-						</Button>
-					</Link>
-				</div>
+				</Link>
+
 				<Link
 					className={`hover:text-gray-400 ${page === "My Graphs" ? "text-gray-400" : ""}`}
 					onClick={() => handlePageChange("My Graphs")}
 				>
 					My Graphs
 				</Link>
+
 				<Link
 					className={`hover:text-gray-400 ${page === "Shared With Me" ? "text-gray-400" : ""}`}
 					onClick={() => handlePageChange("Shared With Me")}
@@ -60,7 +59,16 @@ export default function Sidebar() {
 				>
 					Explore
 				</Link>
-			</VStack>
+
+				<Button
+					colorScheme="blue"
+					onClick={handleLogout}
+					size="md"
+					className="w-full mt-auto"
+				>
+					Logout
+				</Button>
+			</div>
 		</div>
 	);
 }
