@@ -5,6 +5,12 @@ import { Box, Input } from '@chakra-ui/react';
 import { useData } from '../context/DataContext';
 import { GraphMetadata } from '@/mocks/fetchGraphMetadata';
 import { Data } from '../context/DataContext';
+import { GraphData } from '@/types';
+
+interface SearchbarProps {
+    graphs: GraphData[] | undefined;
+    setGraphs: React.Dispatch<React.SetStateAction<GraphData[] | undefined>>;
+}
 
 const mockMetadata: Data[] = [
   { id: '1', title: 'User Growth Trends', description: 'A graph showing monthly user growth over the past year.', author:'' },
@@ -19,27 +25,47 @@ const mockMetadata: Data[] = [
   { id: '10', title: 'Climate Data Overview', description: 'Graph showing changes in temperature and precipitation over time.', author:'' },
 ];
 
-export default function Searchbar() {
+export default function Searchbar({graphs, setGraphs}: SearchbarProps) {
     const [search, setSearch] = React.useState("");
     const {data, setData} = useData();
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setSearch(value);
+    // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const value = e.target.value;
+    //     setSearch(value);
     
-        if (value.length > 0) {  // Might have to change the filter to filter by words not letters
-          const filteredResults = mockMetadata.filter(item =>
-            item.title.toLowerCase().includes(value.toLowerCase())
-          );
-          setData(filteredResults);
-        } else {
-          setData(data);
-        }
-      };
+    //     if (value.length > 0) {  // Might have to change the filter to filter by words not letters
+    //       const filteredResults = mockMetadata.filter(item =>
+    //         item.title.toLowerCase().includes(value.toLowerCase())
+    //       );
+    //       setData(filteredResults);
+    //     } else {
+    //       setData(data);
+    //     }
+    //   };
 
-    useEffect(() => {
-        setData(mockMetadata);
-    }, []);
+    // useEffect(() => {
+    //     setData(mockMetadata);
+    // }, []);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setSearch(value);
+  
+      if (value.length > 0) {  // Might have to change the filter to filter by words not letters
+        const graphsCopy = graphs ? [...graphs] : [];
+        const filteredResults = graphsCopy?.filter(item =>
+          item.graphName.toLowerCase().includes(value.toLowerCase())
+        );
+        setGraphs(filteredResults);
+      } else {
+        // setGraphs(data);
+        setGraphs(graphs);
+      }
+    };
+
+  useEffect(() => {
+      setData(mockMetadata);
+  }, []);
 
     return (
         <Box className="mb-6">
