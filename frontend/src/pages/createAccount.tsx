@@ -94,7 +94,7 @@ export default function CreateAccount() {
 	};
 
 	return (
-		<div className="bg-primary-200 h-screen">
+		<div className="bg-gray-800 h-screen">
 			<div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-[80%]">
 					<Box className="text-center">

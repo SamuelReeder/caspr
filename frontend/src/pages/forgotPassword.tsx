@@ -56,14 +56,14 @@ export default function ForgotPassword() {
 	};
 
 	return (
-		<div className="bg-primary-200 h-screen">
+		<div className="bg-gray-800 h-screen">
 			<div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-[80%]">
 					<Box className="text-center">
 						<Heading className="text-center text-4xl">Forgot Password</Heading>
 						<Text className="pt-2">
-							Enter the email associated with your account. We&apos;ll send you a
-							link to change your password.
+							Enter the email associated with your account. We&apos;ll send you
+							a link to change your password.
 						</Text>
 
 						<form>
@@ -96,8 +96,8 @@ export default function ForgotPassword() {
 										>
 											<CheckCircleIcon mr={2} />
 											An email has been sent to your inbox with a link to reset
-											your password. Once you&apos;ve reset your password, you can
-											close that tab, come back to this one, and log in with
+											your password. Once you&apos;ve reset your password, you
+											can close that tab, come back to this one, and log in with
 											your new password.
 										</Box>
 									</SlideFade>
