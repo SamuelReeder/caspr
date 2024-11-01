@@ -8,6 +8,7 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 import FullScreenLoader from "./fullScreenLoader";
 import { GraphData } from "@/types/graph";
 import { GraphList } from "../components/graphList";
+import Sidebar from "@/components/Sidebar";
 import { fetchGraphs } from "@/api/storage";
 import { universalLogout } from "@/api/auth";
 import { useAuth } from "@/context/AuthContext";
@@ -50,29 +51,21 @@ function Home() {
 	}
 
 	return (
-		<div className="p-8 flex flex-col">
-			<div className="flex flex-row">
-				<div className="flex flex-col gap-2">
-					<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
-					<Text>Email: {firebaseUser.email}</Text>
-				</div>
-
-				<div className="flex flex-row gap-4 justify-center mt-7 ml-auto">
-					<Link href="/upload-file">
-						<Button
-							className="border rounded-lg p-2"
-							rightIcon={<ArrowForwardIcon />}
-						>
-							Upload a File
-						</Button>
-					</Link>
-					<Button colorScheme="blue" onClick={handleLogout}>
-						Logout
-					</Button>
-				</div>
+		<div className="flex flex-row">
+			<div className="sticky top-0 h-screen">
+				<Sidebar />
 			</div>
 
-			<GraphList graphs={graphs} />
+			<div className="p-8 flex flex-col w-full overflow-y-auto">
+				<div className="flex flex-row w-full">
+					<div className="flex flex-col gap-2">
+						<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
+						<Text>Email: {firebaseUser.email}</Text>
+					</div>
+				</div>
+
+				<GraphList graphs={graphs} />
+			</div>
 		</div>
 	);
 }
