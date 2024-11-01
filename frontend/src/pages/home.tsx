@@ -1,18 +1,16 @@
 /**
  * Home
  */
-import { Button, Heading, Link, Text } from "@chakra-ui/react";
+import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
-import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { GraphData } from "@/types/graph";
 import { GraphList } from "../components/graphList";
+import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
 import { fetchGraphs } from "@/api/storage";
-import { universalLogout } from "@/api/auth";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
-import Searchbar from "@/components/Searchbar";
 
 function Home() {
 	const { firebaseUser, loading } = useAuth();
@@ -32,15 +30,6 @@ function Home() {
 		fetchUsersGraphs();
 	}, [fetchUsersGraphs, firebaseUser]);
 
-	const handleLogout = async () => {
-		try {
-			await universalLogout();
-			router.push("/");
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
 	if (loading) {
 		return <div>Loading...</div>;
 	}
@@ -59,7 +48,7 @@ function Home() {
 			<div className="p-8 flex flex-col w-full overflow-y-auto">
 				<div className="flex flex-row w-full">
 					<div className="flex flex-col gap-2 w-full">
-						<Searchbar graphs={graphs} setGraphs={setGraphs}/>
+						<Searchbar graphs={graphs} setGraphs={setGraphs} />
 						<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
 						<Text>Email: {firebaseUser.email}</Text>
 					</div>
