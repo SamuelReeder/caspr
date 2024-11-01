@@ -5,6 +5,7 @@ import { Button, Heading, Link, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
+import FullScreenLoader from "./fullScreenLoader";
 import { GraphData } from "@/types/graph";
 import { GraphList } from "../components/graphList";
 import { fetchGraphs } from "@/api/storage";
@@ -40,7 +41,7 @@ function Home() {
 	};
 
 	if (loading) {
-		return <div>Loading...</div>;
+		return <FullScreenLoader />;
 	}
 
 	if (!firebaseUser) {
