@@ -2,6 +2,7 @@
  * Home
  */
 import { Button, Heading, Link, Text } from "@chakra-ui/react";
+import { useCallback, useEffect, useState } from "react";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { GraphData } from "@/types/graph";
@@ -10,12 +11,24 @@ import { fetchGraphs } from "@/api/storage";
 import { universalLogout } from "@/api/auth";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 function Home() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
 	const [graphs, setGraphs] = useState<GraphData[] | undefined>([]);
+
+	const fetchUsersGraphs = useCallback(async () => {
+		try {
+			const usersGraphs = await fetchGraphs(firebaseUser);
+			setGraphs(usersGraphs);
+		} catch (error) {
+			console.error("Error fetching graphs:", error);
+		}
+	}, [firebaseUser]);
+
+	useEffect(() => {
+		fetchUsersGraphs();
+	}, [fetchUsersGraphs, firebaseUser]);
 
 	const handleLogout = async () => {
 		try {
@@ -34,16 +47,6 @@ function Home() {
 		router.push("/");
 		return null;
 	}
-
-	const fetchUsersGraphs = async () => {
-		try {
-			const usersGraphs = await fetchGraphs(firebaseUser.uid);
-			setGraphs(usersGraphs);
-		} catch (error) {
-			console.error("Error fetching graphs:", error);
-		}
-	};
-	fetchUsersGraphs();
 
 	return (
 		<div className="p-8 flex flex-col">
