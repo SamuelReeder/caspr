@@ -13,6 +13,7 @@ import { fetchGraphs } from "@/api/storage";
 import { universalLogout } from "@/api/auth";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
+import Searchbar from "@/components/Searchbar";
 
 function Home() {
 	const { firebaseUser, loading } = useAuth();
@@ -58,7 +59,8 @@ function Home() {
 
 			<div className="p-8 flex flex-col w-full overflow-y-auto">
 				<div className="flex flex-row w-full">
-					<div className="flex flex-col gap-2">
+					<div className="flex flex-col gap-2 w-full">
+						<Searchbar graphs={graphs} setGraphs={setGraphs}/>
 						<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
 						<Text>Email: {firebaseUser.email}</Text>
 					</div>
