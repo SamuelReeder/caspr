@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useEffect } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Box, Input } from '@chakra-ui/react';
 import { useData } from '../context/DataContext';
 import { GraphMetadata } from '@/mocks/fetchGraphMetadata';
@@ -26,46 +24,41 @@ const mockMetadata: Data[] = [
 ];
 
 export default function Searchbar({graphs, setGraphs}: SearchbarProps) {
-    const [search, setSearch] = React.useState("");
-    const {data, setData} = useData();
-
-    // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const value = e.target.value;
-    //     setSearch(value);
-    
-    //     if (value.length > 0) {  // Might have to change the filter to filter by words not letters
-    //       const filteredResults = mockMetadata.filter(item =>
-    //         item.title.toLowerCase().includes(value.toLowerCase())
-    //       );
-    //       setData(filteredResults);
-    //     } else {
-    //       setData(data);
-    //     }
-    //   };
-
-    // useEffect(() => {
-    //     setData(mockMetadata);
-    // }, []);
+    const [search, setSearch] = useState("");
+    const [originalGraphs, setOriginalGraphs] = useState<GraphData[]>(graphs ? [...graphs] : []);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setSearch(value);
+      setSearch(e.target.value);
+      const value = e.target.value.toLowerCase();
   
-      if (value.length > 0) {  // Might have to change the filter to filter by words not letters
-        const graphsCopy = graphs ? [...graphs] : [];
-        const filteredResults = graphsCopy?.filter(item =>
-          item.graphName.toLowerCase().includes(value.toLowerCase())
+      if (value.length > 0) {
+        const filteredResults = originalGraphs.filter(item =>
+          item.graphName.toLowerCase().includes(value) ||
+          item.graphDescription.toLowerCase().includes(value)
+          // item.author.toLowerCase().includes(value)
         );
-        setGraphs(filteredResults);
+  
+        // Prioritize results by name, then description, then author
+        const prioritizedResults = filteredResults.sort((a, b) => {
+          const aNameMatch = a.graphName.toLowerCase().includes(value) ? 1 : 0;
+          const bNameMatch = b.graphName.toLowerCase().includes(value) ? 1 : 0;
+          const aDescriptionMatch = a.graphDescription.toLowerCase().includes(value) ? 1 : 0;
+          const bDescriptionMatch = b.graphDescription.toLowerCase().includes(value) ? 1 : 0;
+          // const aAuthorMatch = a.author.toLowerCase().includes(value) ? 1 : 0;
+          // const bAuthorMatch = b.author.toLowerCase().includes(value) ? 1 : 0;
+  
+          return (
+            bNameMatch - aNameMatch ||
+            bDescriptionMatch - aDescriptionMatch
+            // bAuthorMatch - aAuthorMatch
+          );
+        });
+  
+        setGraphs(prioritizedResults);
       } else {
-        // setGraphs(data);
-        setGraphs(graphs);
+        setGraphs(originalGraphs);
       }
     };
-
-  useEffect(() => {
-      setData(mockMetadata);
-  }, []);
 
     return (
         <Box className="mb-6">
