@@ -54,7 +54,7 @@ function Home() {
 					</div>
 				</div>
 
-				<GraphList graphs={graphs} />
+				<GraphList graphs={graphs} page="My Graphs"/>
 			</div>
 		</div>
 	);
