@@ -6,9 +6,6 @@ import { Box, Heading, Text } from "@chakra-ui/react";
 import MyGraphObject from "./MyGraphObject";
 
 export function GraphList({ graphs, page }) {
-	console.log(graphs);
-	// createdAt, graphName, graphDescription
-
 	return (
 		<div className="mt-8">
 			<Heading size="md" mb={4}>
@@ -20,6 +17,8 @@ export function GraphList({ graphs, page }) {
 						key={i}
 						graphName={graph.graphName}
 						graphDescription={graph.graphDescription}
+						createdAt={graph.createdAt}
+						author={"John Appleseed"}
 					/>
 				))}
 			</div>

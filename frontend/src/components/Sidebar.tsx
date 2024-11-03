@@ -20,7 +20,7 @@ export default function Sidebar() {
 	return (
 		<div className="bg-gray-800 text-white w-60 p-7 shadow-lg top-0 left-0 h-full">
 			<div className="flex flex-col gap-4 w-full h-full">
-				<Text fontSize="2xl" fontWeight="bold">
+				<Text fontSize="3xl" fontWeight="bold">
 					Caspr
 				</Text>
 
