@@ -1,5 +1,6 @@
 import {
 	Box,
+	Button,
 	Card,
 	CardBody,
 	CardHeader,
@@ -13,31 +14,46 @@ import ShareButton from "./ShareButton";
 interface GraphObjectProps {
 	graphName: string;
 	graphDescription: string;
+	createdAt: Date;
 	author: string;
 }
 
 const MyGraphObject = ({
 	graphName,
 	graphDescription,
+	createdAt,
 	author
 }: GraphObjectProps) => {
 	return (
-		<Card my="5">
+		<Card>
 			<CardHeader className="flex justify-between">
 				<Heading size="md">{graphName}</Heading>
-				<Text>{author}</Text>
+				<div className="flex flex-col">
+					{author && <Text>{`by ${author}`}</Text>}
+
+					<Text fontSize="sm" color="gray.500">
+						Created: {createdAt.toLocaleDateString()}
+					</Text>
+				</div>
 			</CardHeader>
 
 			<CardBody className="flex justify-between">
 				<Box>
 					<Heading size="xs" textTransform="uppercase">
-						graphDescription:
+						Description:
 					</Heading>
 					<Text pt="1" pr="1" fontSize="sm">
 						{graphDescription}
 					</Text>
 				</Box>
-				{/* <ShareButton url={""} graphName={graphName}></ShareButton> */}
+
+				{/* TODO - ShareButton shouldn't be its own component */}
+				{/* Make shareModal component, then replace ShareButton just with a button */}
+				<div className="flex flex-row gap-2">
+					<ShareButton url={""} title={graphName}></ShareButton>
+					{/* TODO - Open button will open the graph */}
+					<Button colorScheme={"blue"}>Open</Button>
+				</div>
 			</CardBody>
 		</Card>
 	);
