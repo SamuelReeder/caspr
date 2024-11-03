@@ -3,15 +3,10 @@ import router, { useRouter } from "next/router";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { universalLogout } from "@/api/auth";
-import { usePage } from "@/context/PageContext";
 
 export default function Sidebar() {
-	const { page, setPage } = usePage();
 	const router = useRouter();
-
-	const handlePageChange = (newPage: string) => {
-		setPage(newPage);
-	};
+	const currentRoute = location.pathname;
 
 	const handleLogout = async () => {
 		try {
@@ -41,21 +36,21 @@ export default function Sidebar() {
 				</Link>
 
 				<Link
-					className={`hover:text-gray-400 ${page === "My Graphs" ? "text-gray-400" : ""}`}
-					onClick={() => handlePageChange("My Graphs")}
+					className={`hover:text-gray-400 ${currentRoute === "/home" ? "text-gray-400" : ""}`}
+					onClick={() => router.push("/home")}
 				>
 					My Graphs
 				</Link>
 
 				<Link
-					className={`hover:text-gray-400 ${page === "Shared With Me" ? "text-gray-400" : ""}`}
-					onClick={() => handlePageChange("Shared With Me")}
+					className={`hover:text-gray-400 ${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}
+					onClick={() => router.push("/sharedWithMe")}
 				>
 					Shared With Me
 				</Link>
 				<Link
-					className={`hover:text-gray-400 ${page === "Explore" ? "text-gray-400" : ""}`}
-					onClick={() => handlePageChange("Explore")}
+					className={`hover:text-gray-400 ${currentRoute === "/explore" ? "text-gray-400" : ""}`}
+					onClick={() => router.push("/explore")}
 				>
 					Explore
 				</Link>
