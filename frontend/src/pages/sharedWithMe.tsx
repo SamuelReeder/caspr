@@ -1,5 +1,6 @@
 /**
- * Home
+ * Shared With Me Page
+ * @returns {ReactElement} Shared With Me Page
  */
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";

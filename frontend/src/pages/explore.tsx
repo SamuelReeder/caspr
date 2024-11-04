@@ -1,5 +1,6 @@
 /**
- * Home
+ * Explore Page
+ * @returns {ReactElement} Explore Page
  */
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";

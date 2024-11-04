@@ -1,3 +1,7 @@
+/**
+ * Sidebar component
+ * @returns {ReactElement} Sidebar component
+ */
 import { Box, Button, Link, Text, VStack } from "@chakra-ui/react";
 import router, { useRouter } from "next/router";
 
