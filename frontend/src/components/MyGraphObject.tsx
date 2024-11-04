@@ -1,3 +1,11 @@
+/**
+ * Graph Object Component
+ * @param {string} graphName - Name of the graph
+ * @param {string} graphDescription - Description of the graph
+ * @param {Date} createdAt - Date the graph was created
+ * @param {string} author - Author of the graph
+ * @returns {ReactElement} Graph Object Component
+ */
 import {
 	Box,
 	Button,

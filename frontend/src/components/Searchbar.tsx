@@ -1,3 +1,9 @@
+/**
+ * Searchbar component
+ * @param {GraphData[]} graphs - Array of graph data
+ * @param {React.Dispatch<React.SetStateAction<GraphData[] | undefined>>} setGraphs - Function to set the graph data
+ * @returns {ReactElement} Searchbar component
+ */
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Input } from '@chakra-ui/react';
 import { GraphData } from '@/types';
