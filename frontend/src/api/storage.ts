@@ -42,7 +42,8 @@ export const uploadGraph = async (
 			graphName: graphName,
 			graphDescription: graphDescription,
 			graphFileURL: downloadURL,
-			createdAt: Timestamp.now()
+			createdAt: Timestamp.now(),
+			presets: {}
 		};
 
 		await createGraph(graph);
@@ -56,7 +57,7 @@ export const uploadGraph = async (
 /**
  * Fetches the graphs belonging to the user from firestore.
  * @returns A promise that resolves to the array of graphs.
- * @Jaeyong
+ * @Jaeyong @Samuel
  */
 export const fetchGraphs = async (firebaseUser: User | null) => {
 	if (!firebaseUser) {
@@ -69,14 +70,17 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 			const q = query(graphsRef, where("owner", "==", firebaseUser.uid));
 			const querySnapshot = await getDocs(q);
 
-			const graphData: GraphData[] = [];
+			const graphData: Graph[] = [];
 
 			querySnapshot.forEach((doc) => {
 				const data = doc.data();
 				graphData.push({
-					createdAt: data.createdAt.toDate(),
+					owner: data.owner,
 					graphName: data.graphName,
-					graphDescription: data.graphDescription
+					graphDescription: data.graphDescription,
+					graphFileURL: data.graphFileURL,
+					createdAt: data.createdAt,
+					presets: data.presets || null
 				});
 			});
 
