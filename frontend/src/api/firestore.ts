@@ -107,30 +107,30 @@ export const createGraph = async (graph: Graph): Promise<void> => {
  * @Danny @Samuel
  */
 export const addPresetToGraph = async (graphId: string, preset: Preset): Promise<void> => {
-    try {
-        const graphDocRef = doc(db, "graphs", graphId);
-        const graphDoc = await getDoc(graphDocRef);
+	try {
+		const graphDocRef = doc(db, "graphs", graphId);
+		const graphDoc = await getDoc(graphDocRef);
 
-        if (graphDoc.exists()) {
-            const data = graphDoc.data();
-            const presets: Preset[] = data.presets || [];
-            const existingPresetIndex = presets.findIndex(p => p.name === preset.name);
+		if (graphDoc.exists()) {
+			const data = graphDoc.data();
+			const presets: Preset[] = data.presets || [];
+			const existingPresetIndex = presets.findIndex(p => p.name === preset.name);
 
-            if (existingPresetIndex !== -1) {
-                presets[existingPresetIndex] = preset;
-            } else {
-                presets.push(preset);
-            }
+			if (existingPresetIndex !== -1) {
+				presets[existingPresetIndex] = preset;
+			} else {
+				presets.push(preset);
+			}
 
-            await updateDoc(graphDocRef, {
-                presets: presets
-            });
-        } else {
-            console.error('Graph document does not exist');
-        }
-    } catch (error) {
-        throw error;
-    }
+			await updateDoc(graphDocRef, {
+				presets: presets
+			});
+		} else {
+			console.error('Graph document does not exist');
+		}
+	} catch (error) {
+		throw error;
+	}
 };
 
 /**
@@ -141,24 +141,24 @@ export const addPresetToGraph = async (graphId: string, preset: Preset): Promise
  * @Samuel
  */
 export const deletePresetFromGraph = async (graphId: string, presetName: string): Promise<void> => {
-    try {
-        const graphDocRef = doc(db, "graphs", graphId);
-        const graphDoc = await getDoc(graphDocRef);
+	try {
+		const graphDocRef = doc(db, "graphs", graphId);
+		const graphDoc = await getDoc(graphDocRef);
 
-        if (graphDoc.exists()) {
-            const data = graphDoc.data();
-            const presets: Preset[] = data.presets || [];
-            const updatedPresets = presets.filter(p => p.name !== presetName);
+		if (graphDoc.exists()) {
+			const data = graphDoc.data();
+			const presets: Preset[] = data.presets || [];
+			const updatedPresets = presets.filter(p => p.name !== presetName);
 
-            await updateDoc(graphDocRef, {
-                presets: updatedPresets
-            });
-        } else {
-            console.error('Graph document does not exist');
-        }
-    } catch (error) {
-        throw error;
-    }
+			await updateDoc(graphDocRef, {
+				presets: updatedPresets
+			});
+		} else {
+			console.error('Graph document does not exist');
+		}
+	} catch (error) {
+		throw error;
+	}
 };
 
 /**
@@ -169,23 +169,23 @@ export const deletePresetFromGraph = async (graphId: string, presetName: string)
  * @Samuel
  */
 export const getPresetByName = async (graphId: string, presetName: string): Promise<Preset | null> => {
-    try {
-        const graphDocRef = doc(db, "graphs", graphId);
-        const graphDoc = await getDoc(graphDocRef);
+	try {
+		const graphDocRef = doc(db, "graphs", graphId);
+		const graphDoc = await getDoc(graphDocRef);
 
-        if (graphDoc.exists()) {
-            const data = graphDoc.data();
-            const presets: Preset[] = data.presets || [];
-            const preset = presets.find(p => p.name === presetName);
-            return preset || null;
-        } else {
-            console.error('Graph document does not exist');
-            return null;
-        }
-    } catch (error) {
-        console.error('Error getting preset by name:', error);
-        return null;
-    }
+		if (graphDoc.exists()) {
+			const data = graphDoc.data();
+			const presets: Preset[] = data.presets || [];
+			const preset = presets.find(p => p.name === presetName);
+			return preset || null;
+		} else {
+			console.error('Graph document does not exist');
+			return null;
+		}
+	} catch (error) {
+		console.error('Error getting preset by name:', error);
+		return null;
+	}
 };
 
 /**
@@ -195,21 +195,21 @@ export const getPresetByName = async (graphId: string, presetName: string): Prom
  * @Samuel
  */
 export const getAllPresets = async (graphId: string): Promise<Preset[] | null> => {
-    try {
-        const graphDocRef = doc(db, "graphs", graphId);
-        const graphDoc = await getDoc(graphDocRef);
+	try {
+		const graphDocRef = doc(db, "graphs", graphId);
+		const graphDoc = await getDoc(graphDocRef);
 
-        if (graphDoc.exists()) {
-            const data = graphDoc.data();
-            return data.presets || null;
-        } else {
-            console.error('Graph document does not exist');
-            return null;
-        }
-    } catch (error) {
-        console.error('Error getting presets:', error);
-        return null;
-    }
+		if (graphDoc.exists()) {
+			const data = graphDoc.data();
+			return data.presets || null;
+		} else {
+			console.error('Graph document does not exist');
+			return null;
+		}
+	} catch (error) {
+		console.error('Error getting presets:', error);
+		return null;
+	}
 };
 /**
  * Update a user document in Firestore.

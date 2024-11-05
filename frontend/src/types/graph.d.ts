@@ -20,10 +20,10 @@ export interface Graph {
  */
 export interface Preset {
 	name: string;
-    updated: Timestamp;
-    filters: string[] | null;
-    pathways: string[] | null;
-    view: ViewPosition | null;
+	updated: Timestamp;
+	filters: string[] | null;
+	pathways: string[] | null;
+	view: ViewPosition | null;
 }
 
 /**
@@ -31,10 +31,10 @@ export interface Preset {
  * @Samuel
  */
 export interface ViewPosition {
-    x: number | null;
-    y: number | null;
-    z: number | null;
-    orientation: Orientation | null;
+	x: number | null;
+	y: number | null;
+	z: number | null;
+	orientation: Orientation | null;
 }
 
 /**
@@ -42,9 +42,9 @@ export interface ViewPosition {
  * @Samuel
  */
 export interface Orientation {
-    pitch: number; // Rotation around the x-axis
-    yaw: number;   // Rotation around the y-axis
-    roll: number;  // Rotation around the z-axis
+	pitch: number; // Rotation around the x-axis
+	yaw: number;   // Rotation around the y-axis
+	roll: number;  // Rotation around the z-axis
 }
 
 /**
