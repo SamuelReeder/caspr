@@ -8,7 +8,7 @@ import customRender from '@/test-utils/render';
 describe('GraphObject renders correctly', () => {
     test('renders GraphObject component', () => {
         customRender(
-                <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" />
+                <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" createdAt={new Date('2023-09-01')} />
         );
 
         const titleElement = screen.getByText(/Test Title/i);
