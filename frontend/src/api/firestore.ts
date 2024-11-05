@@ -11,13 +11,15 @@ import {
 	doc,
 	getDoc,
 	getFirestore,
-	setDoc
+	setDoc,
+	updateDoc
 } from "firebase/firestore";
 import { app, db } from "@/config/firebaseConfig";
 
-import { Graph } from "@/types/graph";
+import { Graph, Preset } from "@/types/graph";
 
 import { User } from "@/types";
+import { pre } from "framer-motion/client";
 
 /**
  * Get a user document from Firestore.
@@ -75,10 +77,10 @@ export const createUser = async (user: User): Promise<void> => {
 };
 
 /**
- * Create a user document in Firestore.
- * @param user - The user object.
- * @returns A promise that resolves to the created user document.
- * @Danny
+ * Create a graph metadata document in Firestore.
+ * @param graph - The graph object.
+ * @returns A promise that resolves to the created graph document.
+ * @Danny @Samuel
  */
 export const createGraph = async (graph: Graph): Promise<void> => {
 	try {
@@ -88,11 +90,31 @@ export const createGraph = async (graph: Graph): Promise<void> => {
 			graphName: graph.graphName,
 			graphDescription: graph.graphDescription,
 			graphFileURL: graph.graphFileURL,
-			createdAt: graph.createdAt
+			createdAt: graph.createdAt,
+			presets: graph.presets
 		});
 	} catch (error) {
 		throw error;
 	}
+};
+
+/**
+ * Create and store a preset to an existing graph in Firestore.
+ * @param graphId - The ID of the graph document.
+ * @param presetKey - The key for the new preset.
+ * @param preset - The preset object.
+ * @returns A promise that resolves when the preset is added.
+ * @Danny @Samuel
+ */
+export const addPresetToGraph = async (graphId: string, presetKey: string, preset: Preset): Promise<void> => {
+    try {
+        const graphDocRef = doc(db, "graphs", graphId);
+        await updateDoc(graphDocRef, {
+            [`presets.${presetKey}`]: preset
+        });
+    } catch (error) {
+        throw error;
+    }
 };
 
 /**
