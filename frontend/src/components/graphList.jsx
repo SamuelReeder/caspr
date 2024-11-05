@@ -19,7 +19,7 @@ export function GraphList({ graphs }) {
 					>
 						<Text fontWeight="bold">{graph.graphName}</Text>
 						<Text fontSize="sm" color="gray.500">
-							Created: {graph.createdAt.toLocaleDateString()}
+							Created: {graph.createdAt.toDate().toLocaleDateString()}
 						</Text>
 						<Text>{graph.graphDescription}</Text>
 					</Box>

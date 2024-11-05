@@ -11,7 +11,7 @@ export interface Graph {
 	graphDescription: string;
 	graphFileURL: string;
 	createdAt: Timestamp;
-	presets: { [key: string]: Preset } | null;
+	presets: Preset[] | null;
 }
 
 /**

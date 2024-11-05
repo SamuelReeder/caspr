@@ -43,7 +43,7 @@ export const uploadGraph = async (
 			graphDescription: graphDescription,
 			graphFileURL: downloadURL,
 			createdAt: Timestamp.now(),
-			presets: {}
+			presets: []
 		};
 
 		await createGraph(graph);
@@ -80,7 +80,7 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 					graphDescription: data.graphDescription,
 					graphFileURL: data.graphFileURL,
 					createdAt: data.createdAt,
-					presets: data.presets || null
+					presets: data.presets || []
 				});
 			});
 
