@@ -22,7 +22,7 @@ import ShareButton from "./ShareButton";
 interface GraphObjectProps {
 	graphName: string;
 	graphDescription: string;
-	createdAt: Date;
+	createdAt: Date | null;
 	author: string;
 }
 
@@ -40,7 +40,7 @@ const MyGraphObject = ({
 					{author && <Text>{`by ${author}`}</Text>}
 
 					<Text fontSize="sm" color="gray.500">
-						Created: {createdAt.toLocaleDateString()}
+						Created: {createdAt?.toLocaleDateString()}
 					</Text>
 				</div>
 			</CardHeader>
