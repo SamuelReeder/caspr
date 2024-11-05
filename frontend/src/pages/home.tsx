@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Graph, GraphData } from "@/types/graph";
+import FullScreenLoader from "./fullScreenLoader";
 import { GraphList } from "../components/graphList";
 import { fetchGraphs } from "@/api/storage";
 import { universalLogout } from "@/api/auth";
@@ -40,7 +41,7 @@ function Home() {
 	};
 
 	if (loading) {
-		return <div>Loading...</div>;
+		return <FullScreenLoader />;
 	}
 
 	if (!firebaseUser) {
