@@ -6,6 +6,7 @@
  * @param {string} author - Author of the graph
  * @returns {ReactElement} Graph Object Component
  */
+
 import {
 	Box,
 	Button,
@@ -16,6 +17,7 @@ import {
 	Text
 } from "@chakra-ui/react";
 
+import { GraphData } from "@/types/graph";
 import React from "react";
 import ShareButton from "./ShareButton";
 
@@ -29,15 +31,15 @@ interface GraphObjectProps {
 const MyGraphObject = ({
 	graphName,
 	graphDescription,
-	createdAt,
-	author
-}: GraphObjectProps) => {
+	createdAt
+}: GraphData) => {
 	return (
 		<Card>
 			<CardHeader className="flex justify-between">
 				<Heading size="md">{graphName}</Heading>
 				<div className="flex flex-col">
-					{author && <Text>{`by ${author}`}</Text>}
+					{/* TODO - Include the owner of the graph here */}
+					{/* {author && <Text>{`by ${author}`}</Text>} */}
 
 					<Text fontSize="sm" color="gray.500">
 						Created: {createdAt?.toLocaleDateString()}

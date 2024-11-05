@@ -4,20 +4,10 @@
  * @param {String} page - Page title
  * @returns {ReactElement} Graph list component
  */
-import { Box, Heading, Text } from "@chakra-ui/react";
-import { GraphData } from "@/types/graph";
+
+import { GraphListProps } from "@/types/graph";
+import { Heading } from "@chakra-ui/react";
 import MyGraphObject from "./MyGraphObject";
-
-interface Graph {
-  graphName: string;
-  graphDescription: string;
-  createdAt: Date;
-}
-
-interface GraphListProps {
-  graphs: GraphData[] | undefined;
-  page: string;
-}
 
 export function GraphList({ graphs, page }: GraphListProps) {
 	return (
@@ -32,7 +22,6 @@ export function GraphList({ graphs, page }: GraphListProps) {
 						graphName={graph.graphName}
 						graphDescription={graph.graphDescription}
 						createdAt={graph.createdAt}
-						author={"John Appleseed"}
 					/>
 				))}
 			</div>

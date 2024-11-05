@@ -1,31 +1,35 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { ChakraProvider } from '@chakra-ui/react';
-import MyGraphObject from '../src/components/MyGraphObject';
-import customRender from '@/test-utils/render';
+import "@testing-library/jest-dom";
 
-describe('GraphObject renders correctly', () => {
-    test('renders GraphObject component', () => {
-        customRender(
-                <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" createdAt={new Date('2023-09-01')} />
-        );
+import { render, screen } from "@testing-library/react";
 
-        const titleElement = screen.getByText(/Test Title/i);
-        const descriptionElement = screen.getByText(/Test Description/i);
-        const authorElement = screen.getByText(/Kevin@gmail.com/i);
+import { ChakraProvider } from "@chakra-ui/react";
+import MyGraphObject from "../src/components/MyGraphObject";
+import React from "react";
+import customRender from "@/test-utils/render";
 
-        expect(titleElement).toBeInTheDocument();
-        expect(descriptionElement).toBeInTheDocument();
-        expect(authorElement).toBeInTheDocument();
-    });
+describe("GraphObject renders correctly", () => {
+	test("renders GraphObject component", () => {
+		customRender(
+			<MyGraphObject
+				graphName="Test Title"
+				graphDescription="Test Description"
+				createdAt={new Date("2023-09-01")}
+			/>
+		);
 
-    // test('renders GraphObject button', () => {
-    //     customRender(
-    //             <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" />
-    //     );
+		const titleElement = screen.getByText(/Test Title/i);
+		const descriptionElement = screen.getByText(/Test Description/i);
 
-    //     const buttonElement = screen.getByText(/Share/i);
-    //     expect(buttonElement).toBeInTheDocument();
-    // });
+		expect(titleElement).toBeInTheDocument();
+		expect(descriptionElement).toBeInTheDocument();
+	});
+
+	// test('renders GraphObject button', () => {
+	//     customRender(
+	//             <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" />
+	//     );
+
+	//     const buttonElement = screen.getByText(/Share/i);
+	//     expect(buttonElement).toBeInTheDocument();
+	// });
 });

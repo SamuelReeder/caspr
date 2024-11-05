@@ -16,3 +16,8 @@ export interface GraphData {
 	graphName: string;
 	graphDescription: string;
 }
+
+export interface GraphListProps {
+	graphs: GraphData[] | undefined;
+	page: string;
+}
