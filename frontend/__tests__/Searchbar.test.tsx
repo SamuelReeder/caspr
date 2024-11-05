@@ -1,10 +1,8 @@
 import { render, screen, act } from '@testing-library/react';
 import Searchbar from '../src/components/Searchbar';
 import '@testing-library/jest-dom';
-import { ChakraProvider } from '@chakra-ui/react';
 import userEvent from '@testing-library/user-event';
 import customRender from '@/test-utils/render';
-import { GraphData } from '@/types';
 
 describe('Searchbar renders correctly', () => {
     test('renders Searchbar component', () => {
