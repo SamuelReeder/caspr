@@ -24,10 +24,6 @@ interface GraphObjectProps {
 	graphDescription: string;
 	createdAt: Date | null;
 	author: string;
-	graphName: string;
-	graphDescription: string;
-	createdAt: Date | null;
-	author: string;
 }
 
 const MyGraphObject = ({
@@ -49,26 +45,6 @@ const MyGraphObject = ({
 				</div>
 			</CardHeader>
 
-			<CardBody className="flex justify-between">
-				<Box>
-					<Heading size="xs" textTransform="uppercase">
-						Description:
-					</Heading>
-					<Text pt="1" pr="1" fontSize="sm">
-						{graphDescription}
-					</Text>
-				</Box>
-
-				{/* TODO - ShareButton shouldn't be its own component */}
-				{/* Make shareModal component, then replace ShareButton just with a button */}
-				<div className="flex flex-row gap-2">
-					<ShareButton url={""} title={graphName}></ShareButton>
-					{/* TODO - Open button will open the graph */}
-					<Button colorScheme={"blue"}>Open</Button>
-				</div>
-			</CardBody>
-		</Card>
-	);
 			<CardBody className="flex justify-between">
 				<Box>
 					<Heading size="xs" textTransform="uppercase">
