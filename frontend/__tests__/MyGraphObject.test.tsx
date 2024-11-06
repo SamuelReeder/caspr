@@ -20,12 +20,12 @@ describe('GraphObject renders correctly', () => {
         expect(authorElement).toBeInTheDocument();
     });
 
-    // test('renders GraphObject button', () => {
-    //     customRender(
-    //             <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" />
-    //     );
+    test('renders GraphObject button', () => {
+        customRender(
+            <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" createdAt={new Date('2023-09-01')} />
+        );
 
-    //     const buttonElement = screen.getByText(/Share/i);
-    //     expect(buttonElement).toBeInTheDocument();
-    // });
+        const buttonElement = screen.getByText(/Share/i);
+        expect(buttonElement).toBeInTheDocument();
+    });
 });
