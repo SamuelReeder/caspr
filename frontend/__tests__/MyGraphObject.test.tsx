@@ -8,7 +8,7 @@ import customRender from '@/test-utils/render';
 describe('GraphObject renders correctly', () => {
     test('renders GraphObject component', () => {
         customRender(
-                <MyGraphObject title="Test Title" description="Test Description" author="Kevin@gmail.com" />
+                <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" createdAt={new Date('2023-09-01')} />
         );
 
         const titleElement = screen.getByText(/Test Title/i);
@@ -22,7 +22,7 @@ describe('GraphObject renders correctly', () => {
 
     test('renders GraphObject button', () => {
         customRender(
-                <MyGraphObject title="Test Title" description="Test Description" author="Kevin@gmail.com" />
+            <MyGraphObject graphName="Test Title" graphDescription="Test Description" author="Kevin@gmail.com" createdAt={new Date('2023-09-01')} />
         );
 
         const buttonElement = screen.getByText(/Share/i);

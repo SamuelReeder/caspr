@@ -1,42 +1,70 @@
+/**
+ * Graph Object Component
+ * @param {string} graphName - Name of the graph
+ * @param {string} graphDescription - Description of the graph
+ * @param {Date} createdAt - Date the graph was created
+ * @param {string} author - Author of the graph
+ * @returns {ReactElement} Graph Object Component
+ */
+import {
+	Box,
+	Button,
+	Card,
+	CardBody,
+	CardHeader,
+	Heading,
+	Text
+} from "@chakra-ui/react";
 
-import { Box, Card, CardBody, CardHeader, Heading, Text } from '@chakra-ui/react';
-import React from 'react';
-import ShareButton from './ShareButton';
+import React from "react";
+import ShareButton from "./ShareButton";
 
 interface GraphObjectProps {
-    title: string;
-    description: string;
-    author: string;
-    // Add more props here
+	graphName: string;
+	graphDescription: string;
+	createdAt: Date | null;
+	author: string;
 }
 
-const MyGraphObject = ({ title, description, author }: GraphObjectProps) => {
-    return (
-        <Card my='5'>
-            <CardHeader className='flex justify-between'>
-                <Heading size='md'>{title}</Heading>
-                <Text>{author}</Text> 
-            </CardHeader>
+const MyGraphObject = ({
+	graphName,
+	graphDescription,
+	createdAt,
+	author
+}: GraphObjectProps) => {
+	return (
+		<Card>
+			<CardHeader className="flex justify-between">
+				<Heading size="md">{graphName}</Heading>
+				<div className="flex flex-col">
+					{author && <Text>{`by ${author}`}</Text>}
 
-            <CardBody className='flex justify-between'>
-                <Box>
-                    <Heading size='xs' textTransform='uppercase'>
-                        Description:
-                    </Heading>
-                    <Text pt='1' pr='1' fontSize='sm'>
-                        {description}
-                    </Text>
-                </Box>
-                <ShareButton url={''} title={title}></ShareButton>
-            </CardBody>
-        </Card>
-    );
+					<Text fontSize="sm" color="gray.500">
+						Created: {createdAt?.toLocaleDateString()}
+					</Text>
+				</div>
+			</CardHeader>
+
+			<CardBody className="flex justify-between">
+				<Box>
+					<Heading size="xs" textTransform="uppercase">
+						Description:
+					</Heading>
+					<Text pt="1" pr="1" fontSize="sm">
+						{graphDescription}
+					</Text>
+				</Box>
+
+				{/* TODO - ShareButton shouldn't be its own component */}
+				{/* Make shareModal component, then replace ShareButton just with a button */}
+				<div className="flex flex-row gap-2">
+					<ShareButton url={""} title={graphName}></ShareButton>
+					{/* TODO - Open button will open the graph */}
+					<Button colorScheme={"blue"}>Open</Button>
+				</div>
+			</CardBody>
+		</Card>
+	);
 };
 
 export default MyGraphObject;
-
-
-// <div key={index} className="bg-gray-100 p-4 rounded-lg my-4">
-//   <div className="w-full h-64 bg-gray-300 mb-4"></div>
-//   <span className="text-sm font-semibold">{result.title}</span>
-// </div>

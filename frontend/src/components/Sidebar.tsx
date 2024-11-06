@@ -1,50 +1,73 @@
-import { Box, VStack, Text, Link } from '@chakra-ui/react';
-import { usePage } from '@/context/PageContext';
-import { useRouter } from 'next/router';
+/**
+ * Sidebar component
+ * @returns {ReactElement} Sidebar component
+ */
+import { Box, Button, Link, Text, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { universalLogout } from "@/api/auth";
 
 export default function Sidebar() {
-  const { page, setPage } = usePage();
+	const router = useRouter();
+	const currentRoute = location.pathname;
 
-  const handlePageChange = (newPage: string) => {
-    setPage(newPage);
-  };
+	const handleLogout = async () => {
+		try {
+			await universalLogout();
+			router.push("/");
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  return (
-    <Box
-      as="nav"
-      bg="gray.800"
-      color="white"
-      w="18rem"
-      p="4"
-      className="shadow-lg"
-      height="100vh"
-      position="fixed"
-      top="0"
-      left="0"
-    >
-      <VStack spacing="4" align="stretch">
-        <Text fontSize="2xl" fontWeight="bold">
-          Caspr
-        </Text>
-        <Link
-          className={`hover:text-gray-400 ${page === 'My Graphs' ? 'text-gray-400' : ''}`}
-          onClick={() => handlePageChange('My Graphs')}
-        >
-          My Graphs
-        </Link>
-        <Link
-          className={`hover:text-gray-400 ${page === 'Shared With Me' ? 'text-gray-400' : ''}`}
-          onClick={() => handlePageChange('Shared With Me')}
-        >
-          Shared With Me
-        </Link>
-        <Link
-          className={`hover:text-gray-400 ${page === 'Explore' ? 'text-gray-400' : ''}`}
-          onClick={() => handlePageChange('Explore')}
-        >
-          Explore
-        </Link>
-      </VStack>
-    </Box>
-  );
+	return (
+		<div className="bg-gray-800 text-white w-60 p-7 shadow-lg top-0 left-0 h-full">
+			<div className="flex flex-col gap-4 w-full h-full">
+				<Text fontSize="3xl" fontWeight="bold">
+					Caspr
+				</Text>
+
+				<Link href="/upload-file">
+					<Button
+						colorScheme="gray"
+						size="md"
+						className="w-full"
+						rightIcon={<ArrowForwardIcon />}
+					>
+						Upload a File
+					</Button>
+				</Link>
+
+				<Link
+					className={`hover:text-gray-400 ${currentRoute === "/home" ? "text-gray-400" : ""}`}
+					onClick={() => router.push("/home")}
+				>
+					My Graphs
+				</Link>
+
+				<Link
+					className={`hover:text-gray-400 ${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}
+					onClick={() => router.push("/sharedWithMe")}
+				>
+					Shared With Me
+				</Link>
+				<Link
+					className={`hover:text-gray-400 ${currentRoute === "/explore" ? "text-gray-400" : ""}`}
+					onClick={() => router.push("/explore")}
+				>
+					Explore
+				</Link>
+
+				<Button
+					colorScheme="blue"
+					onClick={handleLogout}
+					size="md"
+					className="w-full mt-auto"
+				>
+					Logout
+				</Button>
+			</div>
+		</div>
+	);
 }
