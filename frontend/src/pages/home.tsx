@@ -6,8 +6,8 @@ import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { Graph, GraphData } from "@/types/graph";
 import FullScreenLoader from "./fullScreenLoader";
-import { GraphData } from "@/types/graph";
 import { GraphList } from "../components/graphList";
 import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 function Home() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
-	const [graphs, setGraphs] = useState<GraphData[] | undefined>([]);
+	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 
 	const fetchUsersGraphs = useCallback(async () => {
 		try {
