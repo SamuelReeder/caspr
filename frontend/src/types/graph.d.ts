@@ -31,9 +31,9 @@ export interface Preset {
  * @Samuel
  */
 export interface ViewPosition {
-	x: number | null;
-	y: number | null;
-	z: number | null;
+	x: number;
+	y: number;
+	z: number;
 	orientation: Orientation | null;
 }
 
@@ -55,4 +55,9 @@ export interface GraphData {
 	createdAt: Date;
 	graphName: string;
 	graphDescription: string;
+}
+
+export interface GraphListProps {
+	graphs: GraphData[] | Graph[] | undefined;
+	page: string;
 }
