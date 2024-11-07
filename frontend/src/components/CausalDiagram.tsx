@@ -148,8 +148,9 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
               label={node.label}
               value={node.value}
               category={node.category}
-              color={selectedNode && selectedNode.id === node.id ? '#00FFFF' : getColorByCategory(node.category)}
+              color={getColorByCategory(node.category)}
               isInteracting={isInteracting}
+              isSelected={!!(selectedNode && selectedNode.id === node.id)}
             />
           ))}
         {Object.keys(nodePositions).length > 0 &&
