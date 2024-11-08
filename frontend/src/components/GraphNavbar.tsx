@@ -36,7 +36,7 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
   };
 
   return (
-    <Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300" width="100%" minWidth="1800px">
+    <Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300">
       <Link href="/home">
         <IconButton
           aria-label="Go Back"

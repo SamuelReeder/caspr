@@ -54,8 +54,8 @@ const GraphPage = () => {
         removeDiagram={removeDiagram}
       />
       <Box display="flex" flex="1">
-        <Box flex="1">
-          <Tabs index={selectedTab} onChange={(index) => setSelectedTab(index)}>
+        <Box flex="1" width={'100px'}>
+          <Tabs index={selectedTab} onChange={(index) => setSelectedTab(index)} >
             <TabPanels>
               {diagrams.map((diagram) => (
                 <TabPanel key={diagram.id}>
