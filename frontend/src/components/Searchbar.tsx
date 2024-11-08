@@ -1,21 +1,21 @@
 /**
  * Searchbar component
- * @param {GraphData[]} graphs - Array of graph data
- * @param {React.Dispatch<React.SetStateAction<GraphData[] | undefined>>} setGraphs - Function to set the graph data
+ * @param {Graph[]} graphs - Array of graph data
+ * @param {React.Dispatch<React.SetStateAction<Graph[] | undefined>>} setGraphs - Function to set the graph data
  * @returns {ReactElement} Searchbar component
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Input } from '@chakra-ui/react';
-import { GraphData } from '@/types';
+import { Graph } from '@/types';
 
 interface SearchbarProps {
-  graphs: GraphData[] | undefined;
-  setGraphs: React.Dispatch<React.SetStateAction<GraphData[] | undefined>>;
+  graphs: Graph[] | undefined;
+  setGraphs: React.Dispatch<React.SetStateAction<Graph[] | undefined>>;
 }
 
 export default function Searchbar({ graphs, setGraphs }: SearchbarProps) {
   const [search, setSearch] = useState("");
-  const originalGraphsRef = useRef<GraphData[] | undefined>([]);
+  const originalGraphsRef = useRef<Graph[] | undefined>([]);
 
   useEffect(() => {
     if (graphs && graphs.length > 0 && originalGraphsRef.current?.length === 0) {
