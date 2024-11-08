@@ -1,13 +1,11 @@
 /**
- * Home Page
- * @returns {ReactElement} Home Page
+ * Explore Page
+ * @returns {ReactElement} Explore Page
  */
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Graph, GraphData } from "@/types/graph";
-import FullScreenLoader from "./fullScreenLoader";
+import { GraphData } from "@/types/graph";
 import { GraphList } from "../components/graphList";
 import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
@@ -15,26 +13,26 @@ import { fetchGraphs } from "@/api/storage";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 
-function Home() {
+function Explore() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
-	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
+	const [graphs, setGraphs] = useState<GraphData[] | undefined>([]);
 
-	const fetchUsersGraphs = useCallback(async () => {
-		try {
-			const usersGraphs = await fetchGraphs(firebaseUser);
-			setGraphs(usersGraphs);
-		} catch (error) {
-			console.error("Error fetching graphs:", error);
-		}
-	}, [firebaseUser]);
+	// const fetchGraphs = useCallback(async () => {
+	// 	try {
+	// 		const publicGraphs = await fetchGraphs(firebaseUser);
+	// 		setGraphs(publicGraphs);
+	// 	} catch (error) {
+	// 		console.error("Error fetching graphs:", error);
+	// 	}
+	// }, [firebaseUser]);
 
-	useEffect(() => {
-		fetchUsersGraphs();
-	}, [fetchUsersGraphs, firebaseUser]);
+	// useEffect(() => {
+	// 	fetchPublicGraphs();
+	// }, [fetchPublicGraphs, firebaseUser]);
 
 	if (loading) {
-		return <FullScreenLoader />;
+		return <div>Loading...</div>;
 	}
 
 	if (!firebaseUser) {
@@ -57,10 +55,10 @@ function Home() {
 					</div>
 				</div>
 
-				<GraphList graphs={graphs} page="My Graphs"/>
+				<GraphList graphs={graphs} page="Explore" />
 			</div>
 		</div>
 	);
 }
 
-export default Home;
+export default Explore;

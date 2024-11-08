@@ -86,7 +86,7 @@ export default function UploadFile() {
 
 				toast({
 					title: "Graph saved",
-					description: `The following graph has been saved to your account: ${graph.graphName}`,
+					description: `The following graph has been saved to your account: ${graph?.graphName}`,
 					status: "success",
 					duration: 5000,
 					isClosable: true
@@ -107,17 +107,17 @@ export default function UploadFile() {
 	};
 
 	return (
-		<div className="bg-primary-200 h-screen relative">
+		<div className="bg-gray-700 h-screen relative">
 			<Button
-				leftIcon={<ArrowBackIcon />}
+				leftIcon={<ArrowBackIcon color="white" />}
 				className="absolute top-4 left-4"
 				variant="ghost"
-				colorScheme="primary"
+				colorScheme="whiteAlpha"
 				onClick={() => {
 					router.push("/home");
 				}}
 			>
-				Back to Home
+				<Text color="white">Back to Home</Text>
 			</Button>
 			<div className="h-screen max-w-4xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-full">
