@@ -26,7 +26,8 @@ export const uploadGraph = async (
 	firebaseUser: User | null,
 	graphFile: File,
 	graphName: string,
-	graphDescription: string
+	graphDescription: string,
+	graphVisibility: boolean
 ): Promise<Graph | undefined> => {
 	try {
 		const storage = getStorage(app);
@@ -41,6 +42,7 @@ export const uploadGraph = async (
 			owner: firebaseUser?.uid || "",
 			graphName: graphName,
 			graphDescription: graphDescription,
+			graphVisibility: graphVisibility,
 			graphFileURL: downloadURL,
 			createdAt: Timestamp.now(),
 			presets: []
@@ -78,6 +80,7 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 					owner: data.owner,
 					graphName: data.graphName,
 					graphDescription: data.graphDescription,
+					graphVisibility: data.graphVisibility || false,
 					graphFileURL: data.graphFileURL,
 					createdAt: data.createdAt,
 					presets: data.presets || []
