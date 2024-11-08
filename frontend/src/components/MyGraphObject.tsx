@@ -2,7 +2,7 @@
  * Graph Object Component
  * @param {string} graphName - Name of the graph
  * @param {string} graphDescription - Description of the graph
- * @param {Date} createdAt - Date the graph was created
+ * @param {Timestamp} createdAt -  Timestamp the graph was created
  * @param {string} author - Author of the graph
  * @returns {ReactElement} Graph Object Component
  */
@@ -16,22 +16,16 @@ import {
 	Text
 } from "@chakra-ui/react";
 
+import { MyGraphObjectProps } from "@/types/graph";
 import React from "react";
 import ShareButton from "./ShareButton";
-
-interface GraphObjectProps {
-	graphName: string;
-	graphDescription: string;
-	createdAt: Date | null;
-	author: string;
-}
 
 const MyGraphObject = ({
 	graphName,
 	graphDescription,
 	createdAt,
 	author
-}: GraphObjectProps) => {
+}: MyGraphObjectProps) => {
 	return (
 		<Card>
 			<CardHeader className="flex justify-between">
@@ -40,7 +34,7 @@ const MyGraphObject = ({
 					{author && <Text>{`by ${author}`}</Text>}
 
 					<Text fontSize="sm" color="gray.500">
-					Created: {createdAt instanceof Date ? createdAt.toLocaleDateString() : "Unknown"}
+						Created: {createdAt?.toDate().toLocaleDateString()}
 					</Text>
 				</div>
 			</CardHeader>

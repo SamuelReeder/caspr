@@ -5,7 +5,7 @@
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
-import { GraphData } from "@/types/graph";
+import { Graph } from "@/types/graph";
 import { GraphList } from "../components/graphList";
 import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 function SharedWithMe() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
-	const [graphs, setGraphs] = useState<GraphData[] | undefined>([]);
+	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 
 	// const fetchUsersSharedGraphs = useCallback(async () => {
 	// 	try {
