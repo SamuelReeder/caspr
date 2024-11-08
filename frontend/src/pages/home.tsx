@@ -5,9 +5,8 @@
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Graph, GraphData } from "@/types/graph";
 import FullScreenLoader from "./fullScreenLoader";
+import { Graph } from "@/types/graph";
 import { GraphList } from "../components/graphList";
 import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
@@ -57,7 +56,7 @@ function Home() {
 					</div>
 				</div>
 
-				<GraphList graphs={graphs} page="My Graphs"/>
+				<GraphList graphs={graphs} page="My Graphs" />
 			</div>
 		</div>
 	);

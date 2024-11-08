@@ -15,6 +15,26 @@ export interface Graph {
 }
 
 /**
+ * Props for GraphList component used in home page
+ * @Jaeyong
+ */
+export interface GraphListProps {
+	graphs: Graph[] | undefined;
+	page: string;
+}
+
+/**
+ * Props for MyGraphObject component used in home page
+ * @Jaeyong
+ */
+export interface MyGraphObjectProps {
+	graphName: string;
+	graphDescription: string;
+	createdAt: Timestamp;
+	author: string;
+}
+
+/**
  * Represents a preset for graph viewing and manipulation.
  * @Samuel
  */
@@ -43,21 +63,6 @@ export interface ViewPosition {
  */
 export interface Orientation {
 	pitch: number; // Rotation around the x-axis
-	yaw: number;   // Rotation around the y-axis
-	roll: number;  // Rotation around the z-axis
-}
-
-/**
- * @deprecated
- * Represents the data structure for a graph.
- */
-export interface GraphData {
-	createdAt: Date;
-	graphName: string;
-	graphDescription: string;
-}
-
-export interface GraphListProps {
-	graphs: GraphData[] | Graph[] | undefined;
-	page: string;
+	yaw: number; // Rotation around the y-axis
+	roll: number; // Rotation around the z-axis
 }

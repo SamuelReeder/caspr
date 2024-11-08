@@ -4,7 +4,7 @@
  * Storage related functions. ie. upload, download, etc.
  */
 
-import { Graph, GraphData } from "@/types/graph";
+import { Graph } from "@/types/graph";
 import { app, auth } from "@/config/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
