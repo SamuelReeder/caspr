@@ -32,15 +32,16 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({ onNodeSelect }) => {
   };
 
   const filteredNodes = nodes.filter((node) =>
-    node.id.toLowerCase() === searchQuery.toLowerCase() ||
-    node.label.toLowerCase().includes(searchQuery.toLowerCase())
+    node.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    node.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    node.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <Box width="100%" minWidth="295px" p={4} backgroundColor="gray.100" height="100%">
       <Flex mb={4}>
         <Input
-          placeholder="Search by label or id..."
+          placeholder="Search by label, id, or category..."
           value={searchQuery}
           onChange={handleSearchChange}
         />

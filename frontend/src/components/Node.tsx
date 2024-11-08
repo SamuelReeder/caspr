@@ -10,22 +10,23 @@ interface NodeProps {
   category: string;
   color: string;
   isInteracting: boolean;
+  isSelected: boolean;
 }
 
-const Node: React.FC<NodeProps> = ({ position, label, value, category, color, isInteracting }) => {
+const Node: React.FC<NodeProps> = ({ position, label, value, category, color, isInteracting, isSelected }) => {
   const meshRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
   return (
     <mesh
-    scale={[2, 2, 2]}
+      scale={isSelected ? [4, 4, 4] : [2, 2, 2]} // Increase scale if selected
       ref={meshRef}
       position={position}
       onPointerOver={() => !isInteracting && setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-     <sphereGeometry args={[6, 32, 32]} /> 
-      <meshStandardMaterial color={color} /> 
+      <sphereGeometry args={[6, 32, 32]} /> 
+      <meshStandardMaterial color={color} emissive={isSelected ? 'red' : 'black'} emissiveIntensity={isSelected ? 1 : 0} />
       {hovered && (
         <Html>
           <div className="node-tooltip">

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import * as d3 from 'd3';
 import { Canvas } from '@react-three/fiber';
 import Node from './Node';
 import Edge from './Edge';
@@ -39,31 +38,58 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
     return categoryColorMap[category];
   };
 
+  // Function to calculate the distance between two points in 3D space
+  const calculateDistance = (pos1: [number, number, number], pos2: [number, number, number]): number => {
+    const [x1, y1, z1] = pos1;
+    const [x2, y2, z2] = pos2;
+    return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2);
+  };
+
   useEffect(() => {
-    nodes.forEach((node) => {
-      if (!zPositions.current[node.id]) {
-        zPositions.current[node.id] = Math.random() * 100 - 50;
-      }
+    // Calculate radial positions for each category
+    const categories = Array.from(new Set(nodes.map(node => node.category)));
+    const radius = 200; // Adjust the radius as needed
+    const angleStep = (2 * Math.PI) / categories.length;
+    const categoryPositions: { [key: string]: [number, number] } = {};
+
+    categories.forEach((category, index) => {
+      const angle = index * angleStep;
+      categoryPositions[category] = [Math.cos(angle) * radius, Math.sin(angle) * radius];
     });
 
-    // use d3.js for nodes positions
-    const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(edges).id((d: any) => d.id).distance(10))
-      .force('charge', d3.forceManyBody().strength(-5))
-      .force('center', d3.forceCenter(0, 0))
-      .force('collision', d3.forceCollide().radius(40))
-      .on('tick', () => {
-        const positions: { [key: string]: [number, number, number] } = {};
-        nodes.forEach((node: any) => {
-          positions[node.id] = [node.x ?? 0, node.y ?? 0,  zPositions.current[node.id]];
-        });
-        setNodePositions(positions);
-      });
+    // Calculate scaling factor based on the number of nodes
+    const scaleFactor = Math.sqrt(nodes.length) * 0.25;
+    const minDistance = 50 * scaleFactor; // Minimum distance between nodes
 
-    return () => {
-      simulation.stop();
-    };
-  }, [nodes, edges]);
+    // Set node positions based on category with added deterministic noise
+    const positions: { [key: string]: [number, number, number] } = {};
+    nodes.forEach((node, index) => {
+      if (!zPositions.current[node.id]) {
+        const noiseZ = ((index % 5) - 5) * 100 * scaleFactor; // Deterministic noise for z position
+        zPositions.current[node.id] = noiseZ;
+      }
+      const [x, y] = categoryPositions[node.category];
+      const noiseX = ((index % 10) - 5) * 10 * scaleFactor; // Deterministic noise for x position
+      const noiseY = ((Math.floor(index / 10) % 10) - 5) * 10 * scaleFactor; // Deterministic noise for y position
+      positions[node.id] = [(x + noiseX) * scaleFactor, (y + noiseY) * scaleFactor, zPositions.current[node.id]];
+    });
+
+    // Adjust positions if nodes are too close
+    nodes.forEach((node, index) => {
+      const pos1 = positions[node.id];
+      nodes.forEach((otherNode, otherIndex) => {
+        if (index !== otherIndex) {
+          const pos2 = positions[otherNode.id];
+          if (calculateDistance(pos1, pos2) < minDistance) {
+            // Adjust position to ensure minimum distance
+            positions[otherNode.id] = [pos2[0] + minDistance, pos2[1] + minDistance, pos2[2] + minDistance];
+          }
+        }
+      });
+    });
+
+    setNodePositions(positions);
+  }, [nodes]);
 
   // Input handlers for min and max strength fields
   const handleMinStrengthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,22 +148,22 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
               label={node.label}
               value={node.value}
               category={node.category}
-              color={selectedNode && selectedNode.id === node.id ? '#00FFFF' : getColorByCategory(node.category)}
+              color={getColorByCategory(node.category)}
               isInteracting={isInteracting}
+              isSelected={!!(selectedNode && selectedNode.id === node.id)}
             />
           ))}
         {Object.keys(nodePositions).length > 0 &&
           edges
             .filter((edge) => edge.strength >= minStrength && edge.strength <= maxStrength) 
             .map((edge) => {
-              const sourcePosition = nodePositions[(edge.source as any).id];
-              const targetPosition = nodePositions[(edge.target as any).id];
-
+              const sourcePosition = nodePositions[edge.source];
+              const targetPosition = nodePositions[edge.target];
               if (!sourcePosition || !targetPosition) return null;
 
               return (
                 <Edge
-                  key={`${(edge.source as any).id}-${(edge.target as any).id}`}
+                  key={`${edge.source}-${edge.target}`}
                   sourcePosition={sourcePosition}
                   targetPosition={targetPosition}
                   relationship={edge.relationship}
