@@ -40,7 +40,7 @@ const MyGraphObject = ({
 					{author && <Text>{`by ${author}`}</Text>}
 
 					<Text fontSize="sm" color="gray.500">
-						Created: {createdAt?.toLocaleDateString()}
+					Created: {createdAt instanceof Date ? createdAt.toLocaleDateString() : "Unknown"}
 					</Text>
 				</div>
 			</CardHeader>
