@@ -10,18 +10,20 @@ import {
 import { Graph } from "@/types/graph";
 import React from "react";
 import ShareButton from "./ShareButton";
+import { User } from "@/types";
 
 interface MyGraphObjectProps {
 	graph: Graph;
+	owner: User | null;
 }
 
-const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph }) => {
+const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 	return (
 		<Card>
 			<CardHeader className="flex justify-between">
 				<Heading size="md">{graph.graphName}</Heading>
 				<div className="flex flex-col">
-					<Text>{`by ${graph.owner}`}</Text>
+					<Text>{`by ${owner?.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
 						Created: {graph.createdAt.toDate().toLocaleDateString()}
 					</Text>

@@ -5,7 +5,7 @@ import React from "react";
 import { Timestamp } from "firebase/firestore"; // Import Timestamp
 import customRender from "@/test-utils/render";
 import { screen } from "@testing-library/react";
-import { Graph } from "@/types";
+import { Graph, User } from "@/types";
 
 describe("GraphObject renders correctly", () => {
 	test("renders GraphObject component", () => {
@@ -23,6 +23,16 @@ describe("GraphObject renders correctly", () => {
 						sharedEmails: [],
 						presets: []
 					} as Graph
+				}
+				owner={
+					{
+						uid: "1",
+						name: "Kevin",
+						email: "",
+						photoURL: "",
+						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+						roles: []
+					} as User
 				}
 			/>
 		);
@@ -51,6 +61,16 @@ describe("GraphObject renders correctly", () => {
 						sharedEmails: [],
 						presets: []
 					} as Graph
+				}
+				owner={
+					{
+						uid: "1",
+						name: "Kevin",
+						email: "",
+						photoURL: "",
+						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+						roles: []
+					} as User
 				}
 			/>
 		);

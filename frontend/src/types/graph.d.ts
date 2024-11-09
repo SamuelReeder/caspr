@@ -7,7 +7,7 @@ import { deprecate } from "util";
  */
 export interface Graph {
 	id?: string;
-	owner: string;
+	owner: string; // UID of the owner
 	graphName: string;
 	graphDescription: string;
 	graphFileURL: string;
