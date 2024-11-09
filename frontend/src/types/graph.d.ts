@@ -6,12 +6,15 @@ import { deprecate } from "util";
  * @Samuel
  */
 export interface Graph {
+	id?: string;
 	owner: string;
 	graphName: string;
 	graphDescription: string;
 	graphFileURL: string;
 	createdAt: Timestamp;
-	presets: Preset[] | null;
+	sharing?: SharedUser[];
+	sharedEmails?: string[];
+	presets?: Preset[];
 }
 
 /**
@@ -66,3 +69,27 @@ export interface Orientation {
 	yaw: number; // Rotation around the y-axis
 	roll: number; // Rotation around the z-axis
 }
+
+/**
+ * Represents possible roles for shared access
+ * @Samuel
+ */
+export enum GraphRole {
+	VIEWER = 0,
+}
+
+/**
+ * SharedUser interface
+ * @Samuel
+ */
+interface SharedUser {
+	uid?: string;
+	email: string;
+	status: 'pending' | 'accepted';
+	role: GraphRole;
+	presetAccess: string[];
+	addedAt: Timestamp;
+	addedBy: string;
+	acceptedAt?: Timestamp;
+}
+

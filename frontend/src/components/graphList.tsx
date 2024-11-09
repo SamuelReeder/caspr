@@ -18,10 +18,7 @@ export function GraphList({ graphs, page }: GraphListProps) {
 				{graphs?.map((graph, i) => (
 					<MyGraphObject
 						key={i}
-						graphName={graph.graphName}
-						graphDescription={graph.graphDescription}
-						createdAt={graph.createdAt}
-						author={"John Appleseed"} // TODO - replae placeholder author name
+						graph={graph}
 					/>
 				))}
 			</div>

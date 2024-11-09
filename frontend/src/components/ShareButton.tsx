@@ -23,56 +23,35 @@ import {
   TagCloseButton,
   Wrap,
   WrapItem,
+  Stack,
+  Checkbox,
+  CheckboxGroup,
+  Text
 } from '@chakra-ui/react';
-import { Preset } from '@/types';
+import { Graph, Preset } from '@/types';
 import { Timestamp } from 'firebase/firestore';
 import { PresetDetails } from '@/components';
+import { shareGraphWithUser } from '@/api';
 
 
 interface ShareButtonProps {
   url: string;
   title: string;
-  presets?: Preset[];
+  graph: Graph;
   onMakePublic: (isPublic: boolean) => Promise<void>;
 }
 
-const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
+const ShareButton: React.FC<ShareButtonProps> = ({ url, title, graph }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [email, setEmail] = useState('');
   const [emailList, setEmailList] = useState<string[]>([]);
-  const [selectedPreset, setSelectedPreset] = useState('');
+  const [selectedPresets, setSelectedPresets] = useState<string[]>([]);
   const [isPublic, setIsPublic] = useState(false);
   const [publicLink, setPublicLink] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-
-  // dummy
-  const presets: Preset[] = [
-    {
-      name: 'Preset 1',
-      updated: Timestamp.fromDate(new Date()),
-      filters: ['filter1', 'filter2'],
-      pathways: ['pathway1', 'pathway2'],
-      view: null,
-    },
-    {
-      name: 'Preset 2',
-      updated: Timestamp.fromDate(new Date()),
-      filters: ['filter3', 'filter4'],
-      pathways: ['pathway3', 'pathway4'],
-      view: null,
-    },
-    {
-      name: 'Preset 3',
-      updated: Timestamp.fromDate(new Date()),
-      filters: null,
-      pathways: null,
-      view: null,
-    },
-  ];
-
-
-  const handleShare = () => {
+  const handleShare = async () => {
     if (emailList.length === 0) {
       toast({
         title: 'No recipients',
@@ -84,14 +63,48 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
       return;
     }
 
-    toast({
-      title: 'Email sent.',
-      description: `Email has been sent to ${emailList.length} recipient(s)`,
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    });
-    onClose();
+    setIsLoading(true);
+    try {
+      console.log('emailList', emailList);
+      const results = await Promise.all(
+        emailList.map(async email => {
+          return graph.id ? await shareGraphWithUser(graph.id, email, selectedPresets) : false;
+        })
+      );
+
+      const successCount = results.filter(Boolean).length;
+      const failureCount = results.length - successCount;
+
+      if (successCount > 0) {
+        toast({
+          title: 'Graph shared',
+          description: `Successfully shared with ${successCount} recipient(s)${failureCount > 0 ? `. Failed to share with ${failureCount} recipient(s).` : ''
+            }`,
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+        onClose();
+      } else {
+        toast({
+          title: 'Share failed',
+          description: 'Failed to share with any recipients',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to share graph',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleMakePublic = async () => {
@@ -174,26 +187,62 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
               </Wrap>
             </FormControl>
 
-            {presets && presets.length > 0 && (
+            {graph.presets && graph.presets.length > 0 && (
               <FormControl mb={4}>
-                <FormLabel>Select Preset</FormLabel>
-                <Select
-                  value={selectedPreset}
-                  onChange={(e) => setSelectedPreset(e.target.value)}
-                  placeholder="Select a preset"
+                <FormLabel>
+                  Select Presets ({selectedPresets.length} selected)
+                </FormLabel>
+                <Box
+                  maxHeight="200px"
+                  overflowY="auto"
+                  border="1px"
+                  borderColor="gray.200"
+                  borderRadius="md"
+                  p={2}
                 >
-                  {presets.map((preset) => (
-                    <option key={preset.name} value={preset.name}>
-                      {preset.name} ({preset.filters?.length || 0} filters, {preset.pathways?.length || 0} pathways)
-                    </option>
-                  ))}
-                </Select>
-
-                {selectedPreset && (
-                  <PresetDetails
-                    preset={presets.find(p => p.name === selectedPreset)!}
-                  />
-                )}
+                  <CheckboxGroup
+                    value={selectedPresets}
+                    onChange={(values) => setSelectedPresets(values as string[])}
+                  >
+                    <Stack spacing={2}>
+                      {graph.presets.map((preset: Preset) => (
+                        <Box
+                          key={preset.name}
+                          p={2}
+                          _hover={{ bg: 'gray.50' }}
+                          borderRadius="md"
+                        >
+                          <Checkbox value={preset.name}>
+                            <Box>
+                              <Text fontWeight="medium">{preset.name}</Text>
+                              <Text fontSize="sm" color="gray.600">
+                                Updated: {preset.updated.toDate().toLocaleDateString()}
+                              </Text>
+                              {preset.filters && (
+                                <Wrap mt={1}>
+                                  {preset.filters.map(filter => (
+                                    <WrapItem key={filter}>
+                                      <Tag size="sm" colorScheme="purple">{filter}</Tag>
+                                    </WrapItem>
+                                  ))}
+                                </Wrap>
+                              )}
+                              {preset.pathways && (
+                                <Wrap mt={1}>
+                                  {preset.pathways.map(pathway => (
+                                    <WrapItem key={pathway}>
+                                      <Tag size="sm" colorScheme="green">{pathway}</Tag>
+                                    </WrapItem>
+                                  ))}
+                                </Wrap>
+                              )}
+                            </Box>
+                          </Checkbox>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </CheckboxGroup>
+                </Box>
               </FormControl>
             )}
 
@@ -221,8 +270,15 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleShare}>
-              Send
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleShare}
+              isLoading={isLoading}
+              loadingText="Sharing..."
+              disabled={emailList.length === 0}
+            >
+              Share
             </Button>
             <Button variant="ghost" onClick={onClose}>Cancel</Button>
           </ModalFooter>

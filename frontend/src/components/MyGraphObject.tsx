@@ -1,11 +1,3 @@
-/**
- * Graph Object Component
- * @param {string} graphName - Name of the graph
- * @param {string} graphDescription - Description of the graph
- * @param {Timestamp} createdAt -  Timestamp the graph was created
- * @param {string} author - Author of the graph
- * @returns {ReactElement} Graph Object Component
- */
 import {
 	Box,
 	Button,
@@ -15,26 +7,23 @@ import {
 	Heading,
 	Text
 } from "@chakra-ui/react";
-
-import { MyGraphObjectProps } from "@/types/graph";
+import { Graph } from "@/types/graph";
 import React from "react";
 import ShareButton from "./ShareButton";
 
-const MyGraphObject = ({
-	graphName,
-	graphDescription,
-	createdAt,
-	author
-}: MyGraphObjectProps) => {
+interface MyGraphObjectProps {
+	graph: Graph;
+}
+
+const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph }) => {
 	return (
 		<Card>
 			<CardHeader className="flex justify-between">
-				<Heading size="md">{graphName}</Heading>
+				<Heading size="md">{graph.graphName}</Heading>
 				<div className="flex flex-col">
-					{author && <Text>{`by ${author}`}</Text>}
-
+					<Text>{`by ${graph.owner}`}</Text>
 					<Text fontSize="sm" color="gray.500">
-						Created: {createdAt?.toDate().toLocaleDateString()}
+						Created: {graph.createdAt.toDate().toLocaleDateString()}
 					</Text>
 				</div>
 			</CardHeader>
@@ -45,16 +34,20 @@ const MyGraphObject = ({
 						Description:
 					</Heading>
 					<Text pt="1" pr="1" fontSize="sm">
-						{graphDescription}
+						{graph.graphDescription}
 					</Text>
 				</Box>
 
-				{/* TODO - ShareButton shouldn't be its own component */}
-				{/* Make shareModal component, then replace ShareButton just with a button */}
 				<div className="flex flex-row gap-2">
-					<ShareButton url={""} title={graphName}></ShareButton>
-					{/* TODO - Open button will open the graph */}
-					<Button colorScheme={"blue"}>Open</Button>
+					<ShareButton
+						url={graph.graphFileURL}
+						title={graph.graphName}
+						graph={graph}
+						onMakePublic={function (isPublic: boolean): Promise<void> {
+							console.log(isPublic);
+							return Promise.resolve();
+						} }/>
+					<Button colorScheme="blue">Open</Button>
 				</div>
 			</CardBody>
 		</Card>
