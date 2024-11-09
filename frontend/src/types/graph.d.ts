@@ -3,13 +3,14 @@ import { deprecate } from "util";
 
 /**
  * Represents a graph object from a Firebase document.
- * @Samuel
+ * @Samuel @Terry
  */
 export interface Graph {
 	id?: string;
 	owner: string; // UID of the owner
 	graphName: string;
 	graphDescription: string;
+	graphVisibility: boolean;
 	graphFileURL: string;
 	createdAt: Timestamp;
 	sharing?: SharedUser[];
