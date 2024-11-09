@@ -10,12 +10,8 @@ import {
 import { Graph } from "@/types/graph";
 import React from "react";
 import ShareButton from "./ShareButton";
-import { User } from "@/types";
+import { User, MyGraphObjectProps } from "@/types";
 
-interface MyGraphObjectProps {
-	graph: Graph;
-	owner: User | null;
-}
 
 const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 	return (
@@ -46,7 +42,6 @@ const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 						title={graph.graphName}
 						graph={graph}
 						onMakePublic={function (isPublic: boolean): Promise<void> {
-							console.log(isPublic);
 							return Promise.resolve();
 						} }/>
 					<Button colorScheme="blue">Open</Button>

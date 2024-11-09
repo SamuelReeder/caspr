@@ -11,8 +11,10 @@ import { get } from "http";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
 import { getUser } from "@/api";
+import { useAuth } from "@/context";
 
 export function GraphList({ graphs, page }: GraphListProps) {
+	const { firestoreUser } = useAuth();
 
 	const [graphsWithOwners, setGraphsWithOwners] = useState<Array<{
 		graph: Graph,
@@ -26,6 +28,9 @@ export function GraphList({ graphs, page }: GraphListProps) {
 			const withOwners = await Promise.all(
 				graphs.map(async (graph) => {
 					try {
+						if (graph.owner == firestoreUser?.uid) {
+							return {graph, owner: firestoreUser}
+						}
 						const owner = await getUser(graph.owner);
 						return { graph, owner };
 					} catch (error) {

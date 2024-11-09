@@ -28,13 +28,11 @@ export interface GraphListProps {
 
 /**
  * Props for MyGraphObject component used in home page
- * @Jaeyong
+ * @Jaeyong @Samuel
  */
-export interface MyGraphObjectProps {
-	graphName: string;
-	graphDescription: string;
-	createdAt: Timestamp;
-	author: string;
+interface MyGraphObjectProps {
+	graph: Graph;
+	owner: User | null;
 }
 
 /**

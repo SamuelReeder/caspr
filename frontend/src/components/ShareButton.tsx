@@ -65,7 +65,6 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title, graph }) => {
 
     setIsLoading(true);
     try {
-      console.log('emailList', emailList);
       const results = await Promise.all(
         emailList.map(async email => {
           return graph.id ? await shareGraphWithUser(graph.id, email, selectedPresets) : false;
