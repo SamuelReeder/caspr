@@ -9,6 +9,9 @@ import { Heading } from "@chakra-ui/react";
 import MyGraphObject from "./MyGraphObject";
 
 export function GraphList({ graphs, page }: GraphListProps) {
+
+
+
 	return (
 		<div className="mt-8">
 			<Heading size="md" mb={4}>

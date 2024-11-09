@@ -89,6 +89,7 @@ export const createGraph = async (graph: Graph): Promise<void> => {
 			owner: graph.owner,
 			graphName: graph.graphName,
 			graphDescription: graph.graphDescription,
+			graphVisibility: graph.graphVisibility,
 			graphFileURL: graph.graphFileURL,
 			createdAt: graph.createdAt,
 			presets: graph.presets

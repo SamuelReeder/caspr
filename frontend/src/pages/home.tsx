@@ -41,6 +41,8 @@ function Home() {
 		return null;
 	}
 
+	console.log(graphs)
+
 	return (
 		<div className="flex flex-row">
 			<div className="sticky top-0 h-screen">
