@@ -73,7 +73,6 @@ export const createUser = async (user: User): Promise<void> => {
 			roles: user.roles
 		});
 
-		console.log("success");
 	} catch (error) {
 		throw error;
 	}
