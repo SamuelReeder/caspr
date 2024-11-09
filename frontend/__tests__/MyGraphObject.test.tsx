@@ -5,21 +5,31 @@ import React from "react";
 import { Timestamp } from "firebase/firestore"; // Import Timestamp
 import customRender from "@/test-utils/render";
 import { screen } from "@testing-library/react";
+import { Graph } from "@/types";
 
 describe("GraphObject renders correctly", () => {
 	test("renders GraphObject component", () => {
 		customRender(
 			<MyGraphObject
-				graphName="Test Title"
-				graphDescription="Test Description"
-				author="Kevin@gmail.com"
-				createdAt={Timestamp.fromDate(new Date("2023-09-01"))}
+				graph={
+					{
+						id: "1",
+						owner: "Kevin",
+						graphName: "Test Title",
+						graphDescription: "Test Description",
+						graphFileURL: "https://www.google.com",
+						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+						sharing: [],
+						sharedEmails: [],
+						presets: []
+					} as Graph
+				}
 			/>
 		);
 
 		const titleElement = screen.getByText(/Test Title/i);
 		const descriptionElement = screen.getByText(/Test Description/i);
-		const authorElement = screen.getByText(/Kevin@gmail.com/i);
+		const authorElement = screen.getByText(/Kevin/i);
 
 		expect(titleElement).toBeInTheDocument();
 		expect(descriptionElement).toBeInTheDocument();
@@ -29,10 +39,19 @@ describe("GraphObject renders correctly", () => {
 	test("renders GraphObject button", () => {
 		customRender(
 			<MyGraphObject
-				graphName="Test Title"
-				graphDescription="Test Description"
-				author="Kevin@gmail.com"
-				createdAt={Timestamp.fromDate(new Date("2023-09-01"))}
+				graph={
+					{
+						id: "1",
+						owner: "Kevin",
+						graphName: "Test Title",
+						graphDescription: "Test Description",
+						graphFileURL: "https://www.google.com",
+						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+						sharing: [],
+						sharedEmails: [],
+						presets: []
+					} as Graph
+				}
 			/>
 		);
 
