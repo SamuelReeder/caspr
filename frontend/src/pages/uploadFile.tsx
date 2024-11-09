@@ -15,7 +15,8 @@ import {
 	SlideFade,
 	Text,
 	Textarea,
-	useToast
+	useToast,
+	Switch
 } from "@chakra-ui/react";
 
 import { uploadGraph } from "@/api/storage";
@@ -27,12 +28,18 @@ export default function UploadFile() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [graphName, setGraphName] = useState("");
 	const [graphDescription, setGraphDescription] = useState("");
+	const [graphVisibility, setGraphVisibility] = useState(false)
 	const [isDragging, setIsDragging] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const toast = useToast();
 	const router = useRouter();
 	const { firebaseUser } = useAuth();
+
+	
+	const handleSwitchToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setGraphVisibility(e.target.checked);
+	  };
 
 	const handleDragEnter = (e: React.DragEvent) => {
 		e.preventDefault();
@@ -57,6 +64,9 @@ export default function UploadFile() {
 
 	const handleRemoveFile = () => {
 		setSelectedFile(null);
+		setGraphName("")
+		setGraphDescription("")
+		setGraphVisibility(false)
 		const fileInput = document.getElementById("fileInput") as HTMLInputElement;
 		if (fileInput) {
 			fileInput.value = "";
@@ -81,7 +91,8 @@ export default function UploadFile() {
 					firebaseUser,
 					selectedFile,
 					graphName,
-					graphDescription
+					graphDescription,
+					graphVisibility
 				);
 
 				toast({
@@ -107,7 +118,7 @@ export default function UploadFile() {
 	};
 
 	return (
-		<div className="bg-gray-700 h-screen relative">
+		<div className="bg-gray-700 h-screen overflow-auto relative">
 			<Button
 				leftIcon={<ArrowBackIcon color="white" />}
 				className="absolute top-4 left-4"
@@ -193,6 +204,17 @@ export default function UploadFile() {
 											onChange={(e) => setGraphDescription(e.target.value)}
 											value={graphDescription}
 										/>
+
+
+										<FormLabel className="pt-7"> Visibility</FormLabel>
+										<Box className='pl-5' textAlign='left'>
+											<Switch
+												onChange={handleSwitchToggle}
+												isChecked={graphVisibility}
+											> 
+												Publically Available 
+											</Switch>
+										</Box>
 
 										{/* Buttons */}
 										<div className="flex flex-row gap-4 justify-center mt-7">
