@@ -12,7 +12,7 @@ import Sidebar from "@/components/Sidebar";
 import { fetchGraphs } from "@/api/storage";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
-import { getSharedGraphs } from "@/api";
+import { getSharedGraphs, getUser } from "@/api";
 import FullScreenLoader from "./fullScreenLoader";
 
 function SharedWithMe() {
@@ -28,8 +28,24 @@ function SharedWithMe() {
 		try {
 			setIsLoading(true);
 			const sharedGraphs = await getSharedGraphs(firebaseUser.email);
-			console.log("Shared graphs:", sharedGraphs);
-			setGraphs(sharedGraphs);
+			const graphsWithOwners = await Promise.all(
+				sharedGraphs.map(async (graph) => {
+					try {
+						const owner = await getUser(graph.owner);
+						return {
+							...graph,
+							owner: owner.name || "Unknown"
+						};
+					} catch (error) {
+						return {
+							...graph,
+							ownerName: "Unknown"
+						};
+					}
+				})
+			);
+
+			setGraphs(graphsWithOwners);
 		} catch (error) {
 			console.error("Error fetching shared graphs:", error);
 			setGraphs([]);

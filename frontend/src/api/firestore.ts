@@ -14,6 +14,7 @@ import {
 	getDoc,
 	getDocs,
 	getFirestore,
+	orderBy,
 	query,
 	setDoc,
 	updateDoc,
@@ -333,8 +334,10 @@ export const unshareGraphFromUser = async (
 export const getSharedGraphs = async (email: string): Promise<Graph[]> => {
 	try {
 		const graphsRef = collection(db, "graphs");
-		const q = query(graphsRef,
-			where("sharedEmails", "array-contains", email)
+		const q = query(
+			graphsRef,
+			where("sharedEmails", "array-contains", email),
+			// orderBy("createdAt", "desc"),
 		);
 		const querySnap = await getDocs(q);
 
