@@ -56,6 +56,7 @@ describe("GraphObject renders correctly", () => {
 						graphName: "Test Title",
 						graphDescription: "Test Description",
 						graphFileURL: "https://www.google.com",
+						graphVisibility: true,
 						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
 						sharing: [],
 						sharedEmails: [],
