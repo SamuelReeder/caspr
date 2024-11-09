@@ -6,13 +6,16 @@ import { deprecate } from "util";
  * @Samuel @Terry
  */
 export interface Graph {
-	owner: string;
+	id?: string;
+	owner: string; // UID of the owner
 	graphName: string;
 	graphDescription: string;
 	graphVisibility: boolean;
 	graphFileURL: string;
 	createdAt: Timestamp;
-	presets: Preset[] | null;
+	sharing?: SharedUser[];
+	sharedEmails?: string[];
+	presets?: Preset[];
 }
 
 /**
@@ -26,13 +29,11 @@ export interface GraphListProps {
 
 /**
  * Props for MyGraphObject component used in home page
- * @Jaeyong
+ * @Jaeyong @Samuel
  */
-export interface MyGraphObjectProps {
-	graphName: string;
-	graphDescription: string;
-	createdAt: Timestamp;
-	author: string;
+interface MyGraphObjectProps {
+	graph: Graph;
+	owner: User | null;
 }
 
 /**
@@ -67,3 +68,27 @@ export interface Orientation {
 	yaw: number; // Rotation around the y-axis
 	roll: number; // Rotation around the z-axis
 }
+
+/**
+ * Represents possible roles for shared access
+ * @Samuel
+ */
+export enum GraphRole {
+	VIEWER = 0,
+}
+
+/**
+ * SharedUser interface
+ * @Samuel
+ */
+interface SharedUser {
+	uid?: string;
+	email: string;
+	status: 'pending' | 'accepted';
+	role: GraphRole;
+	presetAccess: string[];
+	addedAt: Timestamp;
+	addedBy: string;
+	acceptedAt?: Timestamp;
+}
+

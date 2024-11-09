@@ -45,7 +45,9 @@ export const uploadGraph = async (
 			graphVisibility: graphVisibility,
 			graphFileURL: downloadURL,
 			createdAt: Timestamp.now(),
-			presets: []
+			sharedEmails: [],
+			sharing: [],
+			presets: [],
 		};
 
 		await createGraph(graph);
@@ -71,23 +73,10 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 			const graphsRef = collection(db, "graphs");
 			const q = query(graphsRef, where("owner", "==", firebaseUser.uid));
 			const querySnapshot = await getDocs(q);
-
-			const graphData: Graph[] = [];
-
-			querySnapshot.forEach((doc) => {
-				const data = doc.data();
-				graphData.push({
-					owner: data.owner,
-					graphName: data.graphName,
-					graphDescription: data.graphDescription,
-					graphVisibility: data.graphVisibility || false,
-					graphFileURL: data.graphFileURL,
-					createdAt: data.createdAt,
-					presets: data.presets || []
-				});
-			});
-
-			return graphData;
+			return querySnapshot.docs.map(doc => ({
+				id: doc.id,
+				...doc.data()
+			})) as Graph[];
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
 			return [];

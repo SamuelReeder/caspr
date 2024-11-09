@@ -12,27 +12,54 @@ import Sidebar from "@/components/Sidebar";
 import { fetchGraphs } from "@/api/storage";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
+import { getSharedGraphs, getUser } from "@/api";
+import FullScreenLoader from "./fullScreenLoader";
 
 function SharedWithMe() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
+	const [isLoading, setIsLoading] = useState(true);
 
-	// const fetchUsersSharedGraphs = useCallback(async () => {
-	// 	try {
-	// 		const usersSharedGraphs = await fetchGraphs(firebaseUser);
-	// 		setGraphs(usersSharedGraphs);
-	// 	} catch (error) {
-	// 		console.error("Error fetching graphs:", error);
-	// 	}
-	// }, [firebaseUser]);
 
-	// useEffect(() => {
-	// 	fetchUsersSharedGraphs();
-	// }, [fetchUsersSharedGraphs, firebaseUser]);
+	const fetchUsersSharedGraphs = useCallback(async () => {
+		if (!firebaseUser?.email) return;
 
-	if (loading) {
-		return <div>Loading...</div>;
+		try {
+			setIsLoading(true);
+			const sharedGraphs = await getSharedGraphs(firebaseUser.email);
+			const graphsWithOwners = await Promise.all(
+				sharedGraphs.map(async (graph) => {
+					try {
+						const owner = await getUser(graph.owner);
+						return {
+							...graph,
+							owner: owner.name || "Unknown"
+						};
+					} catch (error) {
+						return {
+							...graph,
+							ownerName: "Unknown"
+						};
+					}
+				})
+			);
+
+			setGraphs(graphsWithOwners);
+		} catch (error) {
+			console.error("Error fetching shared graphs:", error);
+			setGraphs([]);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [firebaseUser?.email]);
+
+	useEffect(() => {
+		fetchUsersSharedGraphs();
+	}, [fetchUsersSharedGraphs]);
+
+	if (loading || isLoading) {
+		return <FullScreenLoader />;
 	}
 
 	if (!firebaseUser) {
