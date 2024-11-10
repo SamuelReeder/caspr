@@ -16,9 +16,8 @@ import {
 	signInWithPopup,
 	signInWithRedirect
 } from "firebase/auth";
-import { app, auth, db } from "@/config/firebaseConfig";
+import { app, auth } from "@/config/firebaseConfig";
 import { createUser, getUser } from "./firestore";
-
 import { Timestamp } from "firebase/firestore";
 
 /**
@@ -34,38 +33,25 @@ export const createAccountWithEmail = async (
 	username: string
 ): Promise<User> => {
 	// create user account in firebase authentication -> Store the user's details in Firestore
-
-	const auth = getAuth(app);
-
 	try {
-		const userCredentials = await createUserWithEmailAndPassword(
-			auth,
-			email,
-			password
-		);
-		const authUser = userCredentials.user; // https://firebase.google.com/docs/reference/js/v8/firebase.User
+		const response = await fetch("/api/auth/createAccountWithEmail", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email, password, username })
+		});
 
-		// If user authentication setup right send email verification and setup user document in firestore
-		if (authUser) {
-			await sendEmailVerification(authUser);
-
-			// Construct the user object
-			const user: User = {
-				uid: authUser.uid,
-				name: username || "",
-				email: authUser.email || "",
-				photoURL: authUser.photoURL || "",
-				createdAt: Timestamp.now(),
-				roles: []
-			};
-
-			await createUser(user);
-
-			return user;
-		} else {
-			throw new Error("Error creating user");
+		if (!response.ok) {
+			throw new Error("Error while creating user");
 		}
+
+		const user = await response.json();
+
+		// After creating user in authentication, create document in firestore
+		await createUser(user);
+
+		return user;
 	} catch (error) {
+		console.error("Error:", error);
 		throw error;
 	}
 };

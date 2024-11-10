@@ -47,7 +47,7 @@ export const uploadGraph = async (
 			createdAt: Timestamp.now(),
 			sharedEmails: [],
 			sharing: [],
-			presets: [],
+			presets: []
 		};
 
 		await createGraph(graph);
@@ -70,13 +70,15 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 
 	if (firebaseUser) {
 		try {
-			const graphsRef = collection(db, "graphs");
-			const q = query(graphsRef, where("owner", "==", firebaseUser.uid));
-			const querySnapshot = await getDocs(q);
-			return querySnapshot.docs.map(doc => ({
-				id: doc.id,
-				...doc.data()
-			})) as Graph[];
+			const uid = firebaseUser.uid;
+			const graphDataResponse = await fetch(`/api/data/getGraphs?uid=${uid}`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			const graphData = await graphDataResponse.json();
+			return graphData;
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
 			return [];
