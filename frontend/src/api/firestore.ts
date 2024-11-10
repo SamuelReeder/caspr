@@ -29,20 +29,20 @@ import { pre } from "framer-motion/client";
  */
 export const getUser = async (uid: string): Promise<User> => {
 	try {
-		// assuming we use "users" collection
-		const userDocRef = doc(db, "users", uid);
-		const userDoc = await getDoc(userDocRef);
-
-		if (userDoc.exists()) {
-			const userData = userDoc.data();
-			if (userData) {
-				return userData as User; // cast to type; ensure fields are correct
-			} else {
-				throw new Error("failed to cast user data");
+		const response = await fetch(`/api/users/${uid}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
 			}
-		} else {
-			throw new Error("document not found");
+		});
+
+		if (!response.ok) {
+			throw new Error("Error while getting user data");
 		}
+
+		const user = await response.json();
+
+		return user;
 	} catch (error) {
 		console.error(error);
 		throw error;

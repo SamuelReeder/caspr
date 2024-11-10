@@ -18,8 +18,8 @@ import {
 } from "firebase/auth";
 import { app, auth, db } from "@/config/firebaseConfig";
 import { createUser, getUser } from "./firestore";
-
 import { Timestamp } from "firebase/firestore";
+import { useAuth } from "@/context";
 
 /**
  * Create account with email and password.
@@ -104,24 +104,21 @@ export const loginWithEmail = async (
 	email: string,
 	password: string
 ): Promise<AuthenticatedUser> => {
-	try {
-		const userCredential = await signInWithEmailAndPassword(
-			auth,
-			email,
-			password
-		);
-		const firebaseUser = userCredential.user;
+	const response = await fetch("api/auth/loginWithEmail", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ email, password })
+	});
 
-		const firestoreUser = await getUser(firebaseUser.uid);
-		if (!firestoreUser) {
-			throw new Error("No user document found");
-		}
-
-		return { firebaseUser, firestoreUser, loading: false };
-	} catch (error) {
-		console.error(error);
-		throw error;
+	if (!response.ok) {
+		console.error("Error while logging in", response.status);
 	}
+
+	const authenticatedUser = await response.json();
+
+	return authenticatedUser as AuthenticatedUser;
 };
 
 /**

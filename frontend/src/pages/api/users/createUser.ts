@@ -14,7 +14,6 @@ export default async function handler(
 
 	try {
 		// Store user in Firestore
-		console.log("test", user);
 		const userDocumentRef = db.collection("users").doc(user.uid);
 		await userDocumentRef.set({ user });
 
