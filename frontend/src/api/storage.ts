@@ -66,24 +66,14 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 
 	if (firebaseUser) {
 		try {
-			const graphsRef = collection(db, "graphs");
-			const q = query(graphsRef, where("owner", "==", firebaseUser.uid));
-			const querySnapshot = await getDocs(q);
-
-			const graphData: Graph[] = [];
-
-			querySnapshot.forEach((doc) => {
-				const data = doc.data();
-				graphData.push({
-					owner: data.owner,
-					graphName: data.graphName,
-					graphDescription: data.graphDescription,
-					graphFileURL: data.graphFileURL,
-					createdAt: data.createdAt,
-					presets: data.presets || []
-				});
+			const uid = firebaseUser.uid;
+			const graphDataResponse = await fetch(`/api/data/getGraphs?uid=${uid}`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				}
 			});
-
+			const graphData = await graphDataResponse.json();
 			return graphData;
 		} catch (error) {
 			console.error("Error fetching graphs:", error);

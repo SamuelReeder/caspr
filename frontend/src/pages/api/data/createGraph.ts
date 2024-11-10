@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbAdmin } from "@/config/firebaseAdmin";
+import { Graph } from "@/types";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -9,19 +10,25 @@ export default async function handler(
 		res.status(405).json({ message: "Method not allowed" });
 	}
 
-	const graph = req.body;
-	console.log(graph);
+	const graph = req.body as { graph: Graph };
+
+	if (!graph.graph.owner || !graph.graph.graphName) {
+		res
+			.status(400)
+			.json({ error: "Owner or graph name wasn't passed, but is required" });
+	}
 
 	try {
 		// Create document in graphs collection
 		const graphsCollection = dbAdmin.collection("graphs");
+
 		await graphsCollection.add({
-			owner: graph.owner,
-			graphName: graph.graphName,
-			graphDescription: graph.graphDescription,
-			graphFileURL: graph.graphFileURL,
-			createdAt: graph.createdAt,
-			presets: graph.presets
+			owner: graph.graph.owner,
+			graphName: graph.graph.graphName,
+			graphDescription: graph.graph.graphDescription || "",
+			graphFileURL: graph.graph.graphFileURL || "",
+			createdAt: graph.graph.createdAt,
+			presets: graph.graph.presets || []
 		});
 
 		res.status(200).json({ message: "Graph succesfully created" });
