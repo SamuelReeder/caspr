@@ -35,17 +35,6 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 	const [isInteracting, setIsInteracting] = useState(false);
 	const [minStrength, setMinStrength] = useState(0);
 	const [maxStrength, setMaxStrength] = useState(1);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	// function to set the state of the modal to open
-	const openPrivacySettings = () => {
-		setIsModalOpen(true);
-	};
-
-	// function to set the state of the modal to be closed
-	const closePrivacySettings = () => {
-		setIsModalOpen(false);
-	};
 
 	// function to assign colors based on category (same color for nodes from one category)
 	const getColorByCategory = (category: string): string => {
@@ -173,15 +162,6 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 					/>
 				</Box>
 
-				{/* Privacy Settings Button */}
-				<Button onClick={openPrivacySettings}>Privacy Settings</Button>
-			</Box>
-
-			{/* Privacy Setting Modal */}
-			<PrivacySettingsModal
-				isOpen={isModalOpen}
-				onClose={closePrivacySettings}
-			/>
 
 			<Canvas
 				camera={{
