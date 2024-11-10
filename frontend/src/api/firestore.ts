@@ -23,7 +23,6 @@ import {
 import { app, auth, db } from "@/config/firebaseConfig";
 import { Graph, Preset, SharedUser, User } from "@/types";
 
-
 /**
  * Get a user document from Firestore.
  * @param uid - The user's UID.
@@ -32,20 +31,21 @@ import { Graph, Preset, SharedUser, User } from "@/types";
  */
 export const getUser = async (uid: string): Promise<User> => {
 	try {
-		// assuming we use "users" collection
-		const userDocRef = doc(db, "users", uid);
-		const userDoc = await getDoc(userDocRef);
-
-		if (userDoc.exists()) {
-			const userData = userDoc.data();
-			if (userData) {
-				return userData as User; // cast to type; ensure fields are correct
-			} else {
-				throw new Error("failed to cast user data");
+		// TODO: make the base url dynamic
+		const response = await fetch(`http://localhost:3000/api/data/${uid}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
 			}
-		} else {
-			throw new Error("document not found");
+		});
+
+		if (!response.ok) {
+			throw new Error("Error while getting user data");
 		}
+
+		const user = await response.json();
+
+		return user;
 	} catch (error) {
 		console.error(error);
 		throw error;
@@ -59,21 +59,20 @@ export const getUser = async (uid: string): Promise<User> => {
  * @Danny
  */
 export const createUser = async (user: User): Promise<void> => {
-	const firestore = getFirestore(app);
-
 	try {
-		const userDocumentRef = doc(firestore, "users", user.uid);
-
-		await setDoc(userDocumentRef, {
-			uid: user.uid,
-			name: user.name,
-			email: user.email,
-			photoURL: user.photoURL,
-			createdAt: user.createdAt,
-			roles: user.roles
+		const response = await fetch("/api/data/createUser", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ user })
 		});
 
+		if (!response.ok) {
+			throw new Error("Error while creating user");
+		}
+
+		await response.json();
 	} catch (error) {
+		console.error(error);
 		throw error;
 	}
 };
@@ -86,9 +85,19 @@ export const createUser = async (user: User): Promise<void> => {
  */
 export const createGraph = async (graph: Graph): Promise<void> => {
 	try {
-		const graphsCollection = collection(db, "graphs");
-		await addDoc(graphsCollection, graph);
+		const response = await fetch("/api/data/createGraph", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ graph })
+		});
+
+		if (!response.ok) {
+			throw new Error("Error while creating graph");
+		}
+
+		await response.json();
 	} catch (error) {
+		console.error(error);
 		throw error;
 	}
 };
@@ -101,7 +110,10 @@ export const createGraph = async (graph: Graph): Promise<void> => {
  * @returns A promise that resolves when the preset is added or updated.
  * @Danny @Samuel
  */
-export const addPresetToGraph = async (graphId: string, preset: Preset): Promise<void> => {
+export const addPresetToGraph = async (
+	graphId: string,
+	preset: Preset
+): Promise<void> => {
 	try {
 		const graphDocRef = doc(db, "graphs", graphId);
 		const graphDoc = await getDoc(graphDocRef);
@@ -109,7 +121,9 @@ export const addPresetToGraph = async (graphId: string, preset: Preset): Promise
 		if (graphDoc.exists()) {
 			const data = graphDoc.data();
 			const presets: Preset[] = data.presets || [];
-			const existingPresetIndex = presets.findIndex(p => p.name === preset.name);
+			const existingPresetIndex = presets.findIndex(
+				(p) => p.name === preset.name
+			);
 
 			if (existingPresetIndex !== -1) {
 				presets[existingPresetIndex] = preset;
@@ -121,7 +135,7 @@ export const addPresetToGraph = async (graphId: string, preset: Preset): Promise
 				presets: presets
 			});
 		} else {
-			console.error('Graph document does not exist');
+			console.error("Graph document does not exist");
 		}
 	} catch (error) {
 		throw error;
@@ -135,7 +149,10 @@ export const addPresetToGraph = async (graphId: string, preset: Preset): Promise
  * @returns A promise that resolves when the preset is deleted.
  * @Samuel
  */
-export const deletePresetFromGraph = async (graphId: string, presetName: string): Promise<void> => {
+export const deletePresetFromGraph = async (
+	graphId: string,
+	presetName: string
+): Promise<void> => {
 	try {
 		const graphDocRef = doc(db, "graphs", graphId);
 		const graphDoc = await getDoc(graphDocRef);
@@ -143,13 +160,13 @@ export const deletePresetFromGraph = async (graphId: string, presetName: string)
 		if (graphDoc.exists()) {
 			const data = graphDoc.data();
 			const presets: Preset[] = data.presets || [];
-			const updatedPresets = presets.filter(p => p.name !== presetName);
+			const updatedPresets = presets.filter((p) => p.name !== presetName);
 
 			await updateDoc(graphDocRef, {
 				presets: updatedPresets
 			});
 		} else {
-			console.error('Graph document does not exist');
+			console.error("Graph document does not exist");
 		}
 	} catch (error) {
 		throw error;
@@ -163,7 +180,10 @@ export const deletePresetFromGraph = async (graphId: string, presetName: string)
  * @returns A promise that resolves to the preset object.
  * @Samuel
  */
-export const getPresetByName = async (graphId: string, presetName: string): Promise<Preset | null> => {
+export const getPresetByName = async (
+	graphId: string,
+	presetName: string
+): Promise<Preset | null> => {
 	try {
 		const graphDocRef = doc(db, "graphs", graphId);
 		const graphDoc = await getDoc(graphDocRef);
@@ -171,14 +191,14 @@ export const getPresetByName = async (graphId: string, presetName: string): Prom
 		if (graphDoc.exists()) {
 			const data = graphDoc.data();
 			const presets: Preset[] = data.presets || [];
-			const preset = presets.find(p => p.name === presetName);
+			const preset = presets.find((p) => p.name === presetName);
 			return preset || null;
 		} else {
-			console.error('Graph document does not exist');
+			console.error("Graph document does not exist");
 			return null;
 		}
 	} catch (error) {
-		console.error('Error getting preset by name:', error);
+		console.error("Error getting preset by name:", error);
 		return null;
 	}
 };
@@ -189,7 +209,9 @@ export const getPresetByName = async (graphId: string, presetName: string): Prom
  * @returns A promise that resolves to an array containing all presets.
  * @Samuel
  */
-export const getAllPresets = async (graphId: string): Promise<Preset[] | null> => {
+export const getAllPresets = async (
+	graphId: string
+): Promise<Preset[] | null> => {
 	try {
 		const graphDocRef = doc(db, "graphs", graphId);
 		const graphDoc = await getDoc(graphDocRef);
@@ -198,11 +220,11 @@ export const getAllPresets = async (graphId: string): Promise<Preset[] | null> =
 			const data = graphDoc.data();
 			return data.presets || null;
 		} else {
-			console.error('Graph document does not exist');
+			console.error("Graph document does not exist");
 			return null;
 		}
 	} catch (error) {
-		console.error('Error getting presets:', error);
+		console.error("Error getting presets:", error);
 		return null;
 	}
 };
@@ -239,7 +261,6 @@ export const shareGraphWithUser = async (
 	role = 0
 ): Promise<boolean> => {
 	try {
-
 		const graphRef = doc(db, "graphs", graphId);
 		const graphSnap = await getDoc(graphRef);
 
@@ -249,23 +270,24 @@ export const shareGraphWithUser = async (
 		const sharing = graph.sharing || [];
 		const sharedEmails = graph.sharedEmails || [];
 
-		if (sharedEmails.some(u => u === email)) {
+		if (sharedEmails.some((u) => u === email)) {
 			return true;
 		}
 
 		const validPresets = presetNames
-			? presetNames.filter(name => graph.presets?.some(p => p.name === name))
+			? presetNames.filter((name) =>
+					graph.presets?.some((p) => p.name === name)
+				)
 			: [];
 
 		const newShare: SharedUser = {
 			email,
-			status: 'pending',
+			status: "pending",
 			role,
 			presetAccess: validPresets,
 			addedAt: Timestamp.now(),
-			addedBy: auth.currentUser?.email || ''
+			addedBy: auth.currentUser?.email || ""
 		};
-
 
 		// if sharing field doesn't exist, create it with new share
 		// await updateDoc(graphRef, {
@@ -279,7 +301,7 @@ export const shareGraphWithUser = async (
 
 		return true;
 	} catch (error) {
-		console.error('Error sharing graph:', error);
+		console.error("Error sharing graph:", error);
 		return false;
 	}
 };
@@ -304,9 +326,8 @@ export const unshareGraphFromUser = async (
 		const sharing = graph.sharing || [];
 		const sharedEmails = graph.sharedEmails || [];
 
-		const updatedSharing = sharing.filter(u => u.email !== email);
-		const updatedEmails = sharedEmails.filter(e => e !== email);
-
+		const updatedSharing = sharing.filter((u) => u.email !== email);
+		const updatedEmails = sharedEmails.filter((e) => e !== email);
 
 		if (updatedSharing.length === sharing.length) {
 			return false;
@@ -319,7 +340,7 @@ export const unshareGraphFromUser = async (
 
 		return true;
 	} catch (error) {
-		console.error('Error unsharing graph:', error);
+		console.error("Error unsharing graph:", error);
 		return false;
 	}
 };
@@ -335,21 +356,20 @@ export const getSharedGraphs = async (email: string): Promise<Graph[]> => {
 		const graphsRef = collection(db, "graphs");
 		const q = query(
 			graphsRef,
-			where("sharedEmails", "array-contains", email),
+			where("sharedEmails", "array-contains", email)
 			// orderBy("createdAt", "desc"),
 		);
 		const querySnap = await getDocs(q);
 
-		return querySnap.docs.map(doc => ({
+		return querySnap.docs.map((doc) => ({
 			id: doc.id,
 			...doc.data()
 		})) as Graph[];
 	} catch (error) {
-		console.error('Error getting shared graphs:', error);
+		console.error("Error getting shared graphs:", error);
 		return [];
 	}
 };
-
 
 /**
  * Accept a graph share invitation and update user ID
@@ -372,25 +392,24 @@ export const acceptShareInvite = async (
 
 		const graph = graphSnap.data() as Graph;
 		const sharing = graph.sharing || [];
-		const userIndex = sharing.findIndex(u => u.email === email);
+		const userIndex = sharing.findIndex((u) => u.email === email);
 
 		if (userIndex === -1) return false;
 
 		sharing[userIndex] = {
 			...sharing[userIndex],
 			uid,
-			status: 'accepted',
+			status: "accepted",
 			acceptedAt: Timestamp.now()
 		};
 
 		await updateDoc(graphRef, { sharing });
 		return true;
 	} catch (error) {
-		console.error('Error accepting invite:', error);
+		console.error("Error accepting invite:", error);
 		return false;
 	}
 };
-
 
 /**
  * Get accessible presets for a user in a shared graph
@@ -410,15 +429,16 @@ export const getUserAccessiblePresets = async (
 		if (!graphSnap.exists()) return [];
 
 		const graph = graphSnap.data() as Graph;
-		const userShare = graph.sharing?.find(u => u.email === email);
+		const userShare = graph.sharing?.find((u) => u.email === email);
 
-		if (!userShare || userShare.status !== 'accepted') return [];
+		if (!userShare || userShare.status !== "accepted") return [];
 
-		return graph.presets?.filter(p =>
-			userShare.presetAccess.includes(p.name)
-		) || [];
+		return (
+			graph.presets?.filter((p) => userShare.presetAccess.includes(p.name)) ||
+			[]
+		);
 	} catch (error) {
-		console.error('Error getting accessible presets:', error);
+		console.error("Error getting accessible presets:", error);
 		return [];
 	}
 };
@@ -444,19 +464,19 @@ export const updatePresetAccess = async (
 
 		const graph = graphSnap.data() as Graph;
 		const sharing = graph.sharing || [];
-		const userIndex = sharing.findIndex(u => u.email === email);
+		const userIndex = sharing.findIndex((u) => u.email === email);
 
 		if (userIndex === -1) return false;
 
-		const validPresets = presetNames.filter(name =>
-			graph.presets?.some(p => p.name === name)
+		const validPresets = presetNames.filter((name) =>
+			graph.presets?.some((p) => p.name === name)
 		);
 
 		sharing[userIndex].presetAccess = validPresets;
 		await updateDoc(graphRef, { sharing });
 		return true;
 	} catch (error) {
-		console.error('Error updating preset access:', error);
+		console.error("Error updating preset access:", error);
 		return false;
 	}
 };
