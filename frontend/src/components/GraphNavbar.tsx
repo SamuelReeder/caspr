@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, Center } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, ArrowBackIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { getAuth } from "firebase/auth";
 
 interface Diagram {
   id: number;
@@ -22,6 +23,16 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      setUsername(auth.currentUser.displayName || "User");
+    }
+  }, []);
+  
 
   const goBack = () => {
     // Function to go back to the last page
@@ -92,7 +103,7 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         Share
       </Button>
       <Avatar
-        name="Hello World"
+        name={username ? username.slice(0, 2).toUpperCase() : ""}
         src="path_to_image.jpg"
         size="md"
         ml={2}
