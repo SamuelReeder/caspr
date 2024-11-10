@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { auth, db } from "@/config/firebaseAdmin";
+import { authAdmin } from "@/config/firebaseAdmin";
 import { User } from "@/types";
 import { firestore } from "firebase-admin";
 
@@ -22,7 +22,7 @@ export default async function handler(
 
 	try {
 		// Create user in Firebase Authentication
-		const userAuth = await auth.createUser({
+		const userAuth = await authAdmin.createUser({
 			email,
 			password,
 			displayName: username

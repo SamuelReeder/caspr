@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { db } from "@/config/firebaseAdmin"; // Import the Firestore Admin instance from firebaseAdmin.ts
+import { dbAdmin } from "@/config/firebaseAdmin"; // Import the Firestore Admin instance from firebaseAdmin.ts
 import { User } from "@/types";
 
 export default async function handler(
@@ -23,7 +23,7 @@ export default async function handler(
 	}
 
 	try {
-		const userDocRef = db.collection("users").doc(uid as string);
+		const userDocRef = dbAdmin.collection("users").doc(uid as string);
 		const userDoc = await userDocRef.get();
 
 		if (userDoc) {

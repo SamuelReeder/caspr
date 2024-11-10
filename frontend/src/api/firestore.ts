@@ -29,7 +29,8 @@ import { pre } from "framer-motion/client";
  */
 export const getUser = async (uid: string): Promise<User> => {
 	try {
-		const response = await fetch(`/api/users/${uid}`, {
+		// TODO: make the base url dynamic
+		const response = await fetch(`http://localhost:3000/api/data/${uid}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json"
@@ -57,7 +58,7 @@ export const getUser = async (uid: string): Promise<User> => {
  */
 export const createUser = async (user: User): Promise<void> => {
 	try {
-		const response = await fetch("/api/users/createUser", {
+		const response = await fetch("/api/data/createUser", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ user })
@@ -82,16 +83,19 @@ export const createUser = async (user: User): Promise<void> => {
  */
 export const createGraph = async (graph: Graph): Promise<void> => {
 	try {
-		const graphsCollection = collection(db, "graphs");
-		await addDoc(graphsCollection, {
-			owner: graph.owner,
-			graphName: graph.graphName,
-			graphDescription: graph.graphDescription,
-			graphFileURL: graph.graphFileURL,
-			createdAt: graph.createdAt,
-			presets: graph.presets
+		const response = await fetch("/api/data/createGraph", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ graph })
 		});
+
+		if (!response.ok) {
+			throw new Error("Error while creating graph");
+		}
+
+		await response.json();
 	} catch (error) {
+		console.error(error);
 		throw error;
 	}
 };

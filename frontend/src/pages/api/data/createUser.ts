@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { db } from "@/config/firebaseAdmin";
+import { dbAdmin } from "@/config/firebaseAdmin";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -14,7 +14,7 @@ export default async function handler(
 
 	try {
 		// Store user in Firestore
-		const userDocumentRef = db.collection("users").doc(user.uid);
+		const userDocumentRef = dbAdmin.collection("users").doc(user.uid);
 		await userDocumentRef.set({ user });
 
 		res.status(200).json({ message: "Successfully created user " });
