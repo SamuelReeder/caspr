@@ -26,7 +26,8 @@ export const uploadGraph = async (
 	firebaseUser: User | null,
 	graphFile: File,
 	graphName: string,
-	graphDescription: string
+	graphDescription: string,
+	graphVisibility: boolean
 ): Promise<Graph | undefined> => {
 	try {
 		const storage = getStorage(app);
@@ -41,8 +42,11 @@ export const uploadGraph = async (
 			owner: firebaseUser?.uid || "",
 			graphName: graphName,
 			graphDescription: graphDescription,
+			graphVisibility: graphVisibility,
 			graphFileURL: downloadURL,
 			createdAt: Timestamp.now(),
+			sharedEmails: [],
+			sharing: [],
 			presets: []
 		};
 

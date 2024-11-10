@@ -71,19 +71,23 @@ export const createAccountWithGoogle = async (): Promise<User> => {
 		const authUser = userCredentials.user;
 
 		if (authUser) {
-			// Construct the user object
-			const user: User = {
-				uid: authUser.uid,
-				name: authUser.displayName || "",
-				email: authUser.email || "",
-				photoURL: authUser.photoURL || "",
-				createdAt: Timestamp.now().toDate(),
-				roles: []
-			};
+			try {
+				const existingUser = await getUser(authUser.uid);
+				return existingUser;
+			} catch (error) {
+				// User doesn't exist, create new one
+				const user: User = {
+					uid: authUser.uid,
+					name: authUser.displayName || "",
+					email: authUser.email || "",
+					photoURL: authUser.photoURL || "",
+					createdAt: Timestamp.now().toDate(),
+					roles: []
+				};
 
-			await createUser(user);
-
-			return user;
+				await createUser(user);
+				return user;
+			}
 		} else {
 			throw new Error("Error creating account with Google");
 		}
@@ -131,7 +135,23 @@ export const loginWithEmail = async (
 export const loginWithGoogle = async (): Promise<void> => {
 	const provider = new GoogleAuthProvider();
 	try {
-		await signInWithPopup(auth, provider); // popup instead of redirect to cover if session storage unavailable
+		const result = await signInWithPopup(auth, provider);
+		const authUser = result.user;
+
+		try {
+			await getUser(authUser.uid);
+		} catch (error) {
+			const newUser: User = {
+				uid: authUser.uid,
+				name: authUser.displayName || "",
+				email: authUser.email || "",
+				photoURL: authUser.photoURL || "",
+				createdAt: Timestamp.now(),
+				roles: []
+			};
+
+			await createUser(newUser);
+		}
 	} catch (error) {
 		console.error(error);
 		throw error;

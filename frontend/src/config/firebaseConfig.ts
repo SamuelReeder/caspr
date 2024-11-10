@@ -29,6 +29,7 @@ const getFirebaseApp = () => {
 	}
 };
 
+
 const app = getFirebaseApp();
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
