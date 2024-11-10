@@ -3,24 +3,22 @@
  * @returns {ReactElement} Shared With Me Page
  */
 import { Heading, Text } from "@chakra-ui/react";
+import { getSharedGraphs, getUser } from "@/api";
 import { useCallback, useEffect, useState } from "react";
 
+import FullScreenLoader from "./fullScreenLoader";
 import { Graph } from "@/types/graph";
-import { GraphList } from "../components/graphList";
+import GraphList from "@/components/GraphList";
 import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
-import { fetchGraphs } from "@/api/storage";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
-import { getSharedGraphs, getUser } from "@/api";
-import FullScreenLoader from "./fullScreenLoader";
 
 function SharedWithMe() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 	const [isLoading, setIsLoading] = useState(true);
-
 
 	const fetchUsersSharedGraphs = useCallback(async () => {
 		if (!firebaseUser?.email) return;
