@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, Center } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, ArrowBackIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 interface Diagram {
   id: number;
@@ -27,10 +27,12 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
 
   useEffect(() => {
     const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      setUsername(auth.currentUser.displayName || "User");
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsername(user.displayName || "User");
+      }
+    });
+    return () => unsubscribe();
   }, []);
   
 
