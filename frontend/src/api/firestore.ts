@@ -22,6 +22,7 @@ import {
 } from "firebase/firestore";
 import { app, auth, db } from "@/config/firebaseConfig";
 import { Graph, Preset, SharedUser, User } from "@/types";
+import { apiClient } from "@/utils/apiClient";
 
 /**
  * Get a user document from Firestore.
@@ -31,8 +32,7 @@ import { Graph, Preset, SharedUser, User } from "@/types";
  */
 export const getUser = async (uid: string): Promise<User> => {
 	try {
-		// TODO: make the base url dynamic
-		const response = await fetch(`http://localhost:3000/api/data/${uid}`, {
+		const response = await apiClient(`/api/data/${uid}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json"
@@ -60,15 +60,11 @@ export const getUser = async (uid: string): Promise<User> => {
  */
 export const createUser = async (user: User): Promise<void> => {
 	try {
-		const response = await fetch("/api/data/createUser", {
+		const response = await apiClient("/api/data/createUser", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ user })
 		});
-
-		if (!response.ok) {
-			throw new Error("Error while creating user");
-		}
 
 		await response.json();
 	} catch (error) {
@@ -85,7 +81,7 @@ export const createUser = async (user: User): Promise<void> => {
  */
 export const createGraph = async (graph: Graph): Promise<void> => {
 	try {
-		const response = await fetch("/api/data/createGraph", {
+		const response = await apiClient("/api/data/createGraph", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ graph })

@@ -17,7 +17,7 @@ import {
 	Text,
 	useToast
 } from "@chakra-ui/react";
-import { createAccountWithEmail, createAccountWithGoogle } from "@/api";
+import { createAccountWithEmail, loginWithGoogle } from "@/api";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
@@ -78,8 +78,17 @@ export default function CreateAccount() {
 	const handleGoogleCreateAccount = async () => {
 		try {
 			setGoogleLoading(true);
+			const user = await loginWithGoogle();
 
-			const user = await createAccountWithGoogle();
+			toast({
+				title: "Account created",
+				description: `Welcome ${user.email}`,
+				status: "success",
+				duration: 5000,
+				isClosable: true
+			});
+
+			router.push("/");
 		} catch (error) {
 			toast({
 				title: "Error while creating account",

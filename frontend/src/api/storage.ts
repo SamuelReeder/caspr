@@ -13,6 +13,7 @@ import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { createGraph } from "./firestore";
 import { db } from "@/config/firebaseConfig";
+import { apiClient } from "@/utils/apiClient";
 
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
@@ -71,12 +72,15 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 	if (firebaseUser) {
 		try {
 			const uid = firebaseUser.uid;
-			const graphDataResponse = await fetch(`/api/data/getGraphs?uid=${uid}`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json"
+			const graphDataResponse = await apiClient(
+				`/api/data/getGraphs?uid=${uid}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
 				}
-			});
+			);
 			const graphData = await graphDataResponse.json();
 			return graphData;
 		} catch (error) {

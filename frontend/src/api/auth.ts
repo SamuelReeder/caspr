@@ -19,6 +19,7 @@ import {
 import { app, auth } from "@/config/firebaseConfig";
 import { createUser, getUser } from "./firestore";
 import { Timestamp } from "firebase/firestore";
+import { apiClient } from "@/utils/apiClient";
 
 /**
  * Create account with email and password.
@@ -34,7 +35,7 @@ export const createAccountWithEmail = async (
 ): Promise<User> => {
 	// create user account in firebase authentication -> Store the user's details in Firestore
 	try {
-		const response = await fetch("/api/auth/createAccountWithEmail", {
+		const response = await apiClient("/api/auth/createAccountWithEmail", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ email, password, username })
@@ -49,6 +50,9 @@ export const createAccountWithEmail = async (
 		// After creating user in authentication, create document in firestore
 		await createUser(user);
 
+		// After creating the user, log them into the app
+		await loginWithEmail(email, password);
+
 		return user;
 	} catch (error) {
 		console.error("Error:", error);
@@ -61,7 +65,7 @@ export const createAccountWithEmail = async (
  * @returns A promise that resolves to the newly created user.
  * @Danny
  */
-export const createAccountWithGoogle = async (): Promise<User> => {
+export const loginWithGoogle = async (): Promise<User> => {
 	const auth = getAuth(app);
 	const provider = new GoogleAuthProvider();
 
@@ -86,6 +90,7 @@ export const createAccountWithGoogle = async (): Promise<User> => {
 				};
 
 				await createUser(user);
+
 				return user;
 			}
 		} else {
@@ -121,37 +126,6 @@ export const loginWithEmail = async (
 		}
 
 		return { firebaseUser, firestoreUser, loading: false };
-	} catch (error) {
-		console.error(error);
-		throw error;
-	}
-};
-
-/**
- * Login with Google.
- * @returns A promise that resolves to the authenticated user.
- * @Samuel
- */
-export const loginWithGoogle = async (): Promise<void> => {
-	const provider = new GoogleAuthProvider();
-	try {
-		const result = await signInWithPopup(auth, provider);
-		const authUser = result.user;
-
-		try {
-			await getUser(authUser.uid);
-		} catch (error) {
-			const newUser: User = {
-				uid: authUser.uid,
-				name: authUser.displayName || "",
-				email: authUser.email || "",
-				photoURL: authUser.photoURL || "",
-				createdAt: Timestamp.now(),
-				roles: []
-			};
-
-			await createUser(newUser);
-		}
 	} catch (error) {
 		console.error(error);
 		throw error;
