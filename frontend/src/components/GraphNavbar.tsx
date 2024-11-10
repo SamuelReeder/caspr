@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, Center } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, ArrowBackIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import ShareButton from './ShareButton';
+import { Timestamp } from 'firebase/firestore';
+import { Graph, Preset, SharedUser } from '@/types/graph';
 
 interface Diagram {
   id: number;
@@ -19,11 +23,13 @@ interface NavBarProps {
   setSelectedTab: (index: number) => void;
   addDiagram: () => void;
   removeDiagram: (id: number) => void;
+  graph: Graph;
 }
 
-const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram }) => {
+const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram, graph }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [username, setUsername] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const auth = getAuth();
@@ -37,15 +43,11 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
   
 
   const goBack = () => {
-    // Function to go back to the last page
+    router.back();
   };
 
   const handleAvatarClick = () => {
     // Function to handle avatar click
-  };
-
-  const handleShareClick = () => {
-    onOpen();
   };
 
   return (
@@ -93,17 +95,13 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         p={2}
       />
       <Spacer />
-      <Button
-        leftIcon={<ExternalLinkIcon />}
-        size="md"
-        ml={2}
-        onClick={handleShareClick}
-        p={4}
-        borderRadius="md"
-        width="150px"
-      >
-        Share
-      </Button>
+      <ShareButton
+						url={graph.graphFileURL}
+						title={graph.graphName}
+						graph={graph}
+						onMakePublic={function (isPublic: boolean): Promise<void> {
+							return Promise.resolve();
+			} }/>
       <Avatar
         name={username ? username.slice(0, 2).toUpperCase() : ""}
         src="path_to_image.jpg"

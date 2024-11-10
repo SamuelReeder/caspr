@@ -5,6 +5,7 @@ import jsonData from '../data/100nodes_example.json';
 import NavBar from '../components/GraphNavbar';
 import GraphSideBar from '../components/GraphSideBar';
 import { NodeType } from '../types/node';
+import { Timestamp } from 'firebase/firestore';
 
 interface Diagram {
   id: number;
@@ -19,6 +20,7 @@ const GraphPage = () => {
   const [diagrams, setDiagrams] = useState<Diagram[]>([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedNode, setSelectedNode] = useState<NodeType | null>(null);
+  //xconst [graph, setGraph] = useState<any>(null);
 
   const handleNodeSelect = (node: NodeType | null) => {
     setSelectedNode(node);
@@ -44,6 +46,19 @@ const GraphPage = () => {
     }
   };
 
+  const graph = {
+    id: "", 
+    owner: "ownerUid", // Owner UID
+    graphName: "name",
+    graphDescription: "desc",
+    graphVisibility: true,
+    graphFileURL: "",
+    createdAt: Timestamp.now(),
+    sharing: [],
+    sharedEmails: [],
+    presets: [],
+  };
+
   return (
     <Box height="100vh" display="flex" flexDirection="column">
       <NavBar
@@ -52,6 +67,7 @@ const GraphPage = () => {
         setSelectedTab={setSelectedTab}
         addDiagram={addDiagram}
         removeDiagram={removeDiagram}
+        graph={graph}
       />
       <Box display="flex" flex="1">
         <Box flex="1" width={'100px'}>
