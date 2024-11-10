@@ -34,7 +34,7 @@ export default async function handler(
 			name: username,
 			email: userAuth.email || "",
 			photoURL: userAuth.photoURL || "",
-			createdAt: firestore.Timestamp.now().toDate(),
+			createdAt: firestore.Timestamp.now(),
 			roles: []
 		};
 

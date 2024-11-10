@@ -26,8 +26,11 @@ export default async function handler(
 			owner: graph.graph.owner,
 			graphName: graph.graph.graphName,
 			graphDescription: graph.graph.graphDescription || "",
+			graphVisibility: graph.graph.graphVisibility || false,
 			graphFileURL: graph.graph.graphFileURL || "",
 			createdAt: graph.graph.createdAt,
+			sharing: graph.graph.sharing,
+			sharedEmails: graph.graph.sharedEmails || [],
 			presets: graph.graph.presets || []
 		});
 

@@ -81,7 +81,7 @@ export const createAccountWithGoogle = async (): Promise<User> => {
 					name: authUser.displayName || "",
 					email: authUser.email || "",
 					photoURL: authUser.photoURL || "",
-					createdAt: Timestamp.now().toDate(),
+					createdAt: Timestamp.now(),
 					roles: []
 				};
 

@@ -26,11 +26,15 @@ export default async function handler(
 		querySnapshot.forEach((doc) => {
 			const data = doc.data();
 			graphs.push({
+				id: data.id,
 				owner: data.owner,
 				graphName: data.graphName,
 				graphDescription: data.graphDescription,
+				graphVisibility: data.graphVisibility,
 				graphFileURL: data.graphFileURL,
 				createdAt: data.createdAt,
+				sharing: data.sharing,
+				sharedEmails: data.sharedEmails,
 				presets: data.presets || []
 			});
 		});

@@ -36,7 +36,7 @@ const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 				<div className="flex flex-col">
 					<Text>{`by ${owner?.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
-						Created: {formatDate(createdAt)}
+						Created: {formatDate(graph.createdAt)}
 					</Text>
 				</div>
 			</CardHeader>
