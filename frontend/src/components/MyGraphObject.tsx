@@ -46,12 +46,12 @@ const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 					<Heading size="xs" textTransform="uppercase">
 						Description:
 					</Heading>
-					<Text pt="1" pr="1" fontSize="sm">
+					<Text pt="1" pr="2" fontSize="sm">
 						{graph.graphDescription}
 					</Text>
 				</Box>
 
-				<div className="flex flex-row gap-2">
+				<Box className="flex flex-row gap-2" alignItems="center">
 					<ShareButton
 						url={graph.graphFileURL}
 						title={graph.graphName}
@@ -61,7 +61,7 @@ const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 						}}
 					/>
 					<Button colorScheme="blue">Open</Button>
-				</div>
+				</Box>
 			</CardBody>
 		</Card>
 	);
