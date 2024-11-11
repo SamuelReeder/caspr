@@ -14,7 +14,7 @@ interface Diagram {
 }
 
 interface NavBarProps {
-  graph: Graph; 
+  graph: Graph | null; 
   diagrams: Diagram[];
   selectedTab: number;
   setSelectedTab: (index: number) => void;
@@ -23,8 +23,6 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ graph, diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram}) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const goBack = () => {
     // Function to go back to the last page
   };
@@ -78,14 +76,16 @@ const NavBar: React.FC<NavBarProps> = ({ graph, diagrams, selectedTab, setSelect
         p={2}
       />
       <Spacer />
-      <ShareButton
-						url={graph.graphFileURL}
-						title={graph.graphName}
-						graph={graph}
-						onMakePublic={function (isPublic: boolean): Promise<void> {
-							return Promise.resolve();
-						}}
-			/>
+      {graph && (
+        <ShareButton
+          url={graph.graphFileURL}
+          title={graph.graphName}
+          graph={graph}
+          onMakePublic={function (isPublic: boolean): Promise<void> {
+            return Promise.resolve();
+          }}
+        />
+      )}
       <Avatar
         name="Hello World"
         src="path_to_image.jpg"
