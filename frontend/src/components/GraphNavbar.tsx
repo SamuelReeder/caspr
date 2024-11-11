@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
+import ShareButton from "./ShareButton";
 import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, Center } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, ArrowBackIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-
+import { Graph } from "@/types/graph"; 
 interface Diagram {
   id: number;
   data: {
@@ -13,6 +14,7 @@ interface Diagram {
 }
 
 interface NavBarProps {
+  graph: Graph | null; 
   diagrams: Diagram[];
   selectedTab: number;
   setSelectedTab: (index: number) => void;
@@ -20,19 +22,13 @@ interface NavBarProps {
   removeDiagram: (id: number) => void;
 }
 
-const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
+const NavBar: React.FC<NavBarProps> = ({ graph, diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram}) => {
   const goBack = () => {
     // Function to go back to the last page
   };
 
   const handleAvatarClick = () => {
     // Function to handle avatar click
-  };
-
-  const handleShareClick = () => {
-    onOpen();
   };
 
   return (
@@ -80,17 +76,16 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         p={2}
       />
       <Spacer />
-      <Button
-        leftIcon={<ExternalLinkIcon />}
-        size="md"
-        ml={2}
-        onClick={handleShareClick}
-        p={4}
-        borderRadius="md"
-        width="150px"
-      >
-        Share
-      </Button>
+      {graph && (
+        <ShareButton
+          url={graph.graphFileURL}
+          title={graph.graphName}
+          graph={graph}
+          onMakePublic={function (isPublic: boolean): Promise<void> {
+            return Promise.resolve();
+          }}
+        />
+      )}
       <Avatar
         name="Hello World"
         src="path_to_image.jpg"
@@ -100,29 +95,6 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         cursor="pointer"
         p={2}
       />
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Shared with:</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Button width="100%" mb={2}>List Item</Button>
-            <Button width="100%" mb={2}>List Item</Button>
-            <Button width="100%" mb={2}>List Item</Button>
-            <Center mt={4}>
-              <Input placeholder="Search for people to add..." width="75%" />
-            </Center>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="gray" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Save
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Flex>
   );
 };

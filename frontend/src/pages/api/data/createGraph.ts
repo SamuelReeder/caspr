@@ -28,6 +28,7 @@ export default async function handler(
 			graphDescription: graph.graph.graphDescription || "",
 			graphVisibility: graph.graph.graphVisibility || false,
 			graphFileURL: graph.graph.graphFileURL || "",
+			graphURL: graph.graph.graphURL || "", 
 			createdAt: graph.graph.createdAt,
 			sharing: graph.graph.sharing,
 			sharedEmails: graph.graph.sharedEmails || [],
