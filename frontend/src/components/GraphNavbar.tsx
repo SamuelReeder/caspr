@@ -24,7 +24,6 @@ interface NavBarProps {
   setSelectedTab: (index: number) => void;
   addDiagram: () => void;
   removeDiagram: (id: number) => void;
-  graph: Graph;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram, graph }) => {
