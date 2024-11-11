@@ -125,6 +125,31 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 };
 
 /**
+ * Fetches all publically visible graphs stored in Firestore inclduing the current user's graphs.
+ * @returns A promise that resolves to the array of graphs.
+ * @Samuel
+ */
+export const fetchAllPublicGraphsIncludingUser = async () => {
+
+	try {
+		const graphsRef = collection(db, "graphs");
+		const q = query(
+			graphsRef,
+			where("graphVisibility", "==", true),
+		);
+		const querySnapshot = await getDocs(q);
+		return querySnapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data()
+		})) as Graph[];
+	} catch (error) {
+		console.error("Error fetching graphs:", error);
+		return [];
+	}
+};
+
+
+/**
  * Fetches the graph data from the URL stored in the Firestore graph object.
  * @returns A promise that resolves to the graph data
  * @Samuel
