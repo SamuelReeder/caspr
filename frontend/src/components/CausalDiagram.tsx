@@ -127,8 +127,10 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 
 	return (
 		<div>
-			<div style={{ marginBottom: '10px' }}>
-        <label htmlFor="min-strength" style={{ marginRight: '10px' }}>Min Strength:</label>
+			<div style={{ marginBottom: "10px" }}>
+        <label htmlFor="min-strength" style={{ marginRight: "10px" }}>
+					Min Strength:
+				</label>
         <input 
           type="number" 
           id="min-strength" 
@@ -137,10 +139,12 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
           step="0.1" 
           min="0" 
           max="1" 
-          style={{ marginRight: '20px' }}
+          style={{ marginRight: "20px" }}
         />
 
-        <label htmlFor="max-strength" style={{ marginRight: '10px' }}>Max Strength:</label>
+        <label htmlFor="max-strength" style={{ marginRight: "10px" }}>
+					Max Strength:
+				</label>
         <input 
           type="number" 
           id="max-strength" 
