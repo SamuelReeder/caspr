@@ -41,7 +41,7 @@ export const uploadGraph = async (
 		const hashedId = uuidv4(); // Generate a unique hashed ID
 		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
     const graphURL = `${baseURL}/graph/${hashedId}`;
-
+		
 		const downloadURL = await getDownloadURL(storageRef);
 		const graph: Graph = {
 			owner: firebaseUser?.uid || "",
@@ -119,3 +119,28 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 		return [];
 	}
 };
+
+/**
+ * Fetches the graph data from the URL stored in the Firestore graph object.
+ * @returns A promise that resolves to the graph data
+ * @Samuel
+ */
+export const getGraphData = async (graph: Graph): Promise<any> => {
+  try {
+	const storage = getStorage(app);
+	const storageRef = ref(storage, graph.graphFileURL);
+	const downloadURL = await getDownloadURL(storageRef);
+  console.log(downloadURL)
+
+	const response = await fetch(downloadURL);
+	console.log(response)
+	if (!response.ok) {
+	  return null;
+	}
+	
+	const jsonData = await response.json();
+	return jsonData;
+  } catch (error) {
+	return null;
+  }
+}; 
