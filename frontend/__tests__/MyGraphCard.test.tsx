@@ -1,11 +1,12 @@
 import "@testing-library/jest-dom";
 
-import MyGraphObject from "../src/components/MyGraphObject";
+import { Graph, User } from "@/types";
+
+import MyGraphObject from "../src/components/MyGraphCard";
 import React from "react";
 import { Timestamp } from "firebase/firestore"; // Import Timestamp
 import customRender from "@/test-utils/render";
 import { screen } from "@testing-library/react";
-import { Graph, User } from "@/types";
 
 describe("GraphObject renders correctly", () => {
 	test("renders GraphObject component", () => {

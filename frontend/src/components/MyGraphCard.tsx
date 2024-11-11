@@ -5,15 +5,34 @@ import {
 	CardBody,
 	CardHeader,
 	Heading,
-	Text
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalHeader,
+	ModalOverlay,
+	Text,
+	Tooltip,
+	useDisclosure
 } from "@chakra-ui/react";
-import { Graph } from "@/types/graph";
+
+import { MyGraphCardProps } from "@/types";
 import React from "react";
 import ShareButton from "./ShareButton";
 import { Timestamp } from "firebase/firestore";
-import { User, MyGraphObjectProps } from "@/types";
 
-const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
+const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
+	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const truncatedDescription =
+		graph.graphDescription.length > 100
+			? `${graph.graphDescription.substring(0, 100)}...`
+			: graph.graphDescription;
+
+	const handleDescriptionClick = () => {
+		onOpen();
+	};
+
 	const formatDate = (date: Timestamp): string => {
 		const NS_TO_MS_MULTIPLIER = 1 / 1000000;
 		const SEC_TO_MS_MULTIPLIER = 1000;
@@ -46,9 +65,23 @@ const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 					<Heading size="xs" textTransform="uppercase">
 						Description:
 					</Heading>
-					<Text pt="1" pr="1" fontSize="sm">
-						{graph.graphDescription}
-					</Text>
+					{truncatedDescription === graph.graphDescription ? (
+						<Text pt="1" pr="1" fontSize="sm">
+							{graph.graphDescription}
+						</Text>
+					) : (
+						<Tooltip label="Click to see full description" hasArrow>
+							<Text
+								pt="1"
+								pr="1"
+								fontSize="sm"
+								onClick={handleDescriptionClick}
+								cursor="pointer"
+							>
+								{truncatedDescription}
+							</Text>
+						</Tooltip>
+					)}
 				</Box>
 
 				<div className="flex flex-row gap-2">
@@ -63,6 +96,15 @@ const MyGraphObject: React.FC<MyGraphObjectProps> = ({ graph, owner }) => {
 					<Button colorScheme="blue">Open</Button>
 				</div>
 			</CardBody>
+
+			<Modal isOpen={isOpen} onClose={onClose}>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>Description</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>{graph.graphDescription}</ModalBody>
+				</ModalContent>
+			</Modal>
 		</Card>
 	);
 };

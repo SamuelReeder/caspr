@@ -31,7 +31,7 @@ export interface GraphListProps {
  * Props for MyGraphObject component used in home page
  * @Jaeyong @Samuel
  */
-interface MyGraphObjectProps {
+interface MyGraphCardProps {
 	graph: Graph;
 	owner: User | null;
 }
@@ -74,7 +74,7 @@ export interface Orientation {
  * @Samuel
  */
 export enum GraphRole {
-	VIEWER = 0,
+	VIEWER = 0
 }
 
 /**
@@ -84,11 +84,10 @@ export enum GraphRole {
 interface SharedUser {
 	uid?: string;
 	email: string;
-	status: 'pending' | 'accepted';
+	status: "pending" | "accepted";
 	role: GraphRole;
 	presetAccess: string[];
 	addedAt: Timestamp;
 	addedBy: string;
 	acceptedAt?: Timestamp;
 }
-

@@ -214,9 +214,11 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title, graph }) => {
                           <Checkbox value={preset.name}>
                             <Box>
                               <Text fontWeight="medium">{preset.name}</Text>
-                              <Text fontSize="sm" color="gray.600">
-                                Updated: {preset.updated.toDate().toLocaleDateString()}
-                              </Text>
+                              {preset.updated && preset.updated instanceof Timestamp && (
+                                <Text fontSize="sm" color="gray.600">
+                                  Updated: {preset.updated.toDate().toLocaleDateString()}
+                                </Text>
+                              )}
                               {preset.filters && (
                                 <Wrap mt={1}>
                                   {preset.filters.map(filter => (
