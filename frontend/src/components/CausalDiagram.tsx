@@ -30,6 +30,9 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
   const [minStrength, setMinStrength] = useState(0);
   const [maxStrength, setMaxStrength] = useState(1); 
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+  const [clickedNodeId, setClickedNodeId] = useState<string | null>(null);
+  const [highlightedNodeIds, setHighlightedNodeIds] = useState<Set<string>>(new Set());
+  const [highlightedEdgeIds, setHighlightedEdgeIds] = useState<Set<string>>(new Set());
 
   // function to assign colors based on category (same color for nodes from one category)
   const getColorByCategory = (category: string): string => {
@@ -48,7 +51,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
 
   const getNeighborNodeIds = (nodeId: string) => {
     return edges
-      .filter(edge => edge.source === nodeId || edge.target === nodeId)
+      .filter(edge => (edge.source === nodeId || edge.target === nodeId) && edge.relationship === 'causal')
       .map(edge => (edge.source === nodeId ? edge.target : edge.source));
   };
   const handlePointerOver = (nodeId: string) => {
@@ -58,6 +61,58 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
   const handlePointerOut = () => {
     setHoveredNodeId(null);
   };
+  const handleCanvasClick = () => {
+    setClickedNodeId(null);
+  };
+  const handleNodeClick = (nodeId: string) => {
+    if (clickedNodeId === nodeId) {
+      setClickedNodeId(null);
+    } else {
+      setClickedNodeId(nodeId);
+    }
+  };
+
+  useEffect(() => {
+    if (clickedNodeId) {
+      const visitedNodeIds = new Set<string>();
+      const visitedEdgeIds = new Set<string>();
+
+      const traverseForward = (nodeId: string) => {
+        visitedNodeIds.add(nodeId);
+        edges.forEach(edge => {
+          if (edge.relationship === 'causal' && edge.source === nodeId) {
+            const edgeId = `${edge.source}-${edge.target}`;
+            visitedEdgeIds.add(edgeId);
+            if (!visitedNodeIds.has(edge.target)) {
+              traverseForward(edge.target);
+            }
+          }
+        });
+      };
+
+      const traverseBackward = (nodeId: string) => {
+        visitedNodeIds.add(nodeId);
+        edges.forEach(edge => {
+          if (edge.relationship === 'causal' && edge.target === nodeId) {
+            const edgeId = `${edge.source}-${edge.target}`;
+            visitedEdgeIds.add(edgeId);
+            if (!visitedNodeIds.has(edge.source)) {
+              traverseBackward(edge.source);
+            }
+          }
+        });
+      };
+      traverseForward(clickedNodeId);
+      traverseBackward(clickedNodeId);
+
+      setHighlightedNodeIds(visitedNodeIds);
+      setHighlightedEdgeIds(visitedEdgeIds);
+    } else {
+      setHighlightedNodeIds(new Set());
+      setHighlightedEdgeIds(new Set());
+    }
+  }, [clickedNodeId, edges]);
+
   useEffect(() => {
     // Calculate radial positions for each category
     const categories = Array.from(new Set(nodes.map(node => node.category)));
@@ -148,6 +203,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
           far: 5000, 
         }}
         style={{ width: '100%', height: '910px' }}
+        onPointerMissed={handleCanvasClick}
       >
         <ambientLight intensity={1.0} />
         <directionalLight position={[10, 10, 10]} intensity={1} />
@@ -156,7 +212,15 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
         {Object.keys(nodePositions).length > 0 &&
           nodes.map((node) => {
             const isNeighbor = hoveredNodeId && getNeighborNodeIds(hoveredNodeId).includes(node.id);
-            const isDimmed = hoveredNodeId !== null && !isNeighbor && hoveredNodeId !== node.id;
+            const isHovered = hoveredNodeId === node.id;
+            const isInCausalPath = highlightedNodeIds.has(node.id);
+            let isDimmed = false;
+
+            if (clickedNodeId) {
+              isDimmed = !isInCausalPath && !isHovered && !isNeighbor;
+            } else if (hoveredNodeId) {
+              isDimmed = !isHovered && !isNeighbor;
+            }
             return (
                     <Node
                       key={node.id}
@@ -170,6 +234,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
                       isDimmed={isDimmed}
                       onPointerOver={() => handlePointerOver(node.id)}
                       onPointerOut={handlePointerOut}
+                      onClick={() => handleNodeClick(node.id)}
                     />
             );
         })}
@@ -180,8 +245,20 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
               const sourcePosition = nodePositions[edge.source];
               const targetPosition = nodePositions[edge.target];
               if (!sourcePosition || !targetPosition) return null;
-              const isEdgeHighlighted = edge.relationship === 'causal' && hoveredNodeId && (edge.source === hoveredNodeId || edge.target === hoveredNodeId);
-              const isDimmed = hoveredNodeId !== null && !isEdgeHighlighted;
+              const edgeId = `${edge.source}-${edge.target}`;
+              const isEdgeHighlighted = highlightedEdgeIds.has(edgeId);
+              const isNeighborEdge = hoveredNodeId && (
+                (edge.source === hoveredNodeId || edge.target === hoveredNodeId) && edge.relationship === 'causal'
+              );
+              
+              let isDimmed = false;
+
+              if (clickedNodeId) {
+                isDimmed = !isEdgeHighlighted && !isNeighborEdge;
+              } else if (hoveredNodeId) {
+                isDimmed = !isNeighborEdge;
+              }
+
 
               return (
                 <Edge
