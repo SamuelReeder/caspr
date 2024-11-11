@@ -32,6 +32,7 @@ export default async function handler(
 				graphDescription: data.graphDescription,
 				graphVisibility: data.graphVisibility,
 				graphFileURL: data.graphFileURL,
+				graphURL: data.graphURL,
 				createdAt: data.createdAt,
 				sharing: data.sharing,
 				sharedEmails: data.sharedEmails,

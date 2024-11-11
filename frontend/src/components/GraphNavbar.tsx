@@ -18,6 +18,7 @@ interface Diagram {
 }
 
 interface NavBarProps {
+  graph: Graph | null; 
   diagrams: Diagram[];
   selectedTab: number;
   setSelectedTab: (index: number) => void;
@@ -95,13 +96,16 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         p={2}
       />
       <Spacer />
-      <ShareButton
-						url={graph.graphFileURL}
-						title={graph.graphName}
-						graph={graph}
-						onMakePublic={function (isPublic: boolean): Promise<void> {
-							return Promise.resolve();
-			} }/>
+      {graph && (
+        <ShareButton
+          url={graph.graphFileURL}
+          title={graph.graphName}
+          graph={graph}
+          onMakePublic={function (isPublic: boolean): Promise<void> {
+            return Promise.resolve();
+          }}
+        />
+      )}
       <Avatar
         name={username ? username.slice(0, 2).toUpperCase() : ""}
         src="path_to_image.jpg"
@@ -111,29 +115,6 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
         cursor="pointer"
         p={2}
       />
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Shared with:</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Button width="100%" mb={2}>List Item</Button>
-            <Button width="100%" mb={2}>List Item</Button>
-            <Button width="100%" mb={2}>List Item</Button>
-            <Center mt={4}>
-              <Input placeholder="Search for people to add..." width="75%" />
-            </Center>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="gray" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Save
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Flex>
   );
 };

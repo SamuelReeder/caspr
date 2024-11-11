@@ -15,6 +15,7 @@ import { createGraph } from "./firestore";
 import { db } from "@/config/firebaseConfig";
 import { apiClient } from "@/utils/apiClient";
 
+import { v4 as uuidv4 } from "uuid";
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
  * @param graphFile - The JSON file containing graph data.
@@ -38,6 +39,10 @@ export const uploadGraph = async (
 		);
 		await uploadBytes(storageRef, graphFile);
 
+		const hashedId = uuidv4(); // Generate a unique hashed ID
+		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+    const graphURL = `${baseURL}/graph/${hashedId}`;
+		
 		const downloadURL = await getDownloadURL(storageRef);
 		const graph: Graph = {
 			owner: firebaseUser?.uid || "",
@@ -45,6 +50,7 @@ export const uploadGraph = async (
 			graphDescription: graphDescription,
 			graphVisibility: graphVisibility,
 			graphFileURL: downloadURL,
+			graphURL: graphURL,
 			createdAt: Timestamp.now(),
 			sharedEmails: [],
 			sharing: [],
@@ -117,3 +123,26 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 		return [];
 	}
 };
+
+/**
+ * Fetches the graph data from the URL stored in the Firestore graph object.
+ * @returns A promise that resolves to the graph data
+ * @Samuel
+ */
+export const getGraphData = async (graph: Graph): Promise<any> => {
+  try {
+	const storage = getStorage(app);
+	const storageRef = ref(storage, graph.graphFileURL);
+	const downloadURL = await getDownloadURL(storageRef);
+
+	const response = await fetch(downloadURL);
+	if (!response.ok) {
+	  return null;
+	}
+	
+	const jsonData = await response.json();
+	return jsonData;
+  } catch (error) {
+	return null;
+  }
+}; 
