@@ -21,17 +21,24 @@ interface NodeProps {
 const Node: React.FC<NodeProps> = ({ position, label, value, category, color, isInteracting, isSelected, isDimmed, onPointerOver, onPointerOut, onClick }) => {
   const meshRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
+  const hideTooltipTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const handlePointerOver = () => {
     if (!isInteracting) {
+      if (hideTooltipTimeout.current) {
+        clearTimeout(hideTooltipTimeout.current);
+        hideTooltipTimeout.current = null;
+      }
       setHovered(true);
-      onPointerOver(); // Notify parent component
+      onPointerOver();
     }
   };
 
   const handlePointerOut = () => {
-    setHovered(false);
-    onPointerOut(); // Notify parent component
+    hideTooltipTimeout.current = setTimeout(() => {
+      setHovered(false);
+      onPointerOut(); 
+    }, 200);
   };
 
   return (

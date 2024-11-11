@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Line, Html } from '@react-three/drei';
 import { extend } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -14,7 +14,20 @@ interface EdgeProps {
 
 const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationship, strength, isDimmed}) => {
   const [hovered, setHovered] = useState(false);
-
+  const hideTooltipTimeout = useRef<NodeJS.Timeout | null>(null);
+  
+  const handlePointerOver = () => {
+    if (hideTooltipTimeout.current) {
+      clearTimeout(hideTooltipTimeout.current);
+      hideTooltipTimeout.current = null;
+    }
+    setHovered(true);
+  };
+  const handlePointerOut = () => {
+    hideTooltipTimeout.current = setTimeout(() => {
+      setHovered(false);
+    }, 200); 
+  };
   if (!sourcePosition || !targetPosition) {
     console.error("Invalid source or target position for edge", { sourcePosition, targetPosition });
     return null;
@@ -80,8 +93,8 @@ const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationshi
         color={color}
         dashed={dashed}
         opacity={isDimmed ? 0.3 : 1}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
       />
       {arrow && (
         <mesh position={arrowPosition} quaternion={arrowRotation} >
