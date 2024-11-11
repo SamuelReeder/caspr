@@ -137,12 +137,12 @@ export const getGraphData = async (graph: Graph): Promise<any> => {
 
 	const response = await fetch(downloadURL);
 	if (!response.ok) {
-	  return null;
+	  console.error("Error fetching graph data");
 	}
 	
 	const jsonData = await response.json();
 	return jsonData;
   } catch (error) {
-	return null;
+	console.error("Error fetching graph data:", error);
   }
 }; 
