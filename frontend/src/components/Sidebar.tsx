@@ -40,23 +40,23 @@ export default function Sidebar() {
 				</Link>
 
 				<Link
-					className={`hover:text-gray-400 ${currentRoute === "/home" ? "text-gray-400" : ""}`}
+					className={`hover:text-gray-400`}
 					onClick={() => router.push("/home")}
 				>
-					My Graphs
+					<Text className={`${currentRoute === "/home" ? "text-gray-400" : ""}`}>My Graphs</Text>
 				</Link>
 
 				<Link
-					className={`hover:text-gray-400 ${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}
+					className={`hover:text-gray-400`}
 					onClick={() => router.push("/sharedWithMe")}
 				>
-					Shared With Me
+					<Text className={`${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}>Shared With Me</Text>
 				</Link>
 				<Link
-					className={`hover:text-gray-400 ${currentRoute === "/explore" ? "text-gray-400" : ""}`}
+					className={`hover:text-gray-400`}
 					onClick={() => router.push("/explore")}
 				>
-					Explore
+					<Text className={`${currentRoute === "/explore" ? "text-gray-400" : ""}`}>Explore</Text>
 				</Link>
 
 				<div className="flex flex-col gap-2 mt-auto">

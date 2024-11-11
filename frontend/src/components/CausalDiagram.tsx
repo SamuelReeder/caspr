@@ -295,18 +295,18 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 						isDimmed = !isNeighborEdge;
 					}
 
-					return (
-						<Edge
-						key={`${edge.source}-${edge.target}`}
-						sourcePosition={sourcePosition}
-						targetPosition={targetPosition}
-						relationship={edge.relationship}
-						strength={edge.strength}
-						isDimmed={isDimmed}
+						return (
+							<Edge
+							key={`${edge.source}-${edge.target}`}
+							sourcePosition={sourcePosition}
+							targetPosition={targetPosition}
+							relationship={edge.relationship}
+							strength={edge.strength}
+							isDimmed={isDimmed}
 						/>
-					);
-					})}
-			</Canvas>
+						);
+						})}
+				</Canvas>
 		</div>
 	);
 };
