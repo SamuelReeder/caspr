@@ -93,7 +93,7 @@ const GraphPage = () => {
     };
 
     fetchGraphData();
-  }, [firebaseUser, id]);
+  }, [firebaseUser, id, router, toast]);
 
   const addDiagram = () => {
     const newId = diagrams.length ? diagrams[diagrams.length - 1].id + 1 : 0;

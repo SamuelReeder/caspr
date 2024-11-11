@@ -132,7 +132,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title, graph }) => {
     });
   };
 
-  const handleEmailKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleEmailKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && email) {
       e.preventDefault();
       if (!email.includes('@')) {
