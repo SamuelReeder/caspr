@@ -33,6 +33,10 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		onOpen();
 	};
 
+	const handleOpenClick = () => {
+		window.location.href = graph.graphURL;
+	};
+
 	const formatDate = (date: Timestamp): string => {
 		const NS_TO_MS_MULTIPLIER = 1 / 1000000;
 		const SEC_TO_MS_MULTIPLIER = 1000;
@@ -93,7 +97,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 							return Promise.resolve();
 						}}
 					/>
-					<Button colorScheme="blue">Open</Button>
+					<Button colorScheme="blue" onClick={handleOpenClick}>Open</Button>
 				</div>
 			</CardBody>
 

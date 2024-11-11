@@ -14,6 +14,7 @@ import { User } from "firebase/auth";
 import { createGraph } from "./firestore";
 import { db } from "@/config/firebaseConfig";
 
+import { v4 as uuidv4 } from "uuid";
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
  * @param graphFile - The JSON file containing graph data.
@@ -37,6 +38,10 @@ export const uploadGraph = async (
 		);
 		await uploadBytes(storageRef, graphFile);
 
+		const hashedId = uuidv4(); // Generate a unique hashed ID
+		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+    const graphURL = `${baseURL}/graph/${hashedId}`;
+
 		const downloadURL = await getDownloadURL(storageRef);
 		const graph: Graph = {
 			owner: firebaseUser?.uid || "",
@@ -44,6 +49,7 @@ export const uploadGraph = async (
 			graphDescription: graphDescription,
 			graphVisibility: graphVisibility,
 			graphFileURL: downloadURL,
+			graphURL: graphURL,
 			createdAt: Timestamp.now(),
 			sharedEmails: [],
 			sharing: [],

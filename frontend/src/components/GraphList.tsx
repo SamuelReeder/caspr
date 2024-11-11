@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import ExploreGraphCard from "./ExploreGraphCard";
 import MyGraphCard from "./MyGraphCard";
 import { User } from "@/types";
+import { Timestamp } from "firebase/firestore";
 import { getUser } from "@/api";
 import { useAuth } from "@/context";
 
@@ -67,9 +68,25 @@ const GraphList = ({ graphs, page }: GraphListProps) => {
 				</div>
 			) : (
 				<div className="flex flex-col gap-4">
-					{graphsWithOwners.map(({ graph, owner }, i) => (
+					{/* {graphsWithOwners.map(({ graph, owner }, i) => (
 						<MyGraphCard key={graph.id || i} graph={graph} owner={owner} />
-					))}
+					))} */}
+					{/* Dummy data for now to test */}
+					<MyGraphCard 
+						key={graphsWithOwners[0]?.graph.id || 1}
+
+						owner={graphsWithOwners[0]?.owner}
+						graph={{
+							id: "dummy-id",
+							owner: "dummy-owner",
+							graphName: "dummy-name",
+							graphDescription: "dummy-description",
+							graphVisibility: true,
+							graphFileURL: "http://dummy-url.com",
+							graphURL: "http://localhost:3000/graph",
+							createdAt: new Timestamp(Math.floor(Date.now() / 1000), 0)
+						}}
+					/>
 				</div>
 			)}
 		</div>

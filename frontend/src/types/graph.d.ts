@@ -12,6 +12,7 @@ export interface Graph {
 	graphDescription: string;
 	graphVisibility: boolean;
 	graphFileURL: string;
+	graphURL: string;
 	createdAt: Timestamp;
 	sharing?: SharedUser[];
 	sharedEmails?: string[];
