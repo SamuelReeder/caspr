@@ -67,7 +67,6 @@ const GraphList = ({ graphs, page }: GraphListProps) => {
 			) : (
 				<div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg-grid-cols-3 gap-4">
 					{graphsWithOwners.map(({ graph, owner }, i) => {
-						console.log(`Rendering MyGraphCard for graph ID: ${graph.graphURL}, owner: ${owner ? owner.name : 'Unknown'}`);
 						return <MyGraphCard key={graph.id || i} graph={graph} owner={owner} />;
 					})}
 				</div>
