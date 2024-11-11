@@ -58,7 +58,7 @@ const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, 
           icon={<ArrowBackIcon />}
           size="lg"
           ml={2}
-          mr={2}
+          mr={5}
           onClick={goBack}
           p={2}
         />
