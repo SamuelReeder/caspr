@@ -84,7 +84,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 					)}
 				</Box>
 
-				<div className="flex flex-row gap-2">
+				<Box className="flex flex-row gap-2" alignItems="center">
 					<ShareButton
 						url={graph.graphFileURL}
 						title={graph.graphName}
@@ -94,7 +94,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 						}}
 					/>
 					<Button colorScheme="blue">Open</Button>
-				</div>
+				</Box>
 			</CardBody>
 
 			<Modal isOpen={isOpen} onClose={onClose}>

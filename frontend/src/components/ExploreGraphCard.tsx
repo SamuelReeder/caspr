@@ -64,7 +64,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 				</Box>
 
 				<div className="flex flex-row gap-2">
-					<Button colorScheme="blue" size="sm">
+					<Button colorScheme="blue" size="md">
 						Open
 					</Button>
 				</div>

@@ -5,6 +5,7 @@ import Edge from "./Edge";
 import CameraController from "./CameraController";
 import { NodeType } from "../types/node";
 import { EdgeType } from "../types/edge";
+import { Box } from "@chakra-ui/react";
 
 interface CausalDiagramProps {
 	nodes: NodeType[];
@@ -163,57 +164,58 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 				</Box>
 
 
-			<Canvas
-				camera={{
-					position: [0, 0, 100],
-					fov: 50,
-					near: 0.1,
-					far: 5000
-				}}
-				style={{ width: "100%", height: "910px" }}
-			>
-				<ambientLight intensity={1.0} />
-				<directionalLight position={[10, 10, 10]} intensity={1} />
-				<CameraController
-					nodePositions={nodePositions}
-					setIsInteracting={setIsInteracting}
-				/>
+				<Canvas
+					camera={{
+						position: [0, 0, 100],
+						fov: 50,
+						near: 0.1,
+						far: 5000
+					}}
+					style={{ width: "100%", height: "910px" }}
+				>
+					<ambientLight intensity={1.0} />
+					<directionalLight position={[10, 10, 10]} intensity={1} />
+					<CameraController
+						nodePositions={nodePositions}
+						setIsInteracting={setIsInteracting}
+					/>
 
-				{Object.keys(nodePositions).length > 0 &&
-					nodes.map((node) => (
-						<Node
-							key={node.id}
-							position={nodePositions[node.id]}
-							label={node.label}
-							value={node.value}
-							category={node.category}
-							color={getColorByCategory(node.category)}
-							isInteracting={isInteracting}
-							isSelected={!!(selectedNode && selectedNode.id === node.id)}
-						/>
-					))}
-				{Object.keys(nodePositions).length > 0 &&
-					edges
-						.filter(
-							(edge) =>
-								edge.strength >= minStrength && edge.strength <= maxStrength
-						)
-						.map((edge) => {
-							const sourcePosition = nodePositions[edge.source];
-							const targetPosition = nodePositions[edge.target];
-							if (!sourcePosition || !targetPosition) return null;
+					{Object.keys(nodePositions).length > 0 &&
+						nodes.map((node) => (
+							<Node
+								key={node.id}
+								position={nodePositions[node.id]}
+								label={node.label}
+								value={node.value}
+								category={node.category}
+								color={getColorByCategory(node.category)}
+								isInteracting={isInteracting}
+								isSelected={!!(selectedNode && selectedNode.id === node.id)}
+							/>
+						))}
+					{Object.keys(nodePositions).length > 0 &&
+						edges
+							.filter(
+								(edge) =>
+									edge.strength >= minStrength && edge.strength <= maxStrength
+							)
+							.map((edge) => {
+								const sourcePosition = nodePositions[edge.source];
+								const targetPosition = nodePositions[edge.target];
+								if (!sourcePosition || !targetPosition) return null;
 
-							return (
-								<Edge
-									key={`${edge.source}-${edge.target}`}
-									sourcePosition={sourcePosition}
-									targetPosition={targetPosition}
-									relationship={edge.relationship}
-									strength={edge.strength}
-								/>
-							);
-						})}
-			</Canvas>
+								return (
+									<Edge
+										key={`${edge.source}-${edge.target}`}
+										sourcePosition={sourcePosition}
+										targetPosition={targetPosition}
+										relationship={edge.relationship}
+										strength={edge.strength}
+									/>
+								);
+							})}
+				</Canvas>
+			</Box>
 		</div>
 	);
 };
