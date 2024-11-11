@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Line, Html } from '@react-three/drei';
 import { extend } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -9,17 +9,32 @@ interface EdgeProps {
   targetPosition: [number, number, number];
   relationship: string;
   strength: number;
+  isDimmed: boolean;
 }
 
-const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationship, strength }) => {
+const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationship, strength, isDimmed}) => {
   const [hovered, setHovered] = useState(false);
-
+  const hideTooltipTimeout = useRef<NodeJS.Timeout | null>(null);
+  
+  const handlePointerOver = () => {
+    if (hideTooltipTimeout.current) {
+      clearTimeout(hideTooltipTimeout.current);
+      hideTooltipTimeout.current = null;
+    }
+    setHovered(true);
+  };
+  const handlePointerOut = () => {
+    hideTooltipTimeout.current = setTimeout(() => {
+      setHovered(false);
+    }, 200); 
+  };
   if (!sourcePosition || !targetPosition) {
     console.error("Invalid source or target position for edge", { sourcePosition, targetPosition });
     return null;
   }
 
   const scaledLineWidth = 0.1 + strength * 3;
+  const nodeRadius = 12;
 
   let color = 'black';
   let dashed = false;
@@ -47,6 +62,18 @@ const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationshi
 
   const normalizedDirection = direction.clone().normalize();
 
+  const adjustedSource = new THREE.Vector3(
+    sourcePosition[0] + normalizedDirection.x * nodeRadius,
+    sourcePosition[1] + normalizedDirection.y * nodeRadius,
+    sourcePosition[2] + normalizedDirection.z * nodeRadius
+  );
+
+  const adjustedTarget = new THREE.Vector3(
+    targetPosition[0] - normalizedDirection.x * nodeRadius,
+    targetPosition[1] - normalizedDirection.y * nodeRadius,
+    targetPosition[2] - normalizedDirection.z * nodeRadius
+  );
+
   // Calculate the midpoint between source and target
   const arrowPosition = new THREE.Vector3(
     targetPosition[0] - normalizedDirection.x * 16,
@@ -61,17 +88,19 @@ const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationshi
   return (
     <>
       <Line
-        points={[sourcePosition, targetPosition]}
+        points={[adjustedSource.toArray(), adjustedTarget.toArray()]}
         lineWidth={scaledLineWidth}
         color={color}
         dashed={dashed}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
+        opacity={isDimmed ? 0.3 : 1}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
       />
       {arrow && (
-        <mesh position={arrowPosition} quaternion={arrowRotation}>
+        <mesh position={arrowPosition} quaternion={arrowRotation} >
           <coneGeometry args={[5, 10, 32]} />
-          <meshBasicMaterial color={color} />
+          <meshBasicMaterial color={color}  opacity={isDimmed ? 0.5 : 1} transparent depthTest={false}/>
+
         </mesh>
       )}
       <mesh

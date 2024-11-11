@@ -5,6 +5,7 @@ import Edge from "./Edge";
 import CameraController from "./CameraController";
 import { NodeType } from "../types/node";
 import { EdgeType } from "../types/edge";
+import { Box } from "@chakra-ui/react";
 
 interface CausalDiagramProps {
 	nodes: NodeType[];
@@ -13,13 +14,13 @@ interface CausalDiagramProps {
 }
 
 const colors = [
-	"#195c90",
-	"#ffffff",
-	"#a0db8e",
-	"#ac1e8e",
-	"#edae01",
-	"#d61800",
-	"#cf6766"
+  '#195c90',
+  '#de7f26',
+  '#a0db8e',
+  '#ac1e8e',
+  '#edae01',
+  '#d61800',
+  '#cf6766'
 ];
 
 const CausalDiagram: React.FC<CausalDiagramProps> = ({
@@ -35,6 +36,10 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 	const [isInteracting, setIsInteracting] = useState(false);
 	const [minStrength, setMinStrength] = useState(0);
 	const [maxStrength, setMaxStrength] = useState(1);
+	const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+	const [clickedNodeId, setClickedNodeId] = useState<string | null>(null);
+	const [highlightedNodeIds, setHighlightedNodeIds] = useState<Set<string>>(new Set());
+	const [highlightedEdgeIds, setHighlightedEdgeIds] = useState<Set<string>>(new Set());
 
 	// function to assign colors based on category (same color for nodes from one category)
 	const getColorByCategory = (category: string): string => {
@@ -55,9 +60,73 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 		return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2);
 	};
 
+	const getNeighborNodeIds = (nodeId: string) => {
+		return edges
+		.filter(edge => (edge.source === nodeId || edge.target === nodeId) && edge.relationship === 'causal')
+		.map(edge => (edge.source === nodeId ? edge.target : edge.source));
+	};
+	const handlePointerOver = (nodeId: string) => {
+		setHoveredNodeId(nodeId);
+	};
+
+	const handlePointerOut = () => {
+		setHoveredNodeId(null);
+	};
+	const handleCanvasClick = () => {
+		setClickedNodeId(null);
+	};
+	const handleNodeClick = (nodeId: string) => {
+		if (clickedNodeId === nodeId) {
+		setClickedNodeId(null);
+		} else {
+		setClickedNodeId(nodeId);
+		}
+	};
+
+	useEffect(() => {
+		if (clickedNodeId) {
+		const visitedNodeIds = new Set<string>();
+		const visitedEdgeIds = new Set<string>();
+
+		const traverseForward = (nodeId: string) => {
+			visitedNodeIds.add(nodeId);
+			edges.forEach(edge => {
+			if (edge.relationship === 'causal' && edge.source === nodeId) {
+				const edgeId = `${edge.source}-${edge.target}`;
+				visitedEdgeIds.add(edgeId);
+				if (!visitedNodeIds.has(edge.target)) {
+				traverseForward(edge.target);
+				}
+			}
+			});
+		};
+
+		const traverseBackward = (nodeId: string) => {
+			visitedNodeIds.add(nodeId);
+			edges.forEach(edge => {
+			if (edge.relationship === 'causal' && edge.target === nodeId) {
+				const edgeId = `${edge.source}-${edge.target}`;
+				visitedEdgeIds.add(edgeId);
+				if (!visitedNodeIds.has(edge.source)) {
+				traverseBackward(edge.source);
+				}
+			}
+			});
+		};
+		traverseForward(clickedNodeId);
+		traverseBackward(clickedNodeId);
+
+		setHighlightedNodeIds(visitedNodeIds);
+		setHighlightedEdgeIds(visitedEdgeIds);
+		} else {
+		setHighlightedNodeIds(new Set());
+		setHighlightedEdgeIds(new Set());
+		}
+	}, [clickedNodeId, edges]);
+
 	useEffect(() => {
 		// Calculate radial positions for each category
-		const categories = Array.from(new Set(nodes.map((node) => node.category)));
+		const categories = Array.from(new Set(nodes.map(node => node.category)));
 		const radius = 200; // Adjust the radius as needed
 		const angleStep = (2 * Math.PI) / categories.length;
 		const categoryPositions: { [key: string]: [number, number] } = {};
@@ -132,7 +201,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 				alignItems="center"
 				justifyContent="space-between"
 				marginBottom="10px"
-			>
+			/>
 				<Box display="flex" alignItems="center">
 					<label htmlFor="min-strength" style={{ marginRight: "10px" }}>
 						Min Strength:
@@ -162,26 +231,34 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 					/>
 				</Box>
 
-
 			<Canvas
 				camera={{
-					position: [0, 0, 100],
-					fov: 50,
-					near: 0.1,
-					far: 5000
+				position: [0, 0, 100],
+				fov: 50,
+				near: 0.1,
+				far: 5000, 
 				}}
-				style={{ width: "100%", height: "910px" }}
-			>
+				style={{ width: '100%', height: '910px' }}
+				onPointerMissed={handleCanvasClick}
+				>
 				<ambientLight intensity={1.0} />
 				<directionalLight position={[10, 10, 10]} intensity={1} />
-				<CameraController
-					nodePositions={nodePositions}
-					setIsInteracting={setIsInteracting}
-				/>
+				<CameraController nodePositions={nodePositions} setIsInteracting={setIsInteracting}/>
 
 				{Object.keys(nodePositions).length > 0 &&
-					nodes.map((node) => (
-						<Node
+				nodes.map((node) => {
+					const isNeighbor = hoveredNodeId && getNeighborNodeIds(hoveredNodeId).includes(node.id);
+					const isHovered = hoveredNodeId === node.id;
+					const isInCausalPath = highlightedNodeIds.has(node.id);
+					let isDimmed = false;
+
+					if (clickedNodeId) {
+					isDimmed = !isInCausalPath && !isHovered && !isNeighbor;
+					} else if (hoveredNodeId) {
+					isDimmed = !isHovered && !isNeighbor;
+					}
+					return (
+							<Node
 							key={node.id}
 							position={nodePositions[node.id]}
 							label={node.label}
@@ -190,29 +267,45 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 							color={getColorByCategory(node.category)}
 							isInteracting={isInteracting}
 							isSelected={!!(selectedNode && selectedNode.id === node.id)}
-						/>
-					))}
+							isDimmed={isDimmed}
+							onPointerOver={() => handlePointerOver(node.id)}
+							onPointerOut={handlePointerOut}
+							onClick={() => handleNodeClick(node.id)}
+							/>
+					);
+				})}
 				{Object.keys(nodePositions).length > 0 &&
-					edges
-						.filter(
-							(edge) =>
-								edge.strength >= minStrength && edge.strength <= maxStrength
-						)
-						.map((edge) => {
-							const sourcePosition = nodePositions[edge.source];
-							const targetPosition = nodePositions[edge.target];
-							if (!sourcePosition || !targetPosition) return null;
+				edges
+					.filter((edge) => edge.strength >= minStrength && edge.strength <= maxStrength) 
+					.map((edge) => {
+					const sourcePosition = nodePositions[edge.source];
+					const targetPosition = nodePositions[edge.target];
+					if (!sourcePosition || !targetPosition) return null;
+					const edgeId = `${edge.source}-${edge.target}`;
+					const isEdgeHighlighted = highlightedEdgeIds.has(edgeId);
+					const isNeighborEdge = hoveredNodeId && (
+						(edge.source === hoveredNodeId || edge.target === hoveredNodeId) && edge.relationship === 'causal'
+					);
+					
+					let isDimmed = false;
 
-							return (
-								<Edge
-									key={`${edge.source}-${edge.target}`}
-									sourcePosition={sourcePosition}
-									targetPosition={targetPosition}
-									relationship={edge.relationship}
-									strength={edge.strength}
-								/>
-							);
-						})}
+					if (clickedNodeId) {
+						isDimmed = !isEdgeHighlighted && !isNeighborEdge;
+					} else if (hoveredNodeId) {
+						isDimmed = !isNeighborEdge;
+					}
+
+					return (
+						<Edge
+						key={`${edge.source}-${edge.target}`}
+						sourcePosition={sourcePosition}
+						targetPosition={targetPosition}
+						relationship={edge.relationship}
+						strength={edge.strength}
+						isDimmed={isDimmed}
+						/>
+					);
+					})}
 			</Canvas>
 		</div>
 	);
