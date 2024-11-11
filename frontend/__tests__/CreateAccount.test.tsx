@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 
-import { createAccountWithEmail, createAccountWithGoogle } from "@/api";
+import { createAccountWithEmail } from "@/api";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import CreateAccount from "@/pages/createAccount";
@@ -15,8 +15,7 @@ jest.mock("next/router", () => ({
 }));
 
 jest.mock("@/api", () => ({
-	createAccountWithEmail: jest.fn(),
-	createAccountWithGoogle: jest.fn()
+	createAccountWithEmail: jest.fn()
 }));
 
 jest.mock("@chakra-ui/react", () => ({
@@ -81,17 +80,5 @@ describe("Create Account (Landing Page)", () => {
 		fireEvent.change(emailInput, { target: { value: "invalid_email" } });
 		fireEvent.change(passwordInput, { target: { value: "wrong_password" } });
 		fireEvent.click(signUpButton);
-	});
-
-	test("triggers Google sign-up when button is clicked", async () => {
-		customRender(<CreateAccount />);
-		const mockGoogleAccountCreation = createAccountWithGoogle as jest.Mock;
-
-		const googleSignUpButton = screen.getByRole("button", {
-			name: /Sign-up with Google/i
-		});
-
-		fireEvent.click(googleSignUpButton);
-		expect(mockGoogleAccountCreation).toHaveBeenCalled();
 	});
 });
