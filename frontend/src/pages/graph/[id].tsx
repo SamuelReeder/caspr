@@ -7,7 +7,8 @@ import {
   Box,
   HStack,
   Switch,
-  Text
+  Text,
+  useToast
 } from "@chakra-ui/react";
 import CausalDiagram from "../../components/CausalDiagram";
 import NavBar from "../../components/GraphNavbar";
@@ -41,10 +42,15 @@ const GraphPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { firebaseUser } = useAuth();
   const [graph, setGraph] = useState<Graph | null>(null);
+  const toast = useToast();
 
   const handleNodeSelect = (node: NodeType | null) => {
     setSelectedNode(node);
   };
+
+  const validateJsonDate = (data: any) => {
+    return data && data.nodes && data.edges;
+  }
 
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -58,10 +64,21 @@ const GraphPage = () => {
           const graphId = urlParts[urlParts.indexOf('graph') + 1]; // Find the part after 'graph'
           return graphId === id;
         });
-  
+
         if (graph) {
           const jsonData = await getGraphData(graph);
-          console.log(jsonData)
+          if (!validateJsonDate(jsonData)) {
+            router.push('/home');
+            toast({
+              title: "Error",
+              description: "Invalid graph data",
+              status: "error",
+              duration: 5000,
+              isClosable: true
+            });
+            return;
+          }
+
           setDiagrams([{ id: 0, data: jsonData, label: graph.graphName }]);
           setGraph(graph)
         } else {
@@ -96,7 +113,7 @@ const GraphPage = () => {
   };
 
   if (loading) {
-    return <FullScreenLoader />; 
+    return <FullScreenLoader />;
   }
 
   return (
@@ -122,10 +139,10 @@ const GraphPage = () => {
           </Tabs>
         </Box>
         <Box width="350px">
-          <GraphSideBar 
-            onNodeSelect={handleNodeSelect} 
-            nodes={diagrams[0]?.data.nodes || []} 
-            edges={diagrams[0]?.data.edges || []} 
+          <GraphSideBar
+            onNodeSelect={handleNodeSelect}
+            nodes={diagrams[0]?.data.nodes || []}
+            edges={diagrams[0]?.data.edges || []}
           />
         </Box>
       </Box>

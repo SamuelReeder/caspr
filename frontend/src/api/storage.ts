@@ -130,10 +130,8 @@ export const getGraphData = async (graph: Graph): Promise<any> => {
 	const storage = getStorage(app);
 	const storageRef = ref(storage, graph.graphFileURL);
 	const downloadURL = await getDownloadURL(storageRef);
-  console.log(downloadURL)
 
 	const response = await fetch(downloadURL);
-	console.log(response)
 	if (!response.ok) {
 	  return null;
 	}
