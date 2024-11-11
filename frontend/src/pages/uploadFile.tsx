@@ -118,7 +118,7 @@ export default function UploadFile() {
 	};
 
 	return (
-		<div className="bg-gray-700 h-screen overflow-auto relative">
+		<div className="bg-gray-800 h-screen overflow-auto relative">
 			<Button
 				leftIcon={<ArrowBackIcon color="white" />}
 				className="absolute top-4 left-4"

@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import ShareButton from "./ShareButton";
+import { useRouter } from 'next/router';
 import { Tabs, TabList, Tab, IconButton, Button, Flex, Avatar, Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, Center } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, ArrowBackIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { Graph } from "@/types/graph"; 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import ShareButton from './ShareButton';
+import { Timestamp } from 'firebase/firestore';
+import { Graph, Preset, SharedUser } from '@/types/graph';
+
 interface Diagram {
   id: number;
   data: {
@@ -22,9 +26,24 @@ interface NavBarProps {
   removeDiagram: (id: number) => void;
 }
 
-const NavBar: React.FC<NavBarProps> = ({ graph, diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram}) => {
+const NavBar: React.FC<NavBarProps> = ({ diagrams, selectedTab, setSelectedTab, addDiagram, removeDiagram, graph }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [username, setUsername] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsername(user.displayName || "User");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+  
+
   const goBack = () => {
-    // Function to go back to the last page
+    router.back();
   };
 
   const handleAvatarClick = () => {
@@ -32,14 +51,14 @@ const NavBar: React.FC<NavBarProps> = ({ graph, diagrams, selectedTab, setSelect
   };
 
   return (
-    <Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300" width="100%" minWidth="1800px">
+    <Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300">
       <Link href="/home">
         <IconButton
           aria-label="Go Back"
           icon={<ArrowBackIcon />}
           size="lg"
           ml={2}
-          mr={2}
+          mr={5}
           onClick={goBack}
           p={2}
         />
@@ -87,7 +106,7 @@ const NavBar: React.FC<NavBarProps> = ({ graph, diagrams, selectedTab, setSelect
         />
       )}
       <Avatar
-        name="Hello World"
+        name={username ? username.slice(0, 2).toUpperCase() : ""}
         src="path_to_image.jpg"
         size="md"
         ml={2}

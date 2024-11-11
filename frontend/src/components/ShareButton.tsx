@@ -32,6 +32,7 @@ import { Graph, Preset } from '@/types';
 import { Timestamp } from 'firebase/firestore';
 import { PresetDetails } from '@/components';
 import { shareGraphWithUser } from '@/api';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 
 interface ShareButtonProps {
@@ -157,8 +158,8 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title, graph }) => {
 
   return (
     <Box className='flex items-end justify-center'>
-      <Button onClick={onOpen}>Share</Button>
-
+      <Button onClick={onOpen} leftIcon={<ExternalLinkIcon />}>Share</Button>
+      
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
