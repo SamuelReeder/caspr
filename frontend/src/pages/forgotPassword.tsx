@@ -20,21 +20,37 @@ import {
 
 import Link from "next/link";
 import { sendResetPasswordEmail } from "@/api";
+import { universalLogout } from "@/api/auth";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function ForgotPassword() {
+	const { firebaseUser } = useAuth();
 	const toast = useToast();
 
 	const [email, setEmail] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [isResetEmailSent, setIsResetEmailSent] = useState(false);
+	const router = useRouter();
+
+	const handleLogout = async () => {
+		try {
+			await universalLogout();
+			router.push("/");
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	const handleResetPassword = async () => {
 		setLoading(true);
 
 		try {
 			await sendResetPasswordEmail(email);
+			if (firebaseUser) {
+				handleLogout();
+			}
 			toast({
 				title: "Email sent",
 				status: "success",
@@ -55,15 +71,23 @@ export default function ForgotPassword() {
 		}
 	};
 
+	const descriptionText =
+		"Enter the email associated with your account. We will send you a link to change your password.";
+	const descriptionTextAlternate =
+		"Enter the email associated with your account. We will send you a link to change your password and you will be logged out.";
+	const pageTitle = "Forgot Password";
+	const pageTitleAlternate = "Reset Password";
+
 	return (
 		<div className="bg-gray-800 h-screen">
 			<div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-[80%]">
 					<Box className="text-center">
-						<Heading className="text-center text-4xl">Forgot Password</Heading>
+						<Heading className="text-center text-4xl">
+							{firebaseUser ? pageTitleAlternate : pageTitle}
+						</Heading>
 						<Text className="pt-2">
-							Enter the email associated with your account. We&apos;ll send you
-							a link to change your password.
+							{firebaseUser ? descriptionTextAlternate : descriptionText}
 						</Text>
 
 						<form>
@@ -105,12 +129,12 @@ export default function ForgotPassword() {
 
 								{/* Buttons */}
 								<div className="flex flex-row gap-4 justify-center mt-7">
-									<Link href="/">
+									<Link href={firebaseUser ? "/home" : "/"}>
 										<Button
 											className="border rounded-lg p-2"
 											leftIcon={<ArrowBackIcon />}
 										>
-											Back to Login Page
+											{firebaseUser ? "Back" : "Back to Login Page"}
 										</Button>
 									</Link>
 

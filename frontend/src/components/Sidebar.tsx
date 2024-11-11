@@ -3,10 +3,10 @@
  * @returns {ReactElement} Sidebar component
  */
 import { Button, Link, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { universalLogout } from "@/api/auth";
+import { useRouter } from "next/router";
 
 export default function Sidebar() {
 	const router = useRouter();
@@ -59,14 +59,21 @@ export default function Sidebar() {
 					<Text className={`${currentRoute === "/explore" ? "text-gray-400" : ""}`}>Explore</Text>
 				</Link>
 
-				<Button
-					colorScheme="blue"
-					onClick={handleLogout}
-					size="md"
-					className="w-full mt-auto"
-				>
-					Logout
-				</Button>
+				<div className="flex flex-col gap-2 mt-auto">
+					<Button
+						colorScheme="blue"
+						onClick={handleLogout}
+						size="md"
+						className="w-full"
+					>
+						Logout
+					</Button>
+					<Link href="/forgot-password">
+						<Button size="md" className="w-full">
+							Reset Password
+						</Button>
+					</Link>
+				</div>
 			</div>
 		</div>
 	);

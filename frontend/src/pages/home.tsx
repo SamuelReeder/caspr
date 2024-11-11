@@ -7,10 +7,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import FullScreenLoader from "./fullScreenLoader";
 import { Graph } from "@/types/graph";
-import { GraphList } from "../components/graphList";
+import GraphList from "@/components/GraphList";
 import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
-import { fetchGraphs } from "@/api/storage";
+import { fetchCurrUserGraphs } from "@/api/storage";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 
@@ -21,7 +21,7 @@ function Home() {
 
 	const fetchUsersGraphs = useCallback(async () => {
 		try {
-			const usersGraphs = await fetchGraphs(firebaseUser);
+			const usersGraphs = await fetchCurrUserGraphs(firebaseUser);
 			setGraphs(usersGraphs);
 		} catch (error) {
 			console.error("Error fetching graphs:", error);

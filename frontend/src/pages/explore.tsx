@@ -5,11 +5,12 @@
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
+import FullScreenLoader from "./fullScreenLoader";
 import { Graph } from "@/types/graph";
-import { GraphList } from "../components/graphList";
+import GraphList from "@/components/GraphList";
 import Searchbar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
-import { fetchGraphs } from "@/api/storage";
+import { fetchAllPublicGraphs } from "@/api/storage";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 
@@ -18,21 +19,21 @@ function Explore() {
 	const router = useRouter();
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 
-	// const fetchGraphs = useCallback(async () => {
-	// 	try {
-	// 		const publicGraphs = await fetchGraphs(firebaseUser);
-	// 		setGraphs(publicGraphs);
-	// 	} catch (error) {
-	// 		console.error("Error fetching graphs:", error);
-	// 	}
-	// }, [firebaseUser]);
+	const fetchExplorePageGraphs = useCallback(async () => {
+		try {
+			const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
+			setGraphs(publicGraphs);
+		} catch (error) {
+			console.error("Error fetching graphs:", error);
+		}
+	}, [firebaseUser]);
 
-	// useEffect(() => {
-	// 	fetchPublicGraphs();
-	// }, [fetchPublicGraphs, firebaseUser]);
+	useEffect(() => {
+		fetchExplorePageGraphs();
+	}, [fetchExplorePageGraphs]);
 
 	if (loading) {
-		return <div>Loading...</div>;
+		return <FullScreenLoader />;
 	}
 
 	if (!firebaseUser) {
@@ -51,7 +52,7 @@ function Explore() {
 					<div className="flex flex-col gap-2 w-full">
 						<Searchbar graphs={graphs} setGraphs={setGraphs} />
 						<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
-						<Text>Email: {firebaseUser.email}</Text>
+						<Text>Email: {firebaseUser?.email}</Text>
 					</div>
 				</div>
 

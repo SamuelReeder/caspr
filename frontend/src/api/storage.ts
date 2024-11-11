@@ -4,11 +4,11 @@
  * Storage related functions. ie. upload, download, etc.
  */
 
-import { Graph } from "@/types/graph";
 import { app, auth } from "@/config/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
+import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { createGraph } from "./firestore";
@@ -63,7 +63,7 @@ export const uploadGraph = async (
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong @Samuel
  */
-export const fetchGraphs = async (firebaseUser: User | null) => {
+export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
 	if (!firebaseUser) {
 		return [];
 	}
@@ -83,5 +83,33 @@ export const fetchGraphs = async (firebaseUser: User | null) => {
 			console.error("Error fetching graphs:", error);
 			return [];
 		}
+	}
+};
+
+/**
+ * Fetches all publically visible graphs stored in Firestore.
+ * @returns A promise that resolves to the array of graphs.
+ * @Jaeyong
+ */
+export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
+	if (!firebaseUser) {
+		return [];
+	}
+
+	try {
+		const graphsRef = collection(db, "graphs");
+		const q = query(
+			graphsRef,
+			where("graphVisibility", "==", true),
+			where("owner", "!=", firebaseUser.uid)
+		);
+		const querySnapshot = await getDocs(q);
+		return querySnapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data()
+		})) as Graph[];
+	} catch (error) {
+		console.error("Error fetching graphs:", error);
+		return [];
 	}
 };
