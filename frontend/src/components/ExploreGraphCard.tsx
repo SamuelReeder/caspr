@@ -31,6 +31,10 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		onOpen();
 	};
 
+	const handleOpenClick = () => {
+		window.location.href = graph.graphURL;
+	};
+
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">
@@ -64,7 +68,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 				</Box>
 
 				<div className="flex flex-row gap-2">
-					<Button colorScheme="blue" size="sm">
+					<Button colorScheme="blue" size="sm" onClick={handleOpenClick}>
 						Open
 					</Button>
 				</div>
