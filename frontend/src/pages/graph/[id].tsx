@@ -16,7 +16,7 @@ import GraphSideBar from "../../components/GraphSideBar";
 import FullScreenLoader from '../fullScreenLoader';
 import { NodeType } from "../../types/node";
 import { Graph } from "@/types/graph"; // Import the Graph type
-import { fetchCurrUserGraphs, getGraphData } from "@/api/storage"; // Import the function to fetch graphs
+import { fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api/storage"; // Import the function to fetch graphs
 import { useAuth } from "@/context/AuthContext";
 
 interface Diagram {
@@ -57,7 +57,7 @@ const GraphPage = () => {
       if (!firebaseUser || !id) return;
 
       try {
-        const userGraphs = await fetchCurrUserGraphs(firebaseUser);
+        const userGraphs = await fetchAllPublicGraphsIncludingUser();
         const graph = userGraphs.find((g: Graph) => {
           if (!g.graphURL) return false;
           const urlParts = g.graphURL.split('/');
