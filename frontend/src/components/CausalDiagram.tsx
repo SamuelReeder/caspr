@@ -14,7 +14,7 @@ interface CausalDiagramProps {
 
 const colors = [
   '#195c90',
-  '#ffffff',
+  '#de7f26',
   '#a0db8e',
   '#ac1e8e',
   '#edae01',
@@ -29,6 +29,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
   const [isInteracting, setIsInteracting] = useState(false); 
   const [minStrength, setMinStrength] = useState(0);
   const [maxStrength, setMaxStrength] = useState(1); 
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
   // function to assign colors based on category (same color for nodes from one category)
   const getColorByCategory = (category: string): string => {
@@ -45,6 +46,18 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2);
   };
 
+  const getNeighborNodeIds = (nodeId: string) => {
+    return edges
+      .filter(edge => edge.source === nodeId || edge.target === nodeId)
+      .map(edge => (edge.source === nodeId ? edge.target : edge.source));
+  };
+  const handlePointerOver = (nodeId: string) => {
+    setHoveredNodeId(nodeId);
+  };
+
+  const handlePointerOut = () => {
+    setHoveredNodeId(null);
+  };
   useEffect(() => {
     // Calculate radial positions for each category
     const categories = Array.from(new Set(nodes.map(node => node.category)));
@@ -141,18 +154,25 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
         <CameraController nodePositions={nodePositions} setIsInteracting={setIsInteracting}/>
 
         {Object.keys(nodePositions).length > 0 &&
-          nodes.map((node) => (
-            <Node
-              key={node.id}
-              position={nodePositions[node.id]}
-              label={node.label}
-              value={node.value}
-              category={node.category}
-              color={getColorByCategory(node.category)}
-              isInteracting={isInteracting}
-              isSelected={!!(selectedNode && selectedNode.id === node.id)}
-            />
-          ))}
+          nodes.map((node) => {
+            const isNeighbor = hoveredNodeId && getNeighborNodeIds(hoveredNodeId).includes(node.id);
+            const isDimmed = hoveredNodeId !== null && !isNeighbor && hoveredNodeId !== node.id;
+            return (
+                    <Node
+                      key={node.id}
+                      position={nodePositions[node.id]}
+                      label={node.label}
+                      value={node.value}
+                      category={node.category}
+                      color={getColorByCategory(node.category)}
+                      isInteracting={isInteracting}
+                      isSelected={!!(selectedNode && selectedNode.id === node.id)}
+                      isDimmed={isDimmed}
+                      onPointerOver={() => handlePointerOver(node.id)}
+                      onPointerOut={handlePointerOut}
+                    />
+            );
+        })}
         {Object.keys(nodePositions).length > 0 &&
           edges
             .filter((edge) => edge.strength >= minStrength && edge.strength <= maxStrength) 
@@ -160,6 +180,8 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
               const sourcePosition = nodePositions[edge.source];
               const targetPosition = nodePositions[edge.target];
               if (!sourcePosition || !targetPosition) return null;
+              const isEdgeHighlighted = edge.relationship === 'causal' && hoveredNodeId && (edge.source === hoveredNodeId || edge.target === hoveredNodeId);
+              const isDimmed = hoveredNodeId !== null && !isEdgeHighlighted;
 
               return (
                 <Edge
@@ -168,6 +190,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({ nodes, edges, selectedNod
                   targetPosition={targetPosition}
                   relationship={edge.relationship}
                   strength={edge.strength}
+                  isDimmed={isDimmed}
                 />
               );
             })}

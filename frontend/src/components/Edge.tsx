@@ -9,9 +9,10 @@ interface EdgeProps {
   targetPosition: [number, number, number];
   relationship: string;
   strength: number;
+  isDimmed: boolean;
 }
 
-const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationship, strength }) => {
+const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationship, strength, isDimmed}) => {
   const [hovered, setHovered] = useState(false);
 
   if (!sourcePosition || !targetPosition) {
@@ -20,6 +21,7 @@ const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationshi
   }
 
   const scaledLineWidth = 0.1 + strength * 3;
+  const nodeRadius = 12;
 
   let color = 'black';
   let dashed = false;
@@ -47,6 +49,18 @@ const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationshi
 
   const normalizedDirection = direction.clone().normalize();
 
+  const adjustedSource = new THREE.Vector3(
+    sourcePosition[0] + normalizedDirection.x * nodeRadius,
+    sourcePosition[1] + normalizedDirection.y * nodeRadius,
+    sourcePosition[2] + normalizedDirection.z * nodeRadius
+  );
+
+  const adjustedTarget = new THREE.Vector3(
+    targetPosition[0] - normalizedDirection.x * nodeRadius,
+    targetPosition[1] - normalizedDirection.y * nodeRadius,
+    targetPosition[2] - normalizedDirection.z * nodeRadius
+  );
+
   // Calculate the midpoint between source and target
   const arrowPosition = new THREE.Vector3(
     targetPosition[0] - normalizedDirection.x * 16,
@@ -61,17 +75,19 @@ const Edge: React.FC<EdgeProps> = ({ sourcePosition, targetPosition, relationshi
   return (
     <>
       <Line
-        points={[sourcePosition, targetPosition]}
+        points={[adjustedSource.toArray(), adjustedTarget.toArray()]}
         lineWidth={scaledLineWidth}
         color={color}
         dashed={dashed}
+        opacity={isDimmed ? 0.3 : 1}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       />
       {arrow && (
-        <mesh position={arrowPosition} quaternion={arrowRotation}>
+        <mesh position={arrowPosition} quaternion={arrowRotation} >
           <coneGeometry args={[5, 10, 32]} />
-          <meshBasicMaterial color={color} />
+          <meshBasicMaterial color={color}  opacity={isDimmed ? 0.5 : 1} transparent depthTest={false}/>
+
         </mesh>
       )}
       <mesh
