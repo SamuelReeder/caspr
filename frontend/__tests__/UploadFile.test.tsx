@@ -1,14 +1,13 @@
-import React from 'react';
-
 import "@testing-library/jest-dom";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
+import React from "react";
 import UploadFile from "@/pages/uploadFile";
-import { uploadGraph } from "@/api/storage";
-import { useAuth } from '@/context';
-import { useRouter } from "next/router";
 import customRender from "@/test-utils/render";
+import { uploadGraph } from "@/api/storage";
+import { useAuth } from "@/context";
+import { useRouter } from "next/router";
 
 jest.mock("@/api/storage");
 // jest.mock("@/app/authContext"); // breaks it
@@ -96,14 +95,15 @@ describe("UploadFile Component", () => {
 		});
 		fireEvent.click(saveButton);
 
-		// const { firebaseUser } = useAuth(); // breaks it 
+		// const { firebaseUser } = useAuth(); // breaks it
 
 		await waitFor(() => {
 			expect(uploadGraph).toHaveBeenCalledWith(
 				null,
 				mockFile,
 				"Test Graph",
-				"Test Description"
+				"Test Description",
+				false
 			);
 			expect(mockRouterPush).toHaveBeenCalledWith("/home");
 		});
