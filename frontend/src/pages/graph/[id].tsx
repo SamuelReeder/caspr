@@ -40,6 +40,7 @@ const GraphPage = () => {
   const [selectedNode, setSelectedNode] = useState<NodeType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { firebaseUser } = useAuth();
+  const [graph, setGraph] = useState<Graph | null>(null);
 
   const handleNodeSelect = (node: NodeType | null) => {
     setSelectedNode(node);
@@ -62,6 +63,7 @@ const GraphPage = () => {
           const jsonData = await getGraphData(graph);
           console.log(jsonData)
           setDiagrams([{ id: 0, data: jsonData, label: graph.graphName }]);
+          setGraph(graph)
         } else {
           router.push('/undefined');
         }
@@ -105,6 +107,7 @@ const GraphPage = () => {
         setSelectedTab={setSelectedTab}
         addDiagram={addDiagram}
         removeDiagram={removeDiagram}
+        graph={graph}
       />
       <Box display="flex" flex="1">
         <Box flex="1">
