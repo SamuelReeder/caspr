@@ -127,41 +127,30 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 
 	return (
 		<div>
-			<Box
-				display="flex"
-				alignItems="center"
-				justifyContent="space-between"
-				marginBottom="10px"
-			>
-				<Box display="flex" alignItems="center">
-					<label htmlFor="min-strength" style={{ marginRight: "10px" }}>
-						Min Strength:
-					</label>
-					<input
-						type="number"
-						id="min-strength"
-						value={minStrength}
-						onChange={handleMinStrengthChange}
-						step="0.1"
-						min="0"
-						max="1"
-						style={{ marginRight: "20px" }}
-					/>
+			<div style={{ marginBottom: '10px' }}>
+        <label htmlFor="min-strength" style={{ marginRight: '10px' }}>Min Strength:</label>
+        <input 
+          type="number" 
+          id="min-strength" 
+          value={minStrength}
+          onChange={handleMinStrengthChange}
+          step="0.1" 
+          min="0" 
+          max="1" 
+          style={{ marginRight: '20px' }}
+        />
 
-					<label htmlFor="max-strength" style={{ marginRight: "10px" }}>
-						Max Strength:
-					</label>
-					<input
-						type="number"
-						id="max-strength"
-						value={maxStrength}
-						onChange={handleMaxStrengthChange}
-						step="0.1"
-						min="0"
-						max="1"
-					/>
-				</Box>
-
+        <label htmlFor="max-strength" style={{ marginRight: '10px' }}>Max Strength:</label>
+        <input 
+          type="number" 
+          id="max-strength" 
+          value={maxStrength}
+          onChange={handleMaxStrengthChange}
+          step="0.1" 
+          min="0" 
+          max="1"
+        />
+      </div>
 
 			<Canvas
 				camera={{
