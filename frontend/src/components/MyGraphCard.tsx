@@ -1,3 +1,8 @@
+/**
+ * Graph card component for the home page
+ * @param {MyGraphCardProps} props
+ * @returns {ReactElement} Graph card component
+ */
 import {
 	Box,
 	Button,
@@ -20,7 +25,7 @@ import {
 
 import { MyGraphCardProps } from "@/types";
 import React, {useState} from "react";
-import ShareButton from "./ShareButton";
+import { ShareButton } from "@/components";
 import { Timestamp } from "firebase/firestore";
 import { updateGraphData } from "@/api/storage";
 
@@ -143,7 +148,9 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 							return Promise.resolve();
 						}}
 					/>
-					<Button colorScheme="blue" onClick={handleOpenClick}>Open</Button>
+					<Button colorScheme="blue" onClick={handleOpenClick}>
+						Open
+					</Button>
 				</Box>
 			</CardBody>
 

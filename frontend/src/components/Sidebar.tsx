@@ -5,7 +5,7 @@
 import { Button, Link, Text } from "@chakra-ui/react";
 
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { universalLogout } from "@/api/auth";
+import { universalLogout } from "@/api";
 import { useRouter } from "next/router";
 
 export default function Sidebar() {
@@ -43,20 +43,32 @@ export default function Sidebar() {
 					className={`hover:text-gray-400`}
 					onClick={() => router.push("/home")}
 				>
-					<Text className={`${currentRoute === "/home" ? "text-gray-400" : ""}`}>My Graphs</Text>
+					<Text
+						className={`${currentRoute === "/home" ? "text-gray-400" : ""}`}
+					>
+						My Graphs
+					</Text>
 				</Link>
 
 				<Link
 					className={`hover:text-gray-400`}
 					onClick={() => router.push("/sharedWithMe")}
 				>
-					<Text className={`${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}>Shared With Me</Text>
+					<Text
+						className={`${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}
+					>
+						Shared With Me
+					</Text>
 				</Link>
 				<Link
 					className={`hover:text-gray-400`}
 					onClick={() => router.push("/explore")}
 				>
-					<Text className={`${currentRoute === "/explore" ? "text-gray-400" : ""}`}>Explore</Text>
+					<Text
+						className={`${currentRoute === "/explore" ? "text-gray-400" : ""}`}
+					>
+						Explore
+					</Text>
 				</Link>
 
 				<div className="flex flex-col gap-2 mt-auto">

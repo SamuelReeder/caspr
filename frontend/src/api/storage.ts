@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-
 /**
  * Storage related functions. ie. upload, download, etc.
  */
@@ -11,7 +9,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
-import { createGraph } from "./firestore";
+import { createGraph } from "@/api";
 import { db } from "@/config/firebaseConfig";
 import { apiClient } from "@/utils/apiClient";
 
@@ -41,8 +39,8 @@ export const uploadGraph = async (
 
 		const hashedId = uuidv4(); // Generate a unique hashed ID
 		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-    const graphURL = `${baseURL}/graph/${hashedId}`;
-		
+		const graphURL = `${baseURL}/graph/${hashedId}`;
+
 		const downloadURL = await getDownloadURL(storageRef);
 		const graph: Graph = {
 			owner: firebaseUser?.uid || "",
@@ -67,6 +65,7 @@ export const uploadGraph = async (
 
 /**
  * Fetches the graphs belonging to the user from firestore.
+ * @param firebaseUser - The current user object.
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong @Samuel
  */
@@ -98,6 +97,7 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
 
 /**
  * Fetches all publically visible graphs stored in Firestore.
+ * @param firebaseUser - The current user object.
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong
  */
@@ -130,13 +130,9 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
  * @Samuel
  */
 export const fetchAllPublicGraphsIncludingUser = async () => {
-
 	try {
 		const graphsRef = collection(db, "graphs");
-		const q = query(
-			graphsRef,
-			where("graphVisibility", "==", true),
-		);
+		const q = query(graphsRef, where("graphVisibility", "==", true));
 		const querySnapshot = await getDocs(q);
 		return querySnapshot.docs.map((doc) => ({
 			id: doc.id,
@@ -148,29 +144,29 @@ export const fetchAllPublicGraphsIncludingUser = async () => {
 	}
 };
 
-
 /**
  * Fetches the graph data from the URL stored in the Firestore graph object.
+ * @param graph - The graph object containing the URL.
  * @returns A promise that resolves to the graph data
  * @Samuel
  */
 export const getGraphData = async (graph: Graph): Promise<any> => {
-  try {
-	const storage = getStorage(app);
-	const storageRef = ref(storage, graph.graphFileURL);
-	const downloadURL = await getDownloadURL(storageRef);
+	try {
+		const storage = getStorage(app);
+		const storageRef = ref(storage, graph.graphFileURL);
+		const downloadURL = await getDownloadURL(storageRef);
 
-	const response = await fetch(downloadURL);
-	if (!response.ok) {
-	  console.error("Error fetching graph data");
+		const response = await fetch(downloadURL);
+		if (!response.ok) {
+			console.error("Error fetching graph data");
+		}
+
+		const jsonData = await response.json();
+		return jsonData;
+	} catch (error) {
+		console.error("Error fetching graph data:", error);
 	}
-	
-	const jsonData = await response.json();
-	return jsonData;
-  } catch (error) {
-	console.error("Error fetching graph data:", error);
-  }
-}; 
+};
 
 /**
  * Update a graph object

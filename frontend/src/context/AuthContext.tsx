@@ -1,10 +1,26 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+/**
+ * This context provides the authenticated user and loading state.
+ * It fetches the Firestore user document when the Firebase user is authenticated.
+ * @param children The children components to render.
+ * @returns The AuthContext provider.
+ */
+import {
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+	ReactNode
+} from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/config/firebaseConfig";
 import { AuthenticatedUser, User } from "@/types";
 import { getUser } from "@/api";
 
-const AuthContext = createContext<AuthenticatedUser>({ firebaseUser: null, firestoreUser: null, loading: true });
+const AuthContext = createContext<AuthenticatedUser>({
+	firebaseUser: null,
+	firestoreUser: null,
+	loading: true
+});
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);

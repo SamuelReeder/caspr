@@ -1,3 +1,9 @@
+/**
+ * ExploreGraphCard.tsx
+ * This component is used to display the card for the graph object in the explore page.
+ * @param {MyGraphCardProps} props - The graph object to be displayed
+ * @returns {ReactElement} The ExploreGraphCard component
+ */
 import {
 	Box,
 	Button,
@@ -15,7 +21,7 @@ import {
 	Tooltip,
 	useDisclosure
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
 import { MyGraphCardProps } from "@/types";
 

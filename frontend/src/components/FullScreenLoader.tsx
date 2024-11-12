@@ -1,4 +1,8 @@
-import { Center, Spinner, useColorModeValue } from "@chakra-ui/react";
+/**
+ * FullScreenLoader component
+ * @returns {ReactElement} FullScreenLoader component
+ */
+import { Center, Spinner } from "@chakra-ui/react";
 
 function FullScreenLoader() {
 	return (

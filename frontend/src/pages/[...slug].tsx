@@ -1,8 +1,13 @@
+/**
+ * This file is a catch-all route that will handle all routes that are not defined in the pages directory.
+ * It will check the slug and render the appropriate component based on the slug.
+ * @returns {ReactElement} CatchAllRoute component
+ */
 import { useEffect, useState } from "react";
 
 import CreateAccount from "./createAccount";
 import ForgotPassword from "./forgotPassword";
-import FullScreenLoader from "./fullScreenLoader";
+import { FullScreenLoader } from "@/components";
 import UploadFile from "./uploadFile";
 import { useRouter } from "next/router";
 

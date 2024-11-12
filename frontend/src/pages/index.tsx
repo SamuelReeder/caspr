@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-
 /**
- * Index (Landing Page)
+ * Index (Login/landing page)
+ * @returns {ReactElement} Login page
  */
 import "tailwindcss/tailwind.css";
 
