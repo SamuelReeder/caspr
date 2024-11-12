@@ -1,3 +1,9 @@
+/**
+ * This API endpoint creates a new graph document in the graphs collection.
+ * @param req The incoming request object.
+ * @param res The outgoing response object.
+ * @returns A message indicating the success of the operation.
+ */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbAdmin } from "@/config/firebaseAdmin";
 import { Graph } from "@/types";

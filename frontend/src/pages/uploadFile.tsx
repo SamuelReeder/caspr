@@ -1,5 +1,6 @@
 /**
  * Upload File
+ * @returns {ReactElement} Upload File
  */
 import "tailwindcss/tailwind.css";
 
@@ -19,7 +20,7 @@ import {
 	Switch
 } from "@chakra-ui/react";
 
-import { uploadGraph } from "@/api/storage";
+import { uploadGraph } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -28,7 +29,7 @@ export default function UploadFile() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [graphName, setGraphName] = useState("");
 	const [graphDescription, setGraphDescription] = useState("");
-	const [graphVisibility, setGraphVisibility] = useState(false)
+	const [graphVisibility, setGraphVisibility] = useState(false);
 	const [isDragging, setIsDragging] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -36,10 +37,9 @@ export default function UploadFile() {
 	const router = useRouter();
 	const { firebaseUser } = useAuth();
 
-	
 	const handleSwitchToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setGraphVisibility(e.target.checked);
-	  };
+	};
 
 	const handleDragEnter = (e: React.DragEvent) => {
 		e.preventDefault();
@@ -64,9 +64,9 @@ export default function UploadFile() {
 
 	const handleRemoveFile = () => {
 		setSelectedFile(null);
-		setGraphName("")
-		setGraphDescription("")
-		setGraphVisibility(false)
+		setGraphName("");
+		setGraphDescription("");
+		setGraphVisibility(false);
 		const fileInput = document.getElementById("fileInput") as HTMLInputElement;
 		if (fileInput) {
 			fileInput.value = "";
@@ -205,14 +205,13 @@ export default function UploadFile() {
 											value={graphDescription}
 										/>
 
-
 										<FormLabel className="pt-7"> Visibility</FormLabel>
-										<Box className='pl-5' textAlign='left'>
+										<Box className="pl-5" textAlign="left">
 											<Switch
 												onChange={handleSwitchToggle}
 												isChecked={graphVisibility}
-											> 
-												Publically Available 
+											>
+												Publically Available
 											</Switch>
 										</Box>
 

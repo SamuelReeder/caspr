@@ -3,16 +3,13 @@
  * @returns {ReactElement} Shared With Me Page
  */
 import { Heading, Text } from "@chakra-ui/react";
-import { getSharedGraphs, getUser } from "@/api";
 import { useCallback, useEffect, useState } from "react";
-
-import FullScreenLoader from "./fullScreenLoader";
-import { Graph } from "@/types/graph";
-import GraphList from "@/components/GraphList";
-import Searchbar from "@/components/Searchbar";
-import Sidebar from "@/components/Sidebar";
-import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
+
+import { getSharedGraphs, getUser } from "@/api";
+import { Graph } from "@/types";
+import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
+import { useAuth } from "@/context/AuthContext";
 
 function SharedWithMe() {
 	const { firebaseUser, loading } = useAuth();

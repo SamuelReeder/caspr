@@ -1,4 +1,11 @@
+/**
+ * This API route fetches all graphs owned by a user with a given UID.
+ * @param req The incoming request object.
+ * @param res The outgoing response object.
+ * @returns An array of Graph objects.
+ */
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import { dbAdmin } from "@/config/firebaseAdmin";
 import { Graph } from "@/types";
 

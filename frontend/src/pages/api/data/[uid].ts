@@ -1,3 +1,9 @@
+/**
+ * This file is responsible for fetching user data from Firestore.
+ * @param req The incoming request object.
+ * @param res The outgoing response object.
+ * @returns The user object.
+ */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbAdmin } from "@/config/firebaseAdmin"; // Import the Firestore Admin instance from firebaseAdmin.ts
 import { User } from "@/types";

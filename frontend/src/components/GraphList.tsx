@@ -4,14 +4,13 @@
  * @param {String} page - Page title
  * @returns {ReactElement} Graph list component
  */
-import { Box, Heading } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import { Graph, GraphListProps } from "@/types/graph";
 import { useEffect, useState } from "react";
 
 import ExploreGraphCard from "./ExploreGraphCard";
 import MyGraphCard from "./MyGraphCard";
 import { User } from "@/types";
-import { Timestamp } from "firebase/firestore";
 import { getUser } from "@/api";
 import { useAuth } from "@/context";
 
@@ -55,19 +54,17 @@ const GraphList = ({ graphs, page }: GraphListProps) => {
 				{page}
 			</Heading>
 			{page === "Explore" ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg-grid-cols-4 gap-4">
+				<div className="flex flex-col sm:w-[50vw] md:w-[70vw] lg:w-[80vw] gap-4">
 					{graphsWithOwners.map(({ graph, owner }, i) => (
-							<ExploreGraphCard
-								key={graph.id || i}
-								graph={graph}
-								owner={owner}
-							/>
+						<ExploreGraphCard key={graph.id || i} graph={graph} owner={owner} />
 					))}
 				</div>
 			) : (
-				<div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg-grid-cols-3 gap-4">
+				<div className="flex flex-col sm:w-[50vw] md:w-[70vw] lg:w-[80vw] gap-4">
 					{graphsWithOwners.map(({ graph, owner }, i) => {
-						return <MyGraphCard key={graph.id || i} graph={graph} owner={owner} />;
+						return (
+							<MyGraphCard key={graph.id || i} graph={graph} owner={owner} />
+						);
 					})}
 				</div>
 			)}
