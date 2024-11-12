@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Tabs, TabPanels, TabPanel, Box, useToast } from "@chakra-ui/react";
-import { GraphSideBar, GraphNavbar, CausalDiagram} from "@/components";
+import { GraphSideBar, GraphNavbar, CausalDiagram } from "@/components";
 import FullScreenLoader from "../../components/FullScreenLoader";
 import { NodeType, Graph } from "@/types";
 import { fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api"; // Import the function to fetch graphs

@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { loginWithEmail, loginWithGoogle } from "@/api";
-import { Providers } from '@/app/providers'; 
+import { Providers } from "@/app/providers";
 import customRender from "@/test-utils/render";
 
 import Index from "@/pages";
@@ -25,7 +25,6 @@ jest.mock("@chakra-ui/react", () => ({
 	toast: jest.fn()
 }));
 
-
 describe("Index (Landing Page)", () => {
 	const mockPush = jest.fn();
 
@@ -35,22 +34,20 @@ describe("Index (Landing Page)", () => {
 	});
 
 	test("renders Login component", () => {
-		customRender(
-			<Index />
-		);
+		customRender(<Index />);
 		const headingElement = screen.getByText(/Welcome to Caspr/i);
 		expect(headingElement).toBeInTheDocument();
 	});
 
 	test("allows user to input email", () => {
-		customRender(<Index/>);
+		customRender(<Index />);
 		const emailInput = screen.getByPlaceholderText(/Enter email/i);
 		fireEvent.change(emailInput, { target: { value: email } });
 		expect(emailInput).toHaveValue(email);
 	});
 
 	test("allows user to input password", () => {
-		customRender(<Index/>);
+		customRender(<Index />);
 		const passwordInput = screen.getByPlaceholderText(/Enter password/i);
 		fireEvent.change(passwordInput, { target: { value: "password" } });
 		expect(passwordInput).toHaveValue("password");
@@ -58,7 +55,7 @@ describe("Index (Landing Page)", () => {
 
 	test("redirects to home on form submit", async () => {
 		(loginWithEmail as jest.Mock).mockResolvedValueOnce({});
-		customRender(<Index/>);
+		customRender(<Index />);
 		const emailInput = screen.getByPlaceholderText(/Enter email/i);
 		const passwordInput = screen.getByPlaceholderText(/Enter password/i);
 		const loginButton = screen.getByRole("button", { name: /Log In/i });
@@ -73,7 +70,7 @@ describe("Index (Landing Page)", () => {
 	});
 
 	test("Create a new account button navigates to /create-account", () => {
-		customRender(<Index/>);
+		customRender(<Index />);
 
 		const signUpButton = screen.getByRole("button", {
 			name: /Create a new account/i
@@ -86,7 +83,7 @@ describe("Index (Landing Page)", () => {
 	});
 
 	test("Forgot password link has correct href", () => {
-		customRender(<Index/>);
+		customRender(<Index />);
 		const forgotPasswordLink = screen.getByText(/Forgot password/i);
 		expect(forgotPasswordLink.closest("a")).toHaveAttribute(
 			"href",
@@ -98,7 +95,7 @@ describe("Index (Landing Page)", () => {
 		(loginWithEmail as jest.Mock).mockRejectedValueOnce(
 			new Error("Invalid credentials")
 		);
-		customRender(<Index/>);
+		customRender(<Index />);
 		const emailInput = screen.getByPlaceholderText(/Enter email/i);
 		const passwordInput = screen.getByPlaceholderText(/Enter password/i);
 		const loginButton = screen.getByRole("button", { name: /Log In/i });
@@ -113,7 +110,7 @@ describe("Index (Landing Page)", () => {
 	});
 
 	test("triggers Google login redirect", async () => {
-		customRender(<Index/>);
+		customRender(<Index />);
 		const googleLoginButton = screen.getByRole("button", {
 			name: /Sign in with Google/i
 		});

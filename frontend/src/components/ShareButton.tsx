@@ -116,8 +116,8 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 
 	const handleMakePublic = async () => {
 		try {
-      setIsPublic(!isPublic);
-      // TODO: Implement this
+			setIsPublic(!isPublic);
+			// TODO: Implement this
 		} catch (error) {
 			toast({
 				title: "Error",

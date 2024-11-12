@@ -79,7 +79,6 @@ const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 			/>
 		</Box>
 	);
-}
-
+};
 
 export default Searchbar;
