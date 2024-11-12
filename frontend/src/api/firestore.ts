@@ -17,6 +17,7 @@ import {
 import { auth, db } from "@/config/firebaseConfig";
 import { Graph, Preset, SharedUser, User } from "@/types";
 import { apiClient } from "@/utils/apiClient";
+import validateEmail from "@/utils/validateEmail";
 
 /**
  * Get a user document from Firestore.
@@ -253,6 +254,10 @@ export const shareGraphWithUser = async (
 	role = 0
 ): Promise<boolean> => {
 	try {
+		if (!validateEmail(email)) {
+			return false;
+		}
+
 		const graphRef = doc(db, "graphs", graphId);
 		const graphSnap = await getDoc(graphRef);
 

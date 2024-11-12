@@ -34,7 +34,7 @@ import {
 } from "@chakra-ui/react";
 import { Graph, Preset } from "@/types";
 import { Timestamp } from "firebase/firestore";
-import { shareGraphWithUser } from "@/api";
+import { shareGraphWithUser, updateGraphData } from "@/api";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface ShareButtonProps {
@@ -114,23 +114,37 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		}
 	};
 
-	const handleMakePublic = async () => {
-		try {
-			setIsPublic(!isPublic);
-			// TODO: Implement this
-		} catch (error) {
-			toast({
-				title: "Error",
-				description: "Failed to make the graph public",
-				status: "error",
-				duration: 5000,
-				isClosable: true
-			});
-		}
-	};
+	
+const handleMakePublic = async () => {
+  try {
+    const newVisibility = !isPublic;
+    
+    const result = await updateGraphData(graph.id, {
+      graphVisibility: newVisibility
+    });
+
+    if (result) {
+      setIsPublic(newVisibility);
+      toast({
+        title: `Graph is now ${newVisibility ? 'public' : 'private'}`,
+        status: 'success',
+        duration: 2000,
+      });
+    }
+  } catch (error) {
+    toast({
+      title: 'Error',
+      description: 'Failed to update graph visibility',
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    });
+    setIsPublic(!isPublic);
+  }
+};
 
 	const copyToClipboard = () => {
-		navigator.clipboard.writeText(publicLink);
+		navigator.clipboard.writeText(graph.graphURL);
 		toast({
 			title: "Link copied",
 			status: "success",
@@ -273,7 +287,8 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 
 						<FormControl display="flex" alignItems="center" mb={4}>
 							<FormLabel mb="0">Make graph public</FormLabel>
-							<Switch
+              <Switch
+                aria-label="Make graph public"
 								isChecked={isPublic}
 								onChange={() => handleMakePublic()}
 							/>
@@ -283,7 +298,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 							<FormControl>
 								<FormLabel>Public Link</FormLabel>
 								<InputGroup>
-									<Input value={publicLink} isReadOnly />
+									<Input value={graph.graphURL} color="gray.500" isReadOnly />
 									<InputRightElement width="4.5rem">
 										<Button h="1.75rem" size="sm" onClick={copyToClipboard}>
 											Copy
