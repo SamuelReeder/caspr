@@ -54,13 +54,13 @@ const GraphList = ({ graphs, page }: GraphListProps) => {
 				{page}
 			</Heading>
 			{page === "Explore" ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg-grid-cols-4 gap-4">
+				<div className="flex flex-col sm:w-[50vw] md:w-[70vw] lg:w-[80vw] gap-4">
 					{graphsWithOwners.map(({ graph, owner }, i) => (
 						<ExploreGraphCard key={graph.id || i} graph={graph} owner={owner} />
 					))}
 				</div>
 			) : (
-				<div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg-grid-cols-3 gap-4">
+				<div className="flex flex-col sm:w-[50vw] md:w-[70vw] lg:w-[80vw] gap-4">
 					{graphsWithOwners.map(({ graph, owner }, i) => {
 						return (
 							<MyGraphCard key={graph.id || i} graph={graph} owner={owner} />

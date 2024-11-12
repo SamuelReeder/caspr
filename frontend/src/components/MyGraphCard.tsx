@@ -16,18 +16,61 @@ import {
 	ModalContent,
 	ModalHeader,
 	ModalOverlay,
+	Switch,
 	Text,
+	useToast,
 	Tooltip,
 	useDisclosure
 } from "@chakra-ui/react";
 
 import { MyGraphCardProps } from "@/types";
-import React from "react";
+import React, {useState} from "react";
 import { ShareButton } from "@/components";
 import { Timestamp } from "firebase/firestore";
+import { updateGraphData } from "@/api/storage";
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
+
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility)
+	const [switchDisabled, setSwitchDisabled] = useState(false)
+	const toast = useToast();
+
+	const handleSwitchToggle = () => {
+		setPublicGraph(!publicGraph);
+		setSwitchDisabled(true)
+		updateVisibility(!publicGraph)
+
+		setTimeout(() => {
+			setSwitchDisabled(false);
+		  }, 50);
+	  };
+
+
+	const updateVisibility = async (visibility: boolean) => {
+
+		try {
+				const updateValues = { graphVisibility: visibility}	
+				await updateGraphData(graph.id, updateValues)
+
+				toast({
+					title: "Graph saved",
+					description: `Graph visibility updated for: ${graph.graphName}`,
+					status: "success",
+					duration: 1500,
+					isClosable: true
+				});
+			}
+		catch (error) {
+			toast({
+				title: "Error while saving graph",
+				description: `Error: ${error}`,
+				status: "error",
+				duration: null,
+				isClosable: true
+			});
+		}
+	};
 
 	const truncatedDescription =
 		graph.graphDescription.length > 100
@@ -60,7 +103,10 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	return (
 		<Card>
 			<CardHeader className="flex justify-between">
-				<Heading size="md">{graph.graphName}</Heading>
+				<div className="flex flex-col space-y-3">
+					<Heading size="md">{graph.graphName}</Heading>
+					<Switch fontSize="sm" isChecked={publicGraph} isDisabled={switchDisabled} onChange={handleSwitchToggle}> Public Visibility </Switch>
+				</div>
 				<div className="flex flex-col">
 					<Text>{`by ${owner?.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
