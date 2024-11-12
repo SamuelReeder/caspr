@@ -7,13 +7,13 @@ export default async function handler(
 	res: NextApiResponse
 ) {
 	if (req.method !== "POST") {
-		res.status(405).json({ message: "Method not allowed" });
+		return res.status(405).json({ message: "Method not allowed" });
 	}
 
 	const graph = req.body as { graph: Graph };
 
 	if (!graph.graph.owner || !graph.graph.graphName) {
-		res
+		return res
 			.status(400)
 			.json({ error: "Owner or graph name wasn't passed, but is required" });
 	}
@@ -28,7 +28,7 @@ export default async function handler(
 			graphDescription: graph.graph.graphDescription || "",
 			graphVisibility: graph.graph.graphVisibility || false,
 			graphFileURL: graph.graph.graphFileURL || "",
-			graphURL: graph.graph.graphURL || "", 
+			graphURL: graph.graph.graphURL || "",
 			createdAt: graph.graph.createdAt,
 			sharing: graph.graph.sharing,
 			sharedEmails: graph.graph.sharedEmails || [],
