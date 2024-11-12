@@ -218,23 +218,24 @@ export const getAllPresets = async (
 		return null;
 	}
 };
+
 /**
  * Update a user document in Firestore.
  * @param user - The user object.
  * @returns A promise that resolves to the updated user document.
  */
-export const updateUser = async (user: User): Promise<void> => {
-	// implement
-};
+// export const updateUser = async (user: User): Promise<void> => {
+// 	// implement
+// };
 
 /**
  * Delete a user document in Firestore.
  * @param uid - The user's UID.
  * @returns A promise that resolves when the user document is deleted.
  */
-export const deleteUser = async (uid: string): Promise<void> => {
-	// implement
-};
+// export const deleteUser = async (uid: string): Promise<void> => {
+// 	// implement
+// };
 
 /**
  * Share graph and specific presets with a user
@@ -258,7 +259,6 @@ export const shareGraphWithUser = async (
 		if (!graphSnap.exists()) return false;
 
 		const graph = graphSnap.data() as Graph;
-		const sharing = graph.sharing || [];
 		const sharedEmails = graph.sharedEmails || [];
 
 		if (sharedEmails.some((u) => u === email)) {
