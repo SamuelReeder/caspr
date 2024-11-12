@@ -1,3 +1,9 @@
+/**
+ * This API endpoint creates a new user account with email and password.
+ * @param req The incoming request object.
+ * @param res The outgoing response object.
+ * @returns The user object.
+ */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { authAdmin } from "@/config/firebaseAdmin";
 import { User } from "@/types";

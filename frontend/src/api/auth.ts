@@ -1,23 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-
 /**
- * Auth related functions
+ * Auth-related functions
  */
 
 import { AuthenticatedUser, User } from "@/types";
 import {
 	GoogleAuthProvider,
-	createUserWithEmailAndPassword,
 	getAuth,
 	getRedirectResult,
-	sendEmailVerification,
 	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
-	signInWithPopup,
-	signInWithRedirect
+	signInWithPopup
 } from "firebase/auth";
 import { app, auth } from "@/config/firebaseConfig";
-import { createUser, getUser } from "./firestore";
+import { createUser, getUser } from "@/api";
 import { Timestamp } from "firebase/firestore";
 import { apiClient } from "@/utils/apiClient";
 

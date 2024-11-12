@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-
 /**
  * Forgot password page
+ * @returns {ReactElement} Forgot password page
  */
 import "tailwindcss/tailwind.css";
 
@@ -19,8 +18,7 @@ import {
 } from "@chakra-ui/react";
 
 import Link from "next/link";
-import { sendResetPasswordEmail } from "@/api";
-import { universalLogout } from "@/api/auth";
+import { sendResetPasswordEmail, universalLogout } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { useState } from "react";

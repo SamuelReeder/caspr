@@ -1,3 +1,9 @@
+/**
+ * This API endpoint is used to create a new user in Firestore.
+ * @param req The incoming request object.
+ * @param res The outgoing response object.
+ * @returns A message indicating the success of the operation.
+ */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbAdmin } from "@/config/firebaseAdmin";
 

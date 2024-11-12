@@ -1,3 +1,9 @@
+/**
+ * apiClient.ts
+ * @param {string} endpoint - The endpoint to make the request to
+ * @param {RequestInit} options - The options for the request
+ * @returns The response from the API
+ */
 export const apiClient = async (
 	endpoint: string,
 	options: RequestInit = {}

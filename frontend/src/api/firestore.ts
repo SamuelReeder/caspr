@@ -1,26 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-
 /**
  * Firestore API
+ * This module contains functions for interacting with Firestore.
  */
 
 import {
-	DocumentData,
 	Timestamp,
-	addDoc,
 	arrayUnion,
 	collection,
 	doc,
 	getDoc,
 	getDocs,
-	getFirestore,
-	orderBy,
 	query,
-	setDoc,
 	updateDoc,
 	where
 } from "firebase/firestore";
-import { app, auth, db } from "@/config/firebaseConfig";
+import { auth, db } from "@/config/firebaseConfig";
 import { Graph, Preset, SharedUser, User } from "@/types";
 import { apiClient } from "@/utils/apiClient";
 
@@ -249,6 +243,7 @@ export const deleteUser = async (uid: string): Promise<void> => {
  * @param presetNames - Optional. The names of the presets to share. If not provided, no presets will be shared.
  * @param role - The role of the user in the graph.
  * @returns A promise that resolves to true if the share was successful.
+ * @Samuel
  */
 export const shareGraphWithUser = async (
 	graphId: string,
@@ -307,6 +302,7 @@ export const shareGraphWithUser = async (
  * @param graphId - The ID of the graph document
  * @param email - The email of the user to unshare from
  * @returns Promise resolving to true if successful
+ * @Samuel
  */
 export const unshareGraphFromUser = async (
 	graphId: string,

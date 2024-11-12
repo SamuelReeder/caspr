@@ -1,5 +1,4 @@
 import { Timestamp } from "firebase/firestore";
-import { deprecate } from "util";
 
 /**
  * Represents a graph object from a Firebase document.

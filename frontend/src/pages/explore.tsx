@@ -5,12 +5,9 @@
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
-import FullScreenLoader from "./fullScreenLoader";
-import { Graph } from "@/types/graph";
-import GraphList from "@/components/GraphList";
-import Searchbar from "@/components/Searchbar";
-import Sidebar from "@/components/Sidebar";
-import { fetchAllPublicGraphs } from "@/api/storage";
+import { Graph } from "@/types";
+import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
+import { fetchAllPublicGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 

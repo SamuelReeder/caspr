@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-
 /**
- * Create Account (Landing Page)
+ * Create Account
+ * @returns {ReactElement} CreateAccount component
  */
 import "tailwindcss/tailwind.css";
 
