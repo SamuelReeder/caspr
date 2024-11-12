@@ -129,15 +129,19 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
  * @returns A promise that resolves to the array of graphs.
  * @Samuel
  */
-export const fetchAllPublicGraphsIncludingUser = async () => {
+export const fetchAllPublicGraphsIncludingUser = async (firebaseUser: User | null): Promise<Graph[]> => {
+	if (!firebaseUser) {
+		return [];
+	}
 	try {
-		const graphsRef = collection(db, "graphs");
-		const q = query(graphsRef, where("graphVisibility", "==", true));
-		const querySnapshot = await getDocs(q);
-		return querySnapshot.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data()
-		})) as Graph[];
+			const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
+			const userGraphs = await fetchCurrUserGraphs(firebaseUser);
+			const allGraphs = [...publicGraphs, ...userGraphs];
+			
+			const uniqueGraphs = Array.from(new Set(allGraphs.map((graph) => graph.id)))
+				.map((id) => allGraphs.find((graph) => graph.id === id));
+	
+			return uniqueGraphs as Graph[];
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
