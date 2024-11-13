@@ -9,31 +9,30 @@ import type { NextApiRequest, NextApiResponse } from "next";
 jest.mock("@/config/firebaseAdmin");
 
 describe("POST /api/graphs/createGraph", () => {
+	const mockID = "TestUpdateGraphID";
 
-	const mockID = "TestUpdateGraphID"
+	const mockUpdateOneField = {
+		graphVisibility: true
+	};
 
-    const mockUpdateOneField = {
-        graphVisibility: true
-    }
+	const mockUpdateMultiField = {
+		graphVisibility: true,
+		graphDescription: "Updated Description",
+		graphName: "Updated Graph Name"
+	};
 
-    const mockUpdateMultiField = {
-        graphVisibility: true,
-        graphDescription: "Updated Description",
-        graphName: "Updated Graph Name"
-    }
+	let updateMock: jest.Mock;
 
-    let updateMock: jest.Mock;
+	beforeEach(() => {
+		updateMock = jest.fn();
 
-    beforeEach(() => {
-      updateMock = jest.fn();
-    
-      // Set up dbAdmin.collection().doc().update()
-      (dbAdmin.collection as jest.Mock).mockReturnValue({
-        doc: jest.fn().mockReturnValue({
-          update: updateMock,
-        }),
-      });
-    });
+		// Set up dbAdmin.collection().doc().update()
+		(dbAdmin.collection as jest.Mock).mockReturnValue({
+			doc: jest.fn().mockReturnValue({
+				update: updateMock
+			})
+		});
+	});
 
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -55,7 +54,7 @@ describe("POST /api/graphs/createGraph", () => {
 	it("Should return status code 400 if graph ID is missing", async () => {
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "PATCH",
-			body: { updates: mockUpdateOneField}
+			body: { updates: mockUpdateOneField }
 		});
 
 		await handler(req, res);
@@ -66,10 +65,10 @@ describe("POST /api/graphs/createGraph", () => {
 		});
 	});
 
-    it("Should return status code 400 if update data is missing", async () => {
+	it("Should return status code 400 if update data is missing", async () => {
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "PATCH",
-			body: { id: mockID}
+			body: { id: mockID }
 		});
 
 		await handler(req, res);
@@ -81,37 +80,37 @@ describe("POST /api/graphs/createGraph", () => {
 	});
 
 	it("Should update a single field and return a status code 200", async () => {
-		updateMock.mockResolvedValue({ id: "TestUpdatedGraph"});
+		updateMock.mockResolvedValue({ id: "TestUpdatedGraph" });
 
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "PATCH",
-			body: { id:mockID, updates:mockUpdateOneField}
+			body: { id: mockID, updates: mockUpdateOneField }
 		});
 
 		await handler(req, res);
 
-        expect(dbAdmin.collection).toHaveBeenCalledWith("graphs");
-        expect(dbAdmin.collection('graphs').doc).toHaveBeenCalledWith(mockID);
-        expect(updateMock).toHaveBeenCalledWith(mockUpdateOneField);
+		expect(dbAdmin.collection).toHaveBeenCalledWith("graphs");
+		expect(dbAdmin.collection("graphs").doc).toHaveBeenCalledWith(mockID);
+		expect(updateMock).toHaveBeenCalledWith(mockUpdateOneField);
 		expect(res._getStatusCode()).toBe(200);
 		expect(JSON.parse(res._getData())).toEqual({
 			updatedGraph: mockID
 		});
 	});
 
-    it("Should update a multiple fields and return a status code 200", async () => {
-		updateMock.mockResolvedValue({ id: "TestUpdatedGraph"});
+	it("Should update a multiple fields and return a status code 200", async () => {
+		updateMock.mockResolvedValue({ id: "TestUpdatedGraph" });
 
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "PATCH",
-			body: { id:mockID, updates:mockUpdateMultiField}
+			body: { id: mockID, updates: mockUpdateMultiField }
 		});
 
 		await handler(req, res);
 
-        expect(dbAdmin.collection).toHaveBeenCalledWith("graphs");
-        expect(dbAdmin.collection('graphs').doc).toHaveBeenCalledWith(mockID);
-        expect(updateMock).toHaveBeenCalledWith(mockUpdateMultiField);
+		expect(dbAdmin.collection).toHaveBeenCalledWith("graphs");
+		expect(dbAdmin.collection("graphs").doc).toHaveBeenCalledWith(mockID);
+		expect(updateMock).toHaveBeenCalledWith(mockUpdateMultiField);
 		expect(res._getStatusCode()).toBe(200);
 		expect(JSON.parse(res._getData())).toEqual({
 			updatedGraph: mockID
@@ -119,18 +118,18 @@ describe("POST /api/graphs/createGraph", () => {
 	});
 
 	it("should return status code: 500 if there is an error updating", async () => {
-        updateMock.mockRejectedValue(new Error("Firestore update error"));
+		updateMock.mockRejectedValue(new Error("Firestore update error"));
 
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "PATCH",
-			body: { id: mockID, updates:mockUpdateOneField }
+			body: { id: mockID, updates: mockUpdateOneField }
 		});
 
 		await handler(req, res);
 
-        expect(res._getStatusCode()).toBe(500);
-        expect(JSON.parse(res._getData())).toEqual({
-        message: "Error fetching graphs",
-        });
+		expect(res._getStatusCode()).toBe(500);
+		expect(JSON.parse(res._getData())).toEqual({
+			message: "Error fetching graphs"
+		});
 	});
 });

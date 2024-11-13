@@ -8,16 +8,16 @@ export default async function handler(
 	if (req.method !== "PATCH") {
 		return res.status(405).json({ error: "Method not allowed" });
 	}
-    
+
 	const id = req.body.id;
-    const updates  = req.body.updates;
+	const updates = req.body.updates;
 
 	if (!id || typeof id !== "string") {
 		return res.status(400).json({ error: "Invalid or Missing Graph ID" });
 	}
 
-	if(!updates){
-		return res.status(400).json({error: "Invalid or Missing Update Data"})
+	if (!updates) {
+		return res.status(400).json({ error: "Invalid or Missing Update Data" });
 	}
 
 	try {
@@ -25,9 +25,9 @@ export default async function handler(
 		const graphRef = dbAdmin.collection("graphs").doc(id);
 
 		// Update the Desired Graph
-        await graphRef.update(updates);
+		await graphRef.update(updates);
 
-		res.status(200).json({updatedGraph: id});
+		res.status(200).json({ updatedGraph: id });
 	} catch (error) {
 		console.error(`Error updating graph ${id}:`, error);
 		res.status(500).json({ message: "Error fetching graphs" });
