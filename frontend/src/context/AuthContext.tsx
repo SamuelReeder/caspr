@@ -16,7 +16,7 @@ import { auth } from "@/config/firebaseConfig";
 import { AuthenticatedUser, User } from "@/types";
 import { getUser } from "@/api";
 
-const AuthContext = createContext<AuthenticatedUser>({
+export const AuthContext = createContext<AuthenticatedUser>({
 	firebaseUser: null,
 	firestoreUser: null,
 	loading: true
