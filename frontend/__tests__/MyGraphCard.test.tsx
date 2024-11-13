@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 
-import { Graph, User } from "@/types";
+import { Graph, User, SharedUser, Preset } from "@/types";
 
 import MyGraphObject from "../src/components/MyGraphCard";
 import React from "react";
@@ -19,6 +19,8 @@ describe("GraphObject renders correctly", () => {
 						graphName: "Test Title",
 						graphDescription: "Test Description",
 						graphFileURL: "https://www.google.com",
+						graphURL: "https://www.example.com/1234",
+						graphVisibility: true,
 						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
 						sharing: [],
 						sharedEmails: [],
@@ -57,6 +59,7 @@ describe("GraphObject renders correctly", () => {
 						graphName: "Test Title",
 						graphDescription: "Test Description",
 						graphFileURL: "https://www.google.com",
+						graphURL: "https://www.example.com/1234",
 						graphVisibility: true,
 						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
 						sharing: [],

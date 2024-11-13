@@ -105,7 +105,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 			<CardHeader className="flex justify-between">
 				<div className="flex flex-col space-y-3">
 					<Heading size="md">{graph.graphName}</Heading>
-					<Switch fontSize="sm" isChecked={publicGraph} isDisabled={switchDisabled} onChange={handleSwitchToggle}> Public Visibility </Switch>
+					<Switch aria-label="Enable Public Visibility" fontSize="sm" isChecked={publicGraph} isDisabled={switchDisabled} onChange={handleSwitchToggle}> Public Visibility </Switch>
 				</div>
 				<div className="flex flex-col">
 					<Text>{`by ${owner?.name || "unknown"}`}</Text>

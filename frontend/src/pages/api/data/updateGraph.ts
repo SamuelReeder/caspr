@@ -6,14 +6,18 @@ export default async function handler(
 	res: NextApiResponse
 ) {
 	if (req.method !== "PATCH") {
-		return res.status(405).json({ message: "Method not allowed" });
+		return res.status(405).json({ error: "Method not allowed" });
 	}
     
 	const id = req.body.id;
     const updates  = req.body.updates;
 
 	if (!id || typeof id !== "string") {
-		return res.status(400).json({ message: "Invalid ID" });
+		return res.status(400).json({ error: "Invalid or Missing Graph ID" });
+	}
+
+	if(!updates){
+		return res.status(400).json({error: "Invalid or Missing Update Data"})
 	}
 
 	try {

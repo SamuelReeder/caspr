@@ -210,6 +210,7 @@ export default function UploadFile() {
 											<Switch
 												onChange={handleSwitchToggle}
 												isChecked={graphVisibility}
+												aria-label="Enable Public Visibility"
 											>
 												Publically Available
 											</Switch>
