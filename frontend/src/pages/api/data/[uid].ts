@@ -14,18 +14,20 @@ export default async function handler(
 ) {
 	if (req.method !== "GET") {
 		res.setHeader("Allow", ["GET"]);
-		res.status(405).end("Method not allowed");
+		return res.status(405).end("Method not allowed");
 	}
 
 	const { query } = req;
 	const uid = query.uid;
 
 	if (!uid) {
-		res.status(400).json({ error: "UID wasn't passed, but is required" });
+		return res
+			.status(400)
+			.json({ error: "UID wasn't passed, but is required" });
 	}
 
 	if (typeof uid !== "string") {
-		res.status(400).json({ error: "invalid UID" });
+		return res.status(400).json({ error: "Invalid UID" });
 	}
 
 	try {
