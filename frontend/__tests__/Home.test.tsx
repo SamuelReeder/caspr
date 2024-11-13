@@ -74,13 +74,11 @@ describe("Home page Component", () => {
     );
   };
 
-  it("renders the home page", async () => {
+  it("renders the home page when authenticated", async () => {
     renderWithAuthContext(mockUser as User);
-    screen.debug()
     expect(await screen.findAllByText(/My Graphs/i)).toHaveLength(2);
-    expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument;
-    expect(await screen.findByText(/Email: test@gmail.com/i)).toBeInTheDocument
-    // screen.debug()
+    expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Email: test@gmail.com/i)).toBeInTheDocument();
   });
 
   it("renders the mock graph data in the home page", async () => {
@@ -91,7 +89,7 @@ describe("Home page Component", () => {
     expect(await screen.findByText(/Description 2/i)).toBeInTheDocument();
 
     expect(await screen.findAllByRole("button", { name: /Share/i })).toHaveLength(2)
-    expect(await screen.findAllByRole("button", { name: /open/i })).toHaveLength(2)
+    expect(await screen.findAllByRole("button", { name: /Open/i })).toHaveLength(2)
   });
 
   it("opens the share modal when the Share button is clicked", async () => {
@@ -101,10 +99,10 @@ describe("Home page Component", () => {
       fireEvent.click(shareButtons[0]);
     });
     expect(await screen.findByText(/Share graph/i)).toBeInTheDocument();
-    expect(await screen.findByPlaceholderText(/Enter email address and press Enter/i)).toBeInTheDocument
-    expect(await screen.findByText(/Make graph public/i)).toBeInTheDocument
-    expect(await screen.findByRole("button", { name: /Share/i })).toBeInTheDocument
-    expect(await screen.findByRole("button", { name: /Cancel/i })).toBeInTheDocument
+    expect(await screen.findByPlaceholderText(/Enter email address and press Enter/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Make graph public/i)).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /Share/i })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /Cancel/i })).toBeInTheDocument();
   });
 
   it("closes the share modal when the cancel button is clicked", async () => {
@@ -123,3 +121,66 @@ describe("Home page Component", () => {
     });
   })
 });
+
+describe("Error Handling", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    (fetchCurrUserGraphs as jest.Mock).mockResolvedValue(mockGraphs);
+  });
+
+  const renderWithAuthContext = (firebaseUser: User | null) => {
+    return customRender(
+      <AuthContext.Provider value={{ firebaseUser, firestoreUser: null, loading: false }}>
+        <Home />
+      </AuthContext.Provider>
+    );
+  };
+
+  it("it doesn't load graphs when not authenticated", () => {
+    renderWithAuthContext(null);
+    expect(mockRouterPush).toHaveBeenCalledWith("/");
+    expect(screen.queryByText(/My Graphs/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Graph 1/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Description 1/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Graph 2/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Description 2/i)).not.toBeInTheDocument();
+  })
+
+  it("handles errors when fetching graphs", async () => {
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => { });
+    (fetchCurrUserGraphs as jest.Mock).mockRejectedValue(new Error("Error fetching graphs"));
+
+    renderWithAuthContext(mockUser as User);
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith("Error fetching graphs:", expect.any(Error));
+      expect(screen.queryByText(/Graph 1/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Graph 2/i)).not.toBeInTheDocument();
+    });
+
+    consoleErrorSpy.mockRestore();
+  });
+});
+
+describe("Loading Screen Component", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    (fetchCurrUserGraphs as jest.Mock).mockResolvedValue(mockGraphs);
+  });
+
+  const renderWithAuthContext = (firebaseUser: User | null) => {
+    return customRender(
+      <AuthContext.Provider value={{ firebaseUser, firestoreUser: null, loading: true }}>
+        <Home />
+      </AuthContext.Provider>
+    );
+  };
+
+  it("it shows loading screen", () => {
+    renderWithAuthContext(null);
+    expect(screen.queryByText(/loading/i)).toBeInTheDocument()
+  })
+});
+
+

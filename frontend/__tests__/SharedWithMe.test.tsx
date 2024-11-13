@@ -61,8 +61,8 @@ const mockSharedGraphs = [
 ];
 
 const mockOwners: { [key: string]: { name: string } } = {
-    owner1: { name: "Owner One" },
-    owner2: { name: "Owner Two" },
+    owner1: { name: "owner1" },
+    owner2: { name: "owner2" },
 };
 
 describe("Shared With Me Page Component", () => {
@@ -85,11 +85,9 @@ describe("Shared With Me Page Component", () => {
 
     it("renders the home page", async () => {
         renderWithAuthContext(mockUser as User);
-        screen.debug()
         expect(await screen.findAllByText(/Shared With Me/i)).toHaveLength(2);
         expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument;
         expect(await screen.findByText(/Email: test@gmail.com/i)).toBeInTheDocument
-        // screen.debug()
     });
 
     it("renders the mock graph data in the home page", async () => {
@@ -100,7 +98,19 @@ describe("Shared With Me Page Component", () => {
         expect(await screen.findByText(/Description 2/i)).toBeInTheDocument();
 
         expect(await screen.findAllByRole("button", { name: /Share/i })).toHaveLength(2)
-        expect(await screen.findAllByRole("button", { name: /open/i })).toHaveLength(2)
+        expect(await screen.findAllByRole("button", { name: /Open/i })).toHaveLength(2)
+    });
+
+
+    it("displays the correct owner names for the shared graphs", async () => {
+        (getSharedGraphs as jest.Mock).mockResolvedValue(mockSharedGraphs);
+        (getUser as jest.Mock).mockImplementation((ownerId) => {
+            return Promise.resolve(mockOwners[ownerId] || { name: "Unknown" });
+        });
+
+        renderWithAuthContext(mockUser as User);
+        expect(await screen.findByText(/owner1/i)).toBeInTheDocument();
+        expect(await screen.findByText(/owner2/i)).toBeInTheDocument();
     });
 
     it("opens the share modal when the Share button is clicked", async () => {
@@ -131,5 +141,71 @@ describe("Shared With Me Page Component", () => {
             expect(screen.queryByText(/Enter email address and press Enter/i)).not.toBeInTheDocument();
             expect(screen.queryByText(/Make graph public/i)).not.toBeInTheDocument();
         });
+    })
+});
+
+
+describe("Shared With Me Page Component", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+
+        (getSharedGraphs as jest.Mock).mockResolvedValue(mockSharedGraphs);
+        (getUser as jest.Mock).mockImplementation((ownerId: string) => {
+            return Promise.resolve(mockOwners[ownerId] || { name: "Unknown" });
+        });
+    });
+
+    const renderWithAuthContext = (firebaseUser: User | null) => {
+        return customRender(
+            <AuthContext.Provider value={{ firebaseUser, firestoreUser: null, loading: false }}>
+                <SharedWithMe />
+            </AuthContext.Provider>
+        );
+    };
+    it("it doesn't load graphs when not authenticated", () => {
+        renderWithAuthContext(null);
+        expect(screen.queryByText(/Shared With Me/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Shared Graph 1/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Description 1/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Shared Graph 2/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/Description 2/i)).not.toBeInTheDocument();
+    })
+
+    it("handles errors when fetching shared graphs", async () => {
+        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => { });
+        (getSharedGraphs as jest.Mock).mockRejectedValue(new Error("Error fetching shared graphs"));
+
+        renderWithAuthContext(mockUser as User);
+        await waitFor(() => {
+            expect(consoleErrorSpy).toHaveBeenCalledWith("Error fetching shared graphs:", expect.any(Error));
+            expect(screen.queryByText(/Shared Graph 1/i)).not.toBeInTheDocument();
+            expect(screen.queryByText(/Shared Graph 2/i)).not.toBeInTheDocument();
+        });
+
+        consoleErrorSpy.mockRestore();
+    });
+});
+
+describe("Loading Screen Component", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+
+        (getSharedGraphs as jest.Mock).mockResolvedValue(mockSharedGraphs);
+        (getUser as jest.Mock).mockImplementation((ownerId: string) => {
+            return Promise.resolve(mockOwners[ownerId] || { name: "Unknown" });
+        });
+    });
+
+    const renderWithAuthContext = (firebaseUser: User | null) => {
+        return customRender(
+            <AuthContext.Provider value={{ firebaseUser, firestoreUser: null, loading: true }}>
+                <SharedWithMe />
+            </AuthContext.Provider>
+        );
+    };
+
+    it("it shows loading screen", () => {
+        renderWithAuthContext(null);
+        expect(screen.queryByText(/loading/i)).toBeInTheDocument()
     })
 });
