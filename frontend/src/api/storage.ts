@@ -129,19 +129,22 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
  * @returns A promise that resolves to the array of graphs.
  * @Samuel
  */
-export const fetchAllPublicGraphsIncludingUser = async (firebaseUser: User | null): Promise<Graph[]> => {
+export const fetchAllPublicGraphsIncludingUser = async (
+	firebaseUser: User | null
+): Promise<Graph[]> => {
 	if (!firebaseUser) {
 		return [];
 	}
 	try {
-			const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
-			const userGraphs = await fetchCurrUserGraphs(firebaseUser);
-			const allGraphs = [...publicGraphs, ...userGraphs];
-			
-			const uniqueGraphs = Array.from(new Set(allGraphs.map((graph) => graph.id)))
-				.map((id) => allGraphs.find((graph) => graph.id === id));
-	
-			return uniqueGraphs as Graph[];
+		const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
+		const userGraphs = await fetchCurrUserGraphs(firebaseUser);
+		const allGraphs = [...publicGraphs, ...userGraphs];
+
+		const uniqueGraphs = Array.from(
+			new Set(allGraphs.map((graph) => graph.id))
+		).map((id) => allGraphs.find((graph) => graph.id === id));
+
+		return uniqueGraphs as Graph[];
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
@@ -177,31 +180,30 @@ export const getGraphData = async (graph: Graph): Promise<any> => {
  * @returns A promise that resolves to a string containing the updated graph id
  * @Terry
  */
-export const updateGraphData = async (graphID: string|undefined, updates: any) => {
+export const updateGraphData = async (
+	graphID: string | undefined,
+	updates: any
+) => {
 	if (!graphID) {
 		return [];
 	}
 
 	try {
 		const id = graphID;
-		const graphDataResponse = await apiClient(
-			`/api/data/updateGraph`,
-			{
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					id: id,
-					updates: updates
-				})
-			}
-		);
+		const graphDataResponse = await apiClient(`/api/data/updateGraph`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				id: id,
+				updates: updates
+			})
+		});
 		const graphData = await graphDataResponse.json();
 		return graphData;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
 	}
-
-}
+};

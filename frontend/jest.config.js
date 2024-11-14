@@ -40,15 +40,18 @@ const config = {
 	maxConcurrency: 5,
 
 	reporters: [
-		'default',
-		['jest-summary-reporter', {
-			showPassedTests: true,
-			showFailedTests: true,
-			showPendingTests: true,
-			showSkippedTests: true,
-			skipShapshots: true,
-		}]
-	],
+		"default",
+		[
+			"jest-summary-reporter",
+			{
+				showPassedTests: true,
+				showFailedTests: true,
+				showPendingTests: true,
+				showSkippedTests: true,
+				skipShapshots: true
+			}
+		]
+	]
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
