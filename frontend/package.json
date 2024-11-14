@@ -62,8 +62,10 @@
 		"jest-canvas-mock": "^2.5.2",
 		"jest-environment-jsdom": "^29.7.0",
 		"jest-silent-reporter": "^0.6.0",
+		"node-mocks-http": "^1.16.1",
 		"postcss": "^8",
 		"prettier": "^3.3.3",
+		"supertest": "^7.0.0",
 		"ts-jest": "^29.2.5",
 		"ts-node": "^10.9.2"
 	}
