@@ -177,31 +177,30 @@ export const getGraphData = async (graph: Graph): Promise<any> => {
  * @returns A promise that resolves to a string containing the updated graph id
  * @Terry
  */
-export const updateGraphData = async (graphID: string|undefined, updates: any) => {
+export const updateGraphData = async (
+	graphID: string | undefined,
+	updates: any
+) => {
 	if (!graphID) {
 		return [];
 	}
 
 	try {
 		const id = graphID;
-		const graphDataResponse = await apiClient(
-			`/api/data/updateGraph`,
-			{
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					id: id,
-					updates: updates
-				})
-			}
-		);
+		const graphDataResponse = await apiClient(`/api/data/updateGraph`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				id: id,
+				updates: updates
+			})
+		});
 		const graphData = await graphDataResponse.json();
 		return graphData;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
 	}
-
-}
+};
