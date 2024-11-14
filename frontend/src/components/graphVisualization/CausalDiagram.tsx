@@ -3,14 +3,15 @@
  * @param {CausalDiagramProps} props - The props for the CausalDiagram component
  * @returns {ReactElement} The CausalDiagram component
  */
-import React, { useEffect, useState, useRef } from "react";
-import { Canvas } from "@react-three/fiber";
-import Node from "./Node";
-import Edge from "./Edge";
-import CameraController from "./CameraController";
-import { NodeType } from "../types/node";
-import { EdgeType } from "../types/edge";
+import React, { useEffect, useRef, useState } from "react";
+
 import { Box } from "@chakra-ui/react";
+import CameraController from "./CameraController";
+import { Canvas } from "@react-three/fiber";
+import Edge from "./Edge";
+import { EdgeType } from "../../types/edge";
+import Node from "./Node";
+import { NodeType } from "../../types/node";
 
 interface CausalDiagramProps {
 	nodes: NodeType[];
