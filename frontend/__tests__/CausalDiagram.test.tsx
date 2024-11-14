@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import CausalDiagram from '../src/components/CausalDiagram';
+import CausalDiagram from '../src/components/graphVisualization/CausalDiagram';
 import '@testing-library/jest-dom';
 import { act } from '@testing-library/react';
 
@@ -34,14 +34,14 @@ jest.mock('@react-three/fiber', () => ({
 }));
 
 const mockNode = jest.fn();
-jest.mock('../src/components/Node', () => (props: any) => {
+jest.mock('../src/components/graphVisualization/Node', () => (props: any) => {
     mockNode(props);
     return null;
   });
 
   const mockEdge = jest.fn();
 
-jest.mock('../src/components/Edge', () => (props: any) => {
+jest.mock('../src/components/graphVisualization/Edge', () => (props: any) => {
   mockEdge(props);
   return null;
 });

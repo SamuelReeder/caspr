@@ -1,6 +1,6 @@
 import React from 'react';
 import { create } from '@react-three/test-renderer';
-import Edge from '../src/components/Edge';
+import Edge from '../src/components/graphVisualization/Edge';
 
 describe('Edge Component', () => {
     const defaultProps = {

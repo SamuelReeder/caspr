@@ -1,6 +1,6 @@
 import React from 'react';
 import { create } from '@react-three/test-renderer';
-import Node from '../src/components/Node';
+import Node from '../src/components/graphVisualization/Node';
 import { Color } from 'three';
 
 describe('Node Component', () => {
