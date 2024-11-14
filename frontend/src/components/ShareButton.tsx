@@ -42,10 +42,7 @@ import {
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface ShareButtonProps {
-	url: string;
-	title: string;
 	graph: Graph;
-	onMakePublic: (isPublic: boolean) => Promise<void>;
 }
 
 const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {

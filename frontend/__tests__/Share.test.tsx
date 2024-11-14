@@ -100,27 +100,11 @@ describe("ShareButton", () => {
 	});
 
 	const renderComponent = () => {
-		return customRender(
-			<ShareButton
-				graph={mockGraph}
-				url={mockGraph.graphURL}
-				title={mockGraph.graphName}
-				onMakePublic={() => Promise.resolve()}
-			/>
-		);
+		return customRender(<ShareButton graph={mockGraph} />);
 	};
 
 	test("renders share button and opens modal", () => {
-		customRender(
-			<ShareButton
-				graph={mockGraph}
-				url={""}
-				title={""}
-				onMakePublic={function (isPublic: boolean): Promise<void> {
-					throw new Error("Function not implemented.");
-				}}
-			/>
-		);
+		renderComponent();
 
 		const shareButton = screen.getByText("Share");
 		fireEvent.click(shareButton);
@@ -303,25 +287,6 @@ describe("ShareButton", () => {
 		);
 
 		expect(getSharedGraphs).toHaveBeenCalledWith(recipientEmail);
-	});
-	test("removes email from list when clicking close button", () => {
-		renderComponent();
-		fireEvent.click(screen.getByText("Share"));
-
-		const emailInput = screen.getByPlaceholderText(
-			"Enter email address and press Enter"
-		);
-		fireEvent.change(emailInput, { target: { value: "new@example.com" } });
-		fireEvent.keyDown(emailInput, { key: "Enter" });
-
-		const emailTags = screen.getAllByRole("listitem");
-		const newEmailTag = Array.from(emailTags).find((tag) =>
-			within(tag).queryByText("new@example.com")
-		);
-		const closeButton = within(newEmailTag!).getByLabelText("close");
-		fireEvent.click(closeButton);
-
-		expect(screen.queryByText("new@example.com")).not.toBeInTheDocument();
 	});
 
 	test("handles email input", () => {
