@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom";
 
-import { Graph, User } from "@/types";
+import { Graph, User, SharedUser, Preset } from "@/types";
 
 import MyGraphObject from "../src/components/MyGraphCard";
 import React from "react";
 import { Timestamp } from "firebase/firestore"; // Import Timestamp
 import customRender from "@/test-utils/render";
-import { screen } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 
 describe("GraphObject renders correctly", () => {
 	test("renders GraphObject component", () => {
@@ -19,6 +19,8 @@ describe("GraphObject renders correctly", () => {
 						graphName: "Test Title",
 						graphDescription: "Test Description",
 						graphFileURL: "https://www.google.com",
+						graphURL: "https://www.example.com/1234",
+						graphVisibility: true,
 						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
 						sharing: [],
 						sharedEmails: [],
@@ -57,6 +59,7 @@ describe("GraphObject renders correctly", () => {
 						graphName: "Test Title",
 						graphDescription: "Test Description",
 						graphFileURL: "https://www.google.com",
+						graphURL: "https://www.example.com/1234",
 						graphVisibility: true,
 						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
 						sharing: [],
@@ -76,8 +79,54 @@ describe("GraphObject renders correctly", () => {
 				}
 			/>
 		);
+		
 
 		const buttonElement = screen.getByText(/Share/i);
 		expect(buttonElement).toBeInTheDocument();
 	});
+	
+	test("navigates to the correct page when Open button is clicked", () => {
+    const originalLocation = window.location;
+		Object.defineProperty(window, 'location', {
+			writable: true,
+			value: { href: "" }
+		});
+
+    customRender(
+      <MyGraphObject
+        graph={
+          {
+            id: "1",
+            owner: "Kevin",
+            graphName: "Test Title",
+            graphDescription: "Test Description",
+            graphFileURL: "https://www.google.com",
+            graphURL: "https://www.example.com",
+            graphVisibility: true,
+            createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+            sharing: [],
+            sharedEmails: [],
+            presets: [],
+          } as Graph
+        }
+        owner={
+          {
+            uid: "1",
+            name: "Kevin",
+            email: "",
+            photoURL: "",
+            createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+            roles: [],
+          } as User
+        }
+      />
+    );
+
+    const openButton = screen.getByText(/Open/i);
+    fireEvent.click(openButton);
+
+    expect(window.location.href).toBe("https://www.example.com");
+
+    window.location = originalLocation;
+  });
 });
