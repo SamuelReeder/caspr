@@ -13,7 +13,7 @@ export default async function handler(
 ) {
 	if (req.method !== "POST") {
 		res.setHeader("Allow", "POST");
-		return res.status(405).end("Method Not Allowed");
+		return res.status(405).end("Method not allowed");
 	}
 
 	const { user } = req.body;
@@ -23,7 +23,7 @@ export default async function handler(
 		const userDocumentRef = dbAdmin.collection("users").doc(user.uid);
 		await userDocumentRef.set({ user });
 
-		res.status(200).json({ message: "Successfully created user " });
+		res.status(200).json({ message: "Successfully created user" });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: "Error creating user" });
