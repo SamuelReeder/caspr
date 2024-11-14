@@ -102,6 +102,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 				<div className="flex flex-col space-y-3">
 					<Heading size="md">{graph.graphName}</Heading>
 					<Switch
+						aria-label="Enable Public Visibility"
 						fontSize="sm"
 						isChecked={publicGraph}
 						isDisabled={switchDisabled}
