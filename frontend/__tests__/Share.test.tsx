@@ -21,6 +21,8 @@ const mockUser: User = {
 	roles: []
 };
 
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const mockGraph: Graph = {
 	id: "test-graph-id",
 	owner: mockUser.uid,
@@ -28,7 +30,7 @@ const mockGraph: Graph = {
 	graphDescription: "Test Description",
 	graphVisibility: true,
 	graphFileURL: "http://example.com/graph.png",
-	graphURL: "http://example.com/graph",
+	graphURL: "graph",
 	createdAt: Timestamp.now(),
 	sharing: [],
 	sharedEmails: ["test@example.com"],
@@ -316,7 +318,7 @@ describe("ShareButton", () => {
 
 		await waitFor(() => {
 			expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-				mockGraph.graphURL
+				`${baseURL}/graph/${mockGraph.graphURL}`
 			);
 		});
 
@@ -348,7 +350,7 @@ describe("ShareButton", () => {
 
 		fireEvent.click(screen.getByText("Share"));
 
-		expect(screen.queryByDisplayValue(mockGraph.graphURL)).toBeInTheDocument();
+		expect(screen.queryByDisplayValue(`${baseURL}/graph/${mockGraph.graphURL}`)).toBeInTheDocument();
 
 		const visibilitySwitch = screen.getByLabelText("Make graph public");
 		fireEvent.click(visibilitySwitch);
@@ -363,7 +365,7 @@ describe("ShareButton", () => {
 
 		await waitFor(() => {
 			expect(
-				screen.queryByDisplayValue(mockGraph.graphURL)
+				screen.queryByDisplayValue(`${baseURL}/graph/${mockGraph.graphURL}`)
 			).toBeInTheDocument();
 		});
 	});
