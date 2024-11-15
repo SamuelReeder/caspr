@@ -34,14 +34,15 @@ import {
 } from "@chakra-ui/react";
 import { Graph, Preset } from "@/types";
 import { Timestamp } from "firebase/firestore";
-import { shareGraphWithUser } from "@/api";
+import {
+	shareGraphWithUser,
+	unshareGraphFromUser,
+	updateGraphData
+} from "@/api";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface ShareButtonProps {
-	url: string;
-	title: string;
 	graph: Graph;
-	onMakePublic: (isPublic: boolean) => Promise<void>;
 }
 
 const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
@@ -49,8 +50,10 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 	const [email, setEmail] = useState("");
 	const [emailList, setEmailList] = useState<string[]>([]);
 	const [selectedPresets, setSelectedPresets] = useState<string[]>([]);
-	const [isPublic, setIsPublic] = useState(false);
-	const [publicLink, setPublicLink] = useState("");
+	const [isPublic, setIsPublic] = useState(graph.graphVisibility);
+	const [sharedEmails, setSharedEmails] = useState<string[]>(
+		graph.sharedEmails || []
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const toast = useToast();
 
@@ -70,9 +73,13 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		try {
 			const results = await Promise.all(
 				emailList.map(async (email) => {
-					return graph.id
+					const result = graph.id
 						? await shareGraphWithUser(graph.id, email, selectedPresets)
 						: false;
+					if (result) {
+						setSharedEmails((prev) => [...prev, email]);
+					}
+					return result;
 				})
 			);
 
@@ -80,6 +87,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 			const failureCount = results.length - successCount;
 
 			if (successCount > 0) {
+				setEmailList([]);
 				toast({
 					title: "Graph shared",
 					description: `Successfully shared with ${successCount} recipient(s)${
@@ -114,23 +122,62 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		}
 	};
 
-	const handleMakePublic = async () => {
+	const handleUnshare = async (email: string) => {
 		try {
-			setIsPublic(!isPublic);
-			// TODO: Implement this
+			const result = graph.id
+				? await unshareGraphFromUser(graph.id, email)
+				: false;
+			if (result) {
+				setSharedEmails((prev) => prev.filter((e) => e !== email));
+				toast({
+					title: "Access removed",
+					description: `Removed sharing access for ${email}`,
+					status: "success",
+					duration: 3000,
+					isClosable: true
+				});
+			}
 		} catch (error) {
 			toast({
 				title: "Error",
-				description: "Failed to make the graph public",
+				description: `Failed to remove access for ${email}`,
 				status: "error",
-				duration: 5000,
+				duration: 3000,
 				isClosable: true
 			});
 		}
 	};
 
+	const handleMakePublic = async () => {
+		try {
+			const newVisibility = !isPublic;
+
+			const result = await updateGraphData(graph.id, {
+				graphVisibility: newVisibility
+			});
+
+			if (result) {
+				setIsPublic(newVisibility);
+				toast({
+					title: `Graph is now ${newVisibility ? "public" : "private"}`,
+					status: "success",
+					duration: 2000
+				});
+			}
+		} catch (error) {
+			toast({
+				title: "Error",
+				description: "Failed to update graph visibility",
+				status: "error",
+				duration: 5000,
+				isClosable: true
+			});
+			setIsPublic(!isPublic);
+		}
+	};
+
 	const copyToClipboard = () => {
-		navigator.clipboard.writeText(publicLink);
+		navigator.clipboard.writeText(graph.graphURL);
 		toast({
 			title: "Link copied",
 			status: "success",
@@ -175,7 +222,24 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 					<ModalCloseButton />
 					<ModalBody>
 						<FormControl mb={4}>
-							<FormLabel>Email address</FormLabel>
+							<FormLabel>Already shared with</FormLabel>
+							<Wrap spacing={2} mb={4}>
+								{sharedEmails.map((email) => (
+									<WrapItem key={email}>
+										<Tag
+											size="md"
+											borderRadius="full"
+											variant="solid"
+											colorScheme="green"
+										>
+											<TagLabel>{email}</TagLabel>
+											<TagCloseButton onClick={() => handleUnshare(email)} />
+										</Tag>
+									</WrapItem>
+								))}
+							</Wrap>
+
+							<FormLabel>Share with new people</FormLabel>
 							<Input
 								type="email"
 								value={email}
@@ -193,13 +257,15 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 											colorScheme="blue"
 										>
 											<TagLabel>{email}</TagLabel>
-											<TagCloseButton onClick={() => removeEmail(email)} />
+											<TagCloseButton
+												aria-label="close"
+												onClick={() => removeEmail(email)}
+											/>
 										</Tag>
 									</WrapItem>
 								))}
 							</Wrap>
 						</FormControl>
-
 						{graph.presets && graph.presets.length > 0 && (
 							<FormControl mb={4}>
 								<FormLabel>
@@ -274,6 +340,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 						<FormControl display="flex" alignItems="center" mb={4}>
 							<FormLabel mb="0">Make graph public</FormLabel>
 							<Switch
+								aria-label="Make graph public"
 								isChecked={isPublic}
 								onChange={() => handleMakePublic()}
 							/>
@@ -283,7 +350,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 							<FormControl>
 								<FormLabel>Public Link</FormLabel>
 								<InputGroup>
-									<Input value={publicLink} isReadOnly />
+									<Input value={graph.graphURL} color="gray.500" isReadOnly />
 									<InputRightElement width="4.5rem">
 										<Button h="1.75rem" size="sm" onClick={copyToClipboard}>
 											Copy
