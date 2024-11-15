@@ -38,8 +38,7 @@ export const uploadGraph = async (
 		await uploadBytes(storageRef, graphFile);
 
 		const hashedId = uuidv4(); // Generate a unique hashed ID
-		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-		const graphURL = `${baseURL}/graph/${hashedId}`;
+		const graphURL = `${hashedId}`;
 
 		const downloadURL = await getDownloadURL(storageRef);
 		const graph: Graph = {
