@@ -59,7 +59,7 @@ The application can be accessed in two ways:
   ```bash
   npm run dev
   ```
-- Access the app at [http://localhost:3000/graph](http://localhost:3000/graph).
+- Access the app at [http://localhost:3000/](http://localhost:3000/).
 
 ### Building for Production
 To prepare the app for production:
