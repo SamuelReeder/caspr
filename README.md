@@ -145,4 +145,5 @@ Due to permission conflicts, deployment is done on a identical forked, private r
 - TBD
 
 ## Licences
-- TBD
+- This project is distributed under the MIT License. See LICENSE.txt for more information. 
+- This license was chosen as it is a very permissive open-source license.  Anyone can use, modify, and distribute this project's code for any purpose, as long as they include the original license and copyright notice. This gives users and potential open-source developers a lot of freedom while providing minimal restrictions, encouraging wider adoption and collaboration.
