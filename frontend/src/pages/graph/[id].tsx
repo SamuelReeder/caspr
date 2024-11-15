@@ -5,7 +5,12 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Tabs, TabPanels, TabPanel, Box, useToast } from "@chakra-ui/react";
-import { GraphSideBar, GraphNavbar, CausalDiagram, FullScreenLoader } from "@/components";
+import {
+	GraphSideBar,
+	GraphNavbar,
+	CausalDiagram,
+	FullScreenLoader
+} from "@/components";
 import { NodeType, Graph } from "@/types";
 import { fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api"; // Import the function to fetch graphs
 import { useAuth } from "@/context/AuthContext";
@@ -48,14 +53,15 @@ const GraphPage = () => {
 			if (!firebaseUser || !id) return;
 
 			try {
-				const userGraphs = await fetchAllPublicGraphsIncludingUser(firebaseUser);
+				const userGraphs =
+					await fetchAllPublicGraphsIncludingUser(firebaseUser);
 				const graph = userGraphs.find((g: Graph) => {
 					if (!g.graphURL) return false;
 					const urlParts = g.graphURL.split("/");
 					const graphId = urlParts[urlParts.indexOf("graph") + 1]; // Find the part after 'graph'
 					return graphId === id;
 				});
-				
+
 				if (graph) {
 					const jsonData = await getGraphData(graph);
 					if (!validateJsonDate(jsonData)) {

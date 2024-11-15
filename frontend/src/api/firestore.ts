@@ -3,19 +3,9 @@
  * This module contains functions for interacting with Firestore.
  */
 
-import {
-	Timestamp,
-	arrayUnion,
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	query,
-	updateDoc,
-	where
-} from "firebase/firestore";
-import { auth, db } from "@/config/firebaseConfig";
-import { Graph, Preset, SharedUser, User } from "@/types";
+import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { Graph, Preset, User } from "@/types";
 import { apiClient } from "@/utils/apiClient";
 
 /**
@@ -99,6 +89,7 @@ export const createGraph = async (graph: Graph): Promise<void> => {
  * @param preset - The preset object.
  * @returns A promise that resolves when the preset is added or updated.
  * @Danny @Samuel
+ * TODO: move to server side
  */
 export const addPresetToGraph = async (
 	graphId: string,
@@ -138,6 +129,7 @@ export const addPresetToGraph = async (
  * @param presetName - The name of the preset to delete.
  * @returns A promise that resolves when the preset is deleted.
  * @Samuel
+ * TODO: move to server side
  */
 export const deletePresetFromGraph = async (
 	graphId: string,
@@ -169,6 +161,7 @@ export const deletePresetFromGraph = async (
  * @param presetName - The name of the preset.
  * @returns A promise that resolves to the preset object.
  * @Samuel
+ * TODO: move to server side
  */
 export const getPresetByName = async (
 	graphId: string,
@@ -198,6 +191,7 @@ export const getPresetByName = async (
  * @param graphId - The ID of the graph document.
  * @returns A promise that resolves to an array containing all presets.
  * @Samuel
+ * TODO: move to server side
  */
 export const getAllPresets = async (
 	graphId: string
@@ -253,46 +247,20 @@ export const shareGraphWithUser = async (
 	role = 0
 ): Promise<boolean> => {
 	try {
-		const graphRef = doc(db, "graphs", graphId);
-		const graphSnap = await getDoc(graphRef);
-
-		if (!graphSnap.exists()) return false;
-
-		const graph = graphSnap.data() as Graph;
-		const sharedEmails = graph.sharedEmails || [];
-
-		if (sharedEmails.some((u) => u === email)) {
-			return true;
-		}
-
-		const validPresets = presetNames
-			? presetNames.filter((name) =>
-					graph.presets?.some((p) => p.name === name)
-				)
-			: [];
-
-		const newShare: SharedUser = {
-			email,
-			status: "pending",
-			role,
-			presetAccess: validPresets,
-			addedAt: Timestamp.now(),
-			addedBy: auth.currentUser?.email || ""
-		};
-
-		// if sharing field doesn't exist, create it with new share
-		// await updateDoc(graphRef, {
-		// 	...(sharing.length === 0 ? { sharing: [newShare] } : { sharing: arrayUnion(newShare) })
-		// });
-
-		await updateDoc(graphRef, {
-			sharing: arrayUnion(newShare),
-			sharedEmails: arrayUnion(email)
+		const response = await apiClient("/api/data/shareGraph", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ graphId, email, presetNames, role })
 		});
 
+		if (!response.ok) {
+			throw new Error("Error sharing graph");
+		}
+
+		await response.json();
 		return true;
 	} catch (error) {
-		console.error("Error sharing graph:", error);
+		console.error(error);
 		return false;
 	}
 };
@@ -309,30 +277,20 @@ export const unshareGraphFromUser = async (
 	email: string
 ): Promise<boolean> => {
 	try {
-		const graphRef = doc(db, "graphs", graphId);
-		const graphSnap = await getDoc(graphRef);
-
-		if (!graphSnap.exists()) return false;
-
-		const graph = graphSnap.data() as Graph;
-		const sharing = graph.sharing || [];
-		const sharedEmails = graph.sharedEmails || [];
-
-		const updatedSharing = sharing.filter((u) => u.email !== email);
-		const updatedEmails = sharedEmails.filter((e) => e !== email);
-
-		if (updatedSharing.length === sharing.length) {
-			return false;
-		}
-
-		await updateDoc(graphRef, {
-			sharing: updatedSharing,
-			sharedEmails: updatedEmails
+		const response = await apiClient("/api/data/unshareGraph", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ graphId, email })
 		});
 
+		if (!response.ok) {
+			throw new Error("Error unsharing graph");
+		}
+
+		await response.json();
 		return true;
 	} catch (error) {
-		console.error("Error unsharing graph:", error);
+		console.error(error);
 		return false;
 	}
 };
@@ -345,20 +303,18 @@ export const unshareGraphFromUser = async (
  */
 export const getSharedGraphs = async (email: string): Promise<Graph[]> => {
 	try {
-		const graphsRef = collection(db, "graphs");
-		const q = query(
-			graphsRef,
-			where("sharedEmails", "array-contains", email)
-			// orderBy("createdAt", "desc"),
+		const response = await apiClient(
+			`/api/data/getSharedGraphs?email=${email}`
 		);
-		const querySnap = await getDocs(q);
 
-		return querySnap.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data()
-		})) as Graph[];
+		if (!response.ok) {
+			throw new Error("Error getting shared graphs");
+		}
+
+		const { graphs } = await response.json();
+		return graphs;
 	} catch (error) {
-		console.error("Error getting shared graphs:", error);
+		console.error(error);
 		return [];
 	}
 };
@@ -370,6 +326,7 @@ export const getSharedGraphs = async (email: string): Promise<Graph[]> => {
  * @param uid - The user ID to update in the shared users list.
  * @returns A promise that resolves to true if the share was accepted.
  * @Samuel
+ * TODO: move to server side
  */
 export const acceptShareInvite = async (
 	graphId: string,
@@ -409,6 +366,7 @@ export const acceptShareInvite = async (
  * @param email - The email of the user to get presets for.
  * @returns A promise that resolves to an array of accessible presets.
  * @Samuel
+ * TODO: move to server side
  */
 export const getUserAccessiblePresets = async (
 	graphId: string,
@@ -442,6 +400,7 @@ export const getUserAccessiblePresets = async (
  * @param presetNames - The names of the presets to share.
  * @returns A promise that resolves to true if the share was successful.
  * @Samuel
+ * TODO: move to server side
  */
 export const updatePresetAccess = async (
 	graphId: string,
