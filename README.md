@@ -1,4 +1,24 @@
-# Caspr - Causal Analysis of Structure Paths and Relationships
+<div align="center">
+  <h1> Caspr</h1>
+
+  <p>
+    Causal Analysis of Structure Paths and Relationships
+  </p>
+</div>
+
+## Application Preview
+
+<p align="center">
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/00164608-852c-4eec-a541-c8545e65e418">
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/751138b8-bfae-464f-96b6-976353a611e8">
+</p>
+
+<p align="center">
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/10b8e4b6-5514-4f58-8fd7-f2d270f042c9">
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/8edcb52b-1f8b-4568-941d-b0a90ff60002">
+</p>
+
+##
 
 [Try the project here!](https://caspr.vercel.app/)
 <!-- PARTNER INTRO -->
@@ -9,7 +29,12 @@ This is an open source project built for the Machine Learning Group in the Depar
 
 <!-- ABOUT THE PROJECT -->
 ## Introduction
-This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. It helps visualize relationships between variables in systems with many interdependent factors. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. To summarize, key features include: 
+
+This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment.
+
+**The Value:** This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. It helps visualize relationships between variables in systems with many interdependent factors.
+
+For example, in an ML research application, our app is useful as it visualizes and compares the reasoning processes of AI agents and humans, enabling researchers to enhance the accuracy and reliability of AI forecasting systems and advance forecasting science. To summarize, key features include:
 
 ### Key Features
 - **Dynamic 3D Graph Visualization**: Our app brings causal diagrams to life! The 3D graph is generated dynamically from JSON data, where each node and edge represents crucial connections between elements. You can explore complex systems with ease.
@@ -17,16 +42,20 @@ This project is a web application designed to allow users to explore and interac
 - **Smooth Graph Interaction**: Navigate the graph in a fully immersive 3D space. Zoom, pan, and rotate the graph freely to explore relationships from every angle. It's simple and intuitive, letting you focus on discovering insights.
 
 - **Node and Edge Information on Hover**: Curious about a specific node or edge? Just hover over it to see all the details, including node labels, categories, and edge relationships and strengths.
-<div style="display: flex; justify-content: space-between;">
+<div align="center">
  <img src="/images/connection_description.jpg" alt="Connection Description" width="40%" height="40%">
    <img src="/images/node_description.jpg" alt="Node Description" width="40%" height="40%">
  </div>
 
 - **Powerful Filtering and Searching**: Customize your view with filtering based on connection strength, or search for nodes by name, category, or ID. The graph instantly adjusts to show exactly what you need.
- <img src="/images/search.gif" alt="Node Description" width="60%" height="60%">
+<div align="center">
+  <img src="/images/search.gif" alt="Node Description" width="60%" height="60%">
+</div>
 
 - **Connection Type and Direction Indicators**: Easily differentiate between causal and inhibitory connections using color-coded edges (black for causal, red for inhibitory), and follow the arrows to see the direction of influence between nodes.
- <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="50%">
+<div align="center">
+  <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="50%">
+</div>
 
 ## Instructions
 - TBD
@@ -68,11 +97,11 @@ npm run build
 ```
 
 ### Testing
-- Run the test: `npm test` 
+- Run the test: `npm test`
 
 ### Linting/formatting
 - Lint the app: `npm run lint`
-- Format with Prettier: `npx prettier --write .` 
+- Format with Prettier: `npx prettier --write .`
 
 ### External Dependencies and 3rd Party Software
 Our project relies on several external dependencies and third-party libraries to enhance functionality and simplify development. Below is a summary of the key dependencies:
@@ -104,7 +133,7 @@ Every update to the **main** branch goes through a series of verification and va
 4. Initiate pull request and get at least 2 approvals
 5. Merge into main
 
-Due to permission conflicts, deployment is done on a  identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
+Due to permission conflicts, deployment is done on a identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
 
 ## Coding Standards and Guidelines
 - TBD
