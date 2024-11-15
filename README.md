@@ -57,6 +57,12 @@ For example, in an ML research application, our app is useful as it visualizes a
   <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="50%">
 </div>
 
+- **Authentication and Permissions**: Securely log in to save and manage graphs.
+
+- **Graph Uploading and Sharing**: Upload JSON files to create custom causal graphs and choose to share them publicly, keep them private, or share to specific emails.
+
+- **Explore Page**: Browse and explore public graphs created by other users.
+
 ## Instructions
 - TBD
 
