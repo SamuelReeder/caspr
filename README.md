@@ -141,9 +141,6 @@ Every update to the **main** branch goes through a series of verification and va
 
 Due to permission conflicts, deployment is done on a identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
 
-## Coding Standards and Guidelines
-- TBD
-
 ## Licences
 - This project is distributed under the MIT License. See LICENSE.txt for more information. 
 - This license was chosen as it is a very permissive open-source license.  Anyone can use, modify, and distribute this project's code for any purpose, as long as they include the original license and copyright notice. This gives users and potential open-source developers a lot of freedom while providing minimal restrictions, encouraging wider adoption and collaboration.
