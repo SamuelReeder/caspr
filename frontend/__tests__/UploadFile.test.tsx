@@ -110,11 +110,12 @@ describe("UploadFile Component", () => {
 
 		expect(mockToast).toHaveBeenCalledWith(
 			expect.objectContaining({
-				title: "Graph saved",
-				description: `Graph visibility updated for: 1`,
+				description:
+					"The following graph has been saved to your account: test-graph",
+				duration: 5000,
+				isClosable: true,
 				status: "success",
-				duration: 1500,
-				isClosable: true
+				title: "Graph saved"
 			})
 		);
 	});
