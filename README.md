@@ -34,34 +34,45 @@ This project is a web application designed to allow users to explore and interac
 <!-- RUNNING THE APPLICATION SECTION -->
 ## Running the Application
 
-There are two options to run try the application. The first one is to use the [live deployment here](https://caspr.vercel.app), and the second one is to run it locally. The instruction below details how to run it locally.
-
-To get started with the 3D Causal Diagram Explorer, please follow the step-by-step instructions below to ensure a smooth setup and start-up process.
+The application can be accessed in two ways:
+1. **Live Deployment**: Use the [live deployment here](https://caspr.vercel.app/).
+2. **Local Setup**: Follow these steps to run the application locally.
 
 ### Requirements
-- Node.js: The runtime environment required to run the application. Download and install it from [Node.js official website](https://nodejs.org/en).
-- npm: Comes with [Node.js](https://nodejs.org/en) and is necessary for managing the application's dependencies
+- **Node.js**: Install Node.js from the [official website](https://nodejs.org/en).
+- **npm**: Comes with Node.js and is necessary for managing dependencies.
 
 ### Installation
-- Clone the repository using `git clone -b D2-2 https://github.com/csc301-2024-f/project-19-Machine-Learning-Group.git`
-- Navigate to the project directory: `cd frontend`
-- Install dependencies: Run `npm install` 
-- Start the development server: `npm run dev`
-- Access the app: Open your browser and go to [http://localhost:3000/graph](http://localhost:3000/graph)
+- Clone the repository from the main branch:
+  ```bash
+  git clone https://github.com/csc301-2024-f/project-19-Machine-Learning-Group.git
+  ```
+- Navigate to the project directory:
+  ```bash
+  cd frontend
+  ```
+- Install dependencies:
+  ```bash
+  npm install
+  ```
+- Start the development server:
+  ```bash
+  npm run dev
+  ```
+- Access the app at [http://localhost:3000/graph](http://localhost:3000/graph).
+
+### Building for Production
+To prepare the app for production:
+```bash
+npm run build
+```
 
 ### Testing
-- Create `.bablerc` file with the following code in the `frontend` directory
 - Run the test: `npm test` 
-```bash
-// .babelrc
-{
-  "presets": [
-    "@babel/preset-env",
-    "@babel/preset-react",
-    "@babel/preset-typescript"
-  ]
-}
-```
+
+### Linting/formatting
+- Lint the app: `npm run lint`
+- Format with Prettier: `npx prettier --write .` 
 
 ### External Dependencies and 3rd Party Software
 Our project relies on several external dependencies and third-party libraries to enhance functionality and simplify development. Below is a summary of the key dependencies:
