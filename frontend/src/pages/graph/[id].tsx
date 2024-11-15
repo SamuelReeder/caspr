@@ -8,9 +8,9 @@ import { Tabs, TabPanels, TabPanel, Box, useToast } from "@chakra-ui/react";
 import {
 	GraphSideBar,
 	GraphNavbar,
-	CausalDiagram,
 	FullScreenLoader
 } from "@/components";
+import CausalDiagram from '../../components/graphVisualization/CausalDiagram';
 import { NodeType, Graph } from "@/types";
 import { fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api"; // Import the function to fetch graphs
 import { useAuth } from "@/context/AuthContext";
