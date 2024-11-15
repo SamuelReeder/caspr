@@ -4,12 +4,13 @@
  * @returns {React.FC} - The component
  */
 import { Preset } from "@/types";
+import formatDate from "@/utils/formatDate";
 import { Box, Text, Wrap, WrapItem, Tag } from "@chakra-ui/react";
 
 const PresetDetails: React.FC<{ preset: Preset }> = ({ preset }) => (
 	<Box mt={2} p={3} bg="gray.50" borderRadius="md">
 		<Text fontSize="sm" color="gray.600" mb={2}>
-			Last updated: {preset.updated.toDate().toLocaleDateString()}
+			Last updated: {formatDate(preset.updated)}
 		</Text>
 
 		{preset.filters && (
