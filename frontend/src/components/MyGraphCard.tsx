@@ -26,9 +26,9 @@ import {
 import { MyGraphCardProps } from "@/types";
 import React, { useState } from "react";
 import { ShareButton } from "@/components";
-import * as firebase from "firebase/app"
-import { Timestamp } from "@firebase/firestore";
 import { updateGraphData } from "@/api/storage";
+import formatDate from "@/utils/formatDate";
+
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -83,21 +83,6 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		window.location.href = `${baseURL}/graph/${graph.graphURL}`;
 	};
 
-	const formatDate = (date: Timestamp): string => {
-		const NS_TO_MS_MULTIPLIER = 1 / 1000000;
-		const SEC_TO_MS_MULTIPLIER = 1000;
-
-		const timestampInMilliseconds =
-			date.seconds * SEC_TO_MS_MULTIPLIER +
-			date.nanoseconds * NS_TO_MS_MULTIPLIER;
-
-		// Date takes the amount in milliseconds and build a Date object
-		const formatted_date = new Date(
-			timestampInMilliseconds
-		).toLocaleDateString();
-		return formatted_date;
-	};
-
 	return (
 		<Card>
 			<CardHeader className="flex justify-between">
@@ -117,7 +102,8 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 				<div className="flex flex-col">
 					<Text>{`by ${owner?.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
-						Created: {graph.createdAt.toDate().toLocaleDateString()}
+						Created: {formatDate(graph.createdAt)}
+
 					</Text>
 				</div>
 			</CardHeader>
