@@ -18,16 +18,11 @@
   <img width="49%" alt="image" src="https://github.com/user-attachments/assets/8edcb52b-1f8b-4568-941d-b0a90ff60002">
 </p>
 
-##
-
-[Try the project here!](https://caspr.vercel.app/)
-
 <!-- ABOUT THE PROJECT -->
 ## Introduction
+[Try the project here!](https://caspr.vercel.app/)
 
-This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment.
-
-**The Value:** This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. It helps visualize relationships between variables in systems with many interdependent factors.
+This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. It helps visualize relationships between variables in systems with many interdependent factors.
 
 For example, in an ML research application, our app is useful as it visualizes and compares the reasoning processes of AI agents and humans, enabling researchers to enhance the accuracy and reliability of AI forecasting systems and advance forecasting science. To summarize, key features include:
 
