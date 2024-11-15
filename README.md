@@ -21,11 +21,6 @@
 ##
 
 [Try the project here!](https://caspr.vercel.app/)
-<!-- PARTNER INTRO -->
-## Project Partner Introduction
-This is an open source project built for the Machine Learning Group in the Department of Computer Science at the University of Toronto. The Department of Computer Science at the University of Toronto has several faculty members working in the area of machine learning, neural networks, statistical pattern recognition, probabilistic planning, and adaptive systems.
-- **Sheldon Huang, Research Lead, Primary Contact**: huang@cs.toronto.edu
-- **Yuchen Wang, Software Lead, Secondary Contact**: https://www.yuchenwyc.com/
 
 <!-- ABOUT THE PROJECT -->
 ## Introduction
@@ -63,6 +58,13 @@ For example, in an ML research application, our app is useful as it visualizes a
 
 - **Explore Page**: Browse and explore public graphs created by other users.
 
+<!-- PARTNER INTRO -->
+## Project Partner Introduction
+This is an open source project built for the Machine Learning Group in the Department of Computer Science at the University of Toronto. The Department of Computer Science at the University of Toronto has several faculty members working in the area of machine learning, neural networks, statistical pattern recognition, probabilistic planning, and adaptive systems.
+- **Sheldon Huang, Research Lead, Primary Contact**: huang@cs.toronto.edu
+- **Yuchen Wang, Software Lead, Secondary Contact**: https://www.yuchenwyc.com/
+
+<!-- INSTURCTIONS -->
 ## Instructions
 - TBD
 
