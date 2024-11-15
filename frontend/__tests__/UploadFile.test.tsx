@@ -10,7 +10,6 @@ import { useAuth } from "@/context";
 import { useRouter } from "next/router";
 
 jest.mock("@/api/storage");
-// jest.mock("@/app/authContext"); // breaks it
 const mockRouterPush = jest.fn();
 jest.mock("next/router", () => ({
 	useRouter: jest.fn(() => ({
@@ -28,12 +27,6 @@ const mockFile = new File(['{"nodes": [], "links": []}'], "test-graph.json", {
 });
 
 describe("UploadFile Component", () => {
-	// beforeEach(() => {
-	// 	(useAuth as jest.Mock).mockReturnValue({
-	// 		firebaseUser: { uid: "test-user-id" }
-	// 	});
-	// });
-
 	it("renders the upload file page", () => {
 		customRender(<UploadFile />);
 		expect(screen.getByText(/File Upload/i)).toBeInTheDocument();
@@ -94,8 +87,6 @@ describe("UploadFile Component", () => {
 			name: /Save graph to your account/i
 		});
 		fireEvent.click(saveButton);
-
-		// const { firebaseUser } = useAuth(); // breaks it
 
 		await waitFor(() => {
 			expect(uploadGraph).toHaveBeenCalledWith(
