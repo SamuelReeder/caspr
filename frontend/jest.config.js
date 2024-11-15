@@ -30,6 +30,7 @@ const createJestConfig = nextJest({
 const config = {
 	coverageProvider: "babel",
 	testEnvironment: "jsdom",
+	setupFiles: ["jest-canvas-mock"],
 	// Add more setup options before each test is run
 	// setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 	moduleNameMapper: {
