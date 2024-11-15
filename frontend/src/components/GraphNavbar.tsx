@@ -127,12 +127,7 @@ const NavBar: React.FC<NavBarProps> = ({
 			<Spacer />
 			{graph && (
 				<ShareButton
-					url={graph.graphFileURL}
-					title={graph.graphName}
 					graph={graph}
-					onMakePublic={function (isPublic: boolean): Promise<void> {
-						return Promise.resolve();
-					}}
 				/>
 			)}
 			<Avatar
