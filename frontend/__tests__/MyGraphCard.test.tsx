@@ -19,7 +19,7 @@ describe("GraphObject renders correctly", () => {
 						graphName: "Test Title",
 						graphDescription: "Test Description",
 						graphFileURL: "https://www.google.com",
-						graphURL: "https://www.example.com/1234",
+						graphURL: "1234",
 						graphVisibility: true,
 						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
 						sharing: [],
@@ -59,7 +59,7 @@ describe("GraphObject renders correctly", () => {
 						graphName: "Test Title",
 						graphDescription: "Test Description",
 						graphFileURL: "https://www.google.com",
-						graphURL: "https://www.example.com/1234",
+						graphURL: "1234",
 						graphVisibility: true,
 						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
 						sharing: [],
@@ -101,7 +101,7 @@ describe("GraphObject renders correctly", () => {
             graphName: "Test Title",
             graphDescription: "Test Description",
             graphFileURL: "https://www.google.com",
-            graphURL: "https://www.example.com",
+            graphURL: "1234",
             graphVisibility: true,
             createdAt: Timestamp.fromDate(new Date("2023-09-01")),
             sharing: [],
@@ -125,7 +125,9 @@ describe("GraphObject renders correctly", () => {
     const openButton = screen.getByText(/Open/i);
     fireEvent.click(openButton);
 
-    expect(window.location.href).toBe("https://www.example.com");
+		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+		expect(window.location.href).toBe(`${baseURL}/graph/1234`);
 
     window.location = originalLocation;
   });

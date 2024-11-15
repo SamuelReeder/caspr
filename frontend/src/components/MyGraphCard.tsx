@@ -26,7 +26,8 @@ import {
 import { MyGraphCardProps } from "@/types";
 import React, { useState } from "react";
 import { ShareButton } from "@/components";
-import { Timestamp } from "firebase/firestore";
+import * as firebase from "firebase/app"
+import { Timestamp } from "@firebase/firestore";
 import { updateGraphData } from "@/api/storage";
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
@@ -116,7 +117,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 				<div className="flex flex-col">
 					<Text>{`by ${owner?.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
-						Created: {formatDate(graph.createdAt)}
+						Created: {graph.createdAt.toDate().toLocaleDateString()}
 					</Text>
 				</div>
 			</CardHeader>
@@ -147,12 +148,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 
 				<Box className="flex flex-row gap-2" alignItems="center">
 					<ShareButton
-						url={graph.graphFileURL}
-						title={graph.graphName}
 						graph={graph}
-						onMakePublic={function (isPublic: boolean): Promise<void> {
-							return Promise.resolve();
-						}}
 					/>
 					<Button colorScheme="blue" onClick={handleOpenClick}>
 						Open
