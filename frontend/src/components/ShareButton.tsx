@@ -55,6 +55,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		graph.sharedEmails || []
 	);
 	const [isLoading, setIsLoading] = useState(false);
+	const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 	const toast = useToast();
 
 	const handleShare = async () => {
@@ -177,7 +178,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 	};
 
 	const copyToClipboard = () => {
-		navigator.clipboard.writeText(graph.graphURL);
+		navigator.clipboard.writeText(`${baseURL}/graph/${graph.graphURL}`);
 		toast({
 			title: "Link copied",
 			status: "success",
@@ -350,7 +351,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 							<FormControl>
 								<FormLabel>Public Link</FormLabel>
 								<InputGroup>
-									<Input value={graph.graphURL} color="gray.500" isReadOnly />
+									<Input value={`${baseURL}/graph/${graph.graphURL}`} color="gray.500" isReadOnly />
 									<InputRightElement width="4.5rem">
 										<Button h="1.75rem" size="sm" onClick={copyToClipboard}>
 											Copy
