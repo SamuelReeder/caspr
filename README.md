@@ -59,10 +59,6 @@ This is an open source project built for the Machine Learning Group in the Depar
 - **Sheldon Huang, Research Lead, Primary Contact**: huang@cs.toronto.edu
 - **Yuchen Wang, Software Lead, Secondary Contact**: https://www.yuchenwyc.com/
 
-<!-- INSTURCTIONS -->
-## Instructions
-- TBD
-
 <!-- RUNNING THE APPLICATION SECTION -->
 ## Running the Application
 
