@@ -90,7 +90,10 @@ Our project relies on several external dependencies and third-party libraries to
   - [npm Documentation](https://docs.npmjs.com/)
 
 ## Development Requirements
-- TBD
+1. **Code Formatting**: Use Prettier for code formatting.
+2. **Commit Standards**: Follow conventional commit standards to ensure clarity and consistency.
+3. **Documentation**: Maintain detailed docstrings for all functions and files. Include `@param`, `@returns` entries alongside a description of the component.
+4. **Branching Strategy**: Use a branching strategy with a prefix for the category and a name for the exact purpose of the branch. Such as `feature/<name>` or `fix/<name>` or `test/<name>`. Submit pull requests for 2-3 reviews before merging to main.
 
 ## Deployment and Github Workflow
 
