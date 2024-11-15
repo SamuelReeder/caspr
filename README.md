@@ -84,7 +84,7 @@ Our project relies on several external dependencies and third-party libraries to
 ## Deployment and Github Workflow
 
 Every update to the **main** branch goes through a series of verification and validation steps before mergeing. The Github workflow proceeds as follows
-1. Identify new-features and bug fixes
+1. Identify new features and bug fixes
 2. Create Jira ticket and determine designee and reviewers
 3. Crate Feature or Bug Fix Branch
 4. Initiate pull request and get at least 2 approvals
