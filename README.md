@@ -1,6 +1,6 @@
 # Caspr - Causal Analysis of Structure Paths and Relationships
 
-[Try the project here!](https://project-19-machine-learning-group-bedngb99d.vercel.app/)
+[Try the project here!](https://caspr.vercel.app/)
 <!-- PARTNER INTRO -->
 ## Project Partner Introduction
 This is an open source project built for the Machine Learning Group in the Department of Computer Science at the University of Toronto. The Department of Computer Science at the University of Toronto has several faculty members working in the area of machine learning, neural networks, statistical pattern recognition, probabilistic planning, and adaptive systems.
@@ -34,7 +34,7 @@ This project is a web application designed to allow users to explore and interac
 <!-- RUNNING THE APPLICATION SECTION -->
 ## Running the Application
 
-There are two options to run try the application. The first one is to use the [live deployment here](https://project-19-machine-learning-group-bedngb99d.vercel.app/), and the second one is to run it locally. The instruction below details how to run it locally.
+There are two options to run try the application. The first one is to use the [live deployment here](https://caspr.vercel.app), and the second one is to run it locally. The instruction below details how to run it locally.
 
 To get started with the 3D Causal Diagram Explorer, please follow the step-by-step instructions below to ensure a smooth setup and start-up process.
 
@@ -82,7 +82,15 @@ Our project relies on several external dependencies and third-party libraries to
 - TBD
 
 ## Deployment and Github Workflow
-- TBD
+
+Every update to the **main** branch goes through a series of verification and validation steps before mergeing. The Github workflow proceeds as follows
+1. Identify new-features and bug fixes
+2. Create Jira ticket and determine designee and reviewers
+3. Crate Feature or Bug Fix Branch
+4. Initiate pull request and get at least 2 approvals
+5. Merge into main
+
+Due to permission conflicts, deployment is done on a  identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
 
 ## Coding Standards and Guidelines
 - TBD
