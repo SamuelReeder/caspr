@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { screen, fireEvent, waitFor, within } from "@testing-library/react";
-import ShareButton from "@/components/ShareButton";
+import ShareButton from "@/components/buttons/ShareButton";
 import {
 	loginWithEmail,
 	shareGraphWithUser,

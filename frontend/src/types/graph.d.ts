@@ -10,6 +10,7 @@ export interface Graph {
 	graphName: string;
 	graphDescription: string;
 	graphVisibility: boolean;
+	graphFilePath: string;
 	graphFileURL: string;
 	graphURL: string;
 	createdAt: Timestamp;

@@ -46,6 +46,7 @@ export const uploadGraph = async (
 			graphName: graphName,
 			graphDescription: graphDescription,
 			graphVisibility: graphVisibility,
+			graphFilePath: `graphs/${auth.currentUser?.uid}/${graphName}.json`,
 			graphFileURL: downloadURL,
 			graphURL: graphURL,
 			createdAt: Timestamp.now(),
@@ -206,3 +207,27 @@ export const updateGraphData = async (
 		return [];
 	}
 };
+
+export const deleteGraph = async (graph: Graph) => {
+	if(!graph){
+		return []
+	}
+
+	try {
+		const graphDataResponse = await apiClient(`/api/data/deleteGraph`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				graphID: graph.id,
+				graphFileURL: graph.graphFileURL
+			})
+		});
+		const deleteGraphResponse = await graphDataResponse.json();
+		return deleteGraphResponse;
+	} catch (error) {
+		console.error("Error fetching graphs:", error);
+		return [];
+	}
+}

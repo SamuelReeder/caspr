@@ -3,7 +3,7 @@
  * @param {Graph} graph - The graph to share
  * @returns {ReactElement} ShareButton component
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Box,
 	Button,
@@ -50,7 +50,6 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 	const [email, setEmail] = useState("");
 	const [emailList, setEmailList] = useState<string[]>([]);
 	const [selectedPresets, setSelectedPresets] = useState<string[]>([]);
-	const [isPublic, setIsPublic] = useState(graph.graphVisibility);
 	const [sharedEmails, setSharedEmails] = useState<string[]>(
 		graph.sharedEmails || []
 	);
@@ -149,33 +148,6 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		}
 	};
 
-	const handleMakePublic = async () => {
-		try {
-			const newVisibility = !isPublic;
-
-			const result = await updateGraphData(graph.id, {
-				graphVisibility: newVisibility
-			});
-
-			if (result) {
-				setIsPublic(newVisibility);
-				toast({
-					title: `Graph is now ${newVisibility ? "public" : "private"}`,
-					status: "success",
-					duration: 2000
-				});
-			}
-		} catch (error) {
-			toast({
-				title: "Error",
-				description: "Failed to update graph visibility",
-				status: "error",
-				duration: 5000,
-				isClosable: true
-			});
-			setIsPublic(!isPublic);
-		}
-	};
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(`${baseURL}/graph/${graph.graphURL}`);
@@ -338,16 +310,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 							</FormControl>
 						)}
 
-						<FormControl display="flex" alignItems="center" mb={4}>
-							<FormLabel mb="0">Make graph public</FormLabel>
-							<Switch
-								aria-label="Make graph public"
-								isChecked={isPublic}
-								onChange={() => handleMakePublic()}
-							/>
-						</FormControl>
-
-						{isPublic && (
+						{graph.graphVisibility && (
 							<FormControl>
 								<FormLabel>Public Link</FormLabel>
 								<InputGroup>

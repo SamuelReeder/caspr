@@ -4,6 +4,7 @@ export { default as GraphSideBar } from "./GraphSideBar";
 export { default as MyGraphCard } from "./MyGraphCard";
 export { default as PresetDetails } from "./PresetDetails";
 export { default as Searchbar } from "./Searchbar";
-export { default as ShareButton } from "./ShareButton";
+export { default as ShareButton } from "./buttons/ShareButton";
+export { default as DeleteButton } from "./buttons/DeleteButton";
 export { default as Sidebar } from "./Sidebar";
 export { default as FullScreenLoader } from "./FullScreenLoader";
