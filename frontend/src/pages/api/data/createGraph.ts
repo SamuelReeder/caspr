@@ -26,14 +26,16 @@ export default async function handler(
 
 	try {
 		// Create document in graphs collection
-		const graphsCollection = dbAdmin.collection("graphs");
+		const graphsCollection = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
 
 		await graphsCollection.add({
 			owner: graph.graph.owner,
+			ownerName: graph.graph.ownerName,
 			graphName: graph.graph.graphName,
 			graphDescription: graph.graph.graphDescription || "",
 			graphVisibility: graph.graph.graphVisibility || false,
 			graphFileURL: graph.graph.graphFileURL || "",
+			graphFilePath: graph.graph.graphFilePath || "",
 			graphURL: graph.graph.graphURL || "",
 			createdAt: graph.graph.createdAt,
 			sharing: graph.graph.sharing,

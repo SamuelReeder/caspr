@@ -5,7 +5,6 @@
  */
 import {
 	Box,
-	Button,
 	Card,
 	CardBody,
 	CardHeader,
@@ -28,10 +27,11 @@ import React, { useState } from "react";
 import { DeleteButton, ShareButton } from "@/components";
 import { updateGraphData } from "@/api/storage";
 import formatDate from "@/utils/formatDate";
+import { useAuth } from "@/context";
 
-
-const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
+const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { firebaseUser } = useAuth();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
 	const [switchDisabled, setSwitchDisabled] = useState(false);
 	const toast = useToast();
@@ -69,7 +69,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 			});
 		}
 	};
-
+	
 	const truncatedDescription =
 		graph.graphDescription.length > 100
 			? `${graph.graphDescription.substring(0, 100)}...`
@@ -101,7 +101,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 					</Switch>
 				</div>
 				<div className="flex flex-col">
-					<Text>{`by ${owner?.name || "unknown"}`}</Text>
+					<Text>{`by ${firebaseUser?.displayName || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
 						Created: {formatDate(graph.createdAt)}
 

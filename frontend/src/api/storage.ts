@@ -3,14 +3,12 @@
  */
 
 import { app, auth } from "@/config/firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { createGraph } from "@/api";
-import { db } from "@/config/firebaseConfig";
 import { apiClient } from "@/utils/apiClient";
 
 import { v4 as uuidv4 } from "uuid";
@@ -43,6 +41,7 @@ export const uploadGraph = async (
 		const downloadURL = await getDownloadURL(storageRef);
 		const graph: Graph = {
 			owner: firebaseUser?.uid || "",
+			ownerName: firebaseUser?.displayName || "",
 			graphName: graphName,
 			graphDescription: graphDescription,
 			graphVisibility: graphVisibility,
@@ -99,7 +98,7 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
  * Fetches all publically visible graphs stored in Firestore.
  * @param firebaseUser - The current user object.
  * @returns A promise that resolves to the array of graphs.
- * @Jaeyong
+ * @Jaeyong @Terry
  */
 export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 	if (!firebaseUser) {
@@ -107,17 +106,18 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 	}
 
 	try {
-		const graphsRef = collection(db, "graphs");
-		const q = query(
-			graphsRef,
-			where("graphVisibility", "==", true),
-			where("owner", "!=", firebaseUser.uid)
+		const uid = firebaseUser.uid;
+		const graphDataResponse = await apiClient(
+			`/api/data/getPublicGraphs?uid=${uid}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				}
+			}
 		);
-		const querySnapshot = await getDocs(q);
-		return querySnapshot.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data()
-		})) as Graph[];
+		const graphData = await graphDataResponse.json();
+		return graphData;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
@@ -208,7 +208,13 @@ export const updateGraphData = async (
 	}
 };
 
+/**
+ * Update a graph object
+ * @returns A promise that resolves to a string containing the updated graph id
+ * @Terry
+ */
 export const deleteGraph = async (graph: Graph) => {
+
 	if(!graph){
 		return []
 	}
@@ -221,7 +227,7 @@ export const deleteGraph = async (graph: Graph) => {
 			},
 			body: JSON.stringify({
 				graphID: graph.id,
-				graphFileURL: graph.graphFileURL
+				graphFilePath: graph.graphFilePath
 			})
 		});
 		const deleteGraphResponse = await graphDataResponse.json();

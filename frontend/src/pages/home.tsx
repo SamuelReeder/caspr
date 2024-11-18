@@ -8,13 +8,14 @@ import { useCallback, useEffect, useState } from "react";
 import { Graph } from "@/types";
 import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
 import { fetchCurrUserGraphs } from "@/api";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, useGraph } from "@/context";
 import { useRouter } from "next/router";
+
 
 function Home() {
 	const { firebaseUser, loading } = useAuth();
+	const { graphs, setGraphs } = useGraph()
 	const router = useRouter();
-	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 
 	const fetchUsersGraphs = useCallback(async () => {
 		try {

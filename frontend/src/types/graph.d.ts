@@ -7,6 +7,7 @@ import { Timestamp } from "firebase-admin/firestore";
 export interface Graph {
 	id?: string;
 	owner: string; // UID of the owner
+	ownerName: string;
 	graphName: string;
 	graphDescription: string;
 	graphVisibility: boolean;
@@ -34,7 +35,6 @@ export interface GraphListProps {
  */
 interface MyGraphCardProps {
 	graph: Graph;
-	owner: User | null;
 }
 
 /**
@@ -91,4 +91,14 @@ interface SharedUser {
 	addedAt: Timestamp;
 	addedBy: string;
 	acceptedAt?: Timestamp;
+}
+
+
+/**
+ * Graph Context Type
+ * @Terry
+ */
+interface GraphContextType{
+	graphs: Graph[];
+	setGraphs: Dispatch<SetStateAction<Graph[]>>;
 }

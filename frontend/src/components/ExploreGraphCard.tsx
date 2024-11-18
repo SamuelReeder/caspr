@@ -25,7 +25,7 @@ import React from "react";
 
 import { MyGraphCardProps } from "@/types";
 
-const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
+const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const truncatedDescription =
@@ -47,7 +47,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 			<CardHeader className="flex justify-between">
 				<Heading size="md">{graph.graphName}</Heading>
 				<div className="flex flex-col">
-					<Text>{`by ${owner?.name || "unknown"}`}</Text>
+					<Text>{`by ${graph.ownerName || "unknown"}`}</Text>
 				</div>
 			</CardHeader>
 			<CardBody className="flex justify-between">

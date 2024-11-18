@@ -19,20 +19,24 @@ import {
 import { Graph } from "@/types";
 import { deleteGraph } from "@/api";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { useGraph} from "@/context/GraphContext"
 
-interface ShareButtonProps {
+interface DeleteButtonProps {
 	graph: Graph;
 }
 
-const DeleteButton: React.FC<ShareButtonProps> = ({ graph }) => {
+const DeleteButton: React.FC<DeleteButtonProps> = ({ graph }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { setGraphs } = useGraph();
 	const toast = useToast();
 
+	const updateGraphList = (id: string | undefined) => {
+		setGraphs((prevItems: Graph[]) => prevItems.filter((item) => item.id !== id));
+	}
     const handleDeleteGraph = async () => {
         try{
-
             const response = await deleteGraph(graph)
-            console.log(response)
+			updateGraphList(graph.id)
             onClose()
 
             toast({

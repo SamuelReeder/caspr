@@ -36,10 +36,10 @@ export default async function handler(
         await deleteObject(fileRef)
 
 		// Remove Graph File from Firebase
-		const graphsRef = dbAdmin.collection("graphs");
+		const graphsRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
         await graphsRef.doc(graphID).delete()
 
-		res.status(200);
+		res.status(200).json({message: "Graph Deleted Successfully"});
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		res.status(500).json({ message: "Error fetching graphs" });

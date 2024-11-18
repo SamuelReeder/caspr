@@ -24,7 +24,7 @@ export default async function handler(
 
 	try {
 		const graphsSnap = await dbAdmin
-			.collection("graphs")
+			.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
 			.where("sharedEmails", "array-contains", email)
 			.get();
 

@@ -1,5 +1,5 @@
 /**
- * This API route fetches all graphs owned by a user with a given UID.
+ * This API route fetches all publci graphs not owned by current user.
  * @param req The incoming request object.
  * @param res The outgoing response object.
  * @returns An array of Graph objects.
@@ -24,9 +24,14 @@ export default async function handler(
 	}
 
 	try {
+
+        const graphsRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
+
 		// Query Firestore for graphs with matching owner UID
-		const graphsRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
-		const querySnapshot = await graphsRef.where("owner", "==", uid).get();
+		const querySnapshot = await graphsRef
+			.where("graphVisibility", "==", true)
+			.where("owner", "!=", uid)
+			.get();
 
 		// Transform results into an array of Graph objects
 		const graphs: Graph[] = [];
@@ -48,7 +53,7 @@ export default async function handler(
 				presets: data.presets || []
 			});
 		});
-
+		console.log(graphs)
 		res.status(200).json(graphs);
 	} catch (error) {
 		console.error("Error fetching graphs:", error);

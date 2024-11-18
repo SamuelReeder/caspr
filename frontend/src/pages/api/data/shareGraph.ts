@@ -31,7 +31,7 @@ export default async function handler(
 	}
 
 	try {
-		const graphRef = dbAdmin.collection("graphs").doc(graphId);
+		const graphRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "").doc(graphId);
 		const graphSnap = await graphRef.get();
 
 		if (!graphSnap.exists) {
