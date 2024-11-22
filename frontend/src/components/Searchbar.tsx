@@ -6,7 +6,7 @@
  */
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Input } from "@chakra-ui/react";
-import { Graph, User } from "@/types";
+import { Graph } from "@/types";
 import { getUser } from "@/api/firestore"
 
 interface SearchbarProps {
@@ -28,10 +28,10 @@ const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 			) {
 				originalGraphsRef.current = await Promise.all(
 					graphs.map(async (graph) => {
-					  const user = await getUser(graph.owner);
-					  return [graph, user.name];
+						const user = await getUser(graph.owner);
+						return [graph, user.name];
 					})
-				  );
+				);
 			}
 		};
 		fetchOwnerData();
@@ -67,8 +67,7 @@ const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 				const bAuthorMatch = b[1]?.toLowerCase().includes(value) ? 1 : 0;
 
 				return (
-					bNameMatch - aNameMatch || bDescriptionMatch - aDescriptionMatch ||
-					bAuthorMatch - aAuthorMatch
+					bNameMatch - aNameMatch || bDescriptionMatch - aDescriptionMatch || bAuthorMatch - aAuthorMatch
 				);
 			});
 
