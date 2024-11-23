@@ -54,7 +54,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
   const [showInhibitory, setShowInhibitory] = useState(true);
 
 	useEffect(() => {
-    if (edges.length > 400) {
+    if (edges.length > 150 || nodes.length > 500) {
       setShowCausal(false);
       setShowCorrelated(false);
       setShowInhibitory(false);
@@ -227,6 +227,8 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
         (edge.relationship === "inhibitory" && showInhibitory))
   );
 
+  const farClippingPlane = Math.max(5000, nodes.length * 20);
+
   return (
     <div>
       <Box display="flex" alignItems="center" justifyContent="space-between" mb={4}>
@@ -276,7 +278,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
           position: [0, 0, 100],
           fov: 50,
           near: 0.1,
-          far: 5000
+          far: farClippingPlane
         }}
         style={{ width: "100%", height: "910px" }}
         onPointerMissed={handleCanvasClick}

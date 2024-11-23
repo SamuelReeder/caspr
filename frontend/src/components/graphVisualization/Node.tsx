@@ -60,7 +60,7 @@ const Node: React.FC<NodeProps> = ({
 	};
 
 	const baseScale = 2;
-	const scaleFactor = Math.sqrt(totalNodes) * 0.05;
+	const scaleFactor = Math.sqrt(totalNodes) * 0.1;
 	const scale: [number, number, number] = isSelected
 		? [baseScale * scaleFactor * 5, baseScale * scaleFactor * 5, baseScale * scaleFactor * 5]
 		: [baseScale * scaleFactor, baseScale * scaleFactor, baseScale * scaleFactor];
