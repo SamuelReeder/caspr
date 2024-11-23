@@ -5,7 +5,7 @@ import { loginWithEmail, loginWithGoogle } from "@/api";
 import { Providers } from "@/app/providers";
 import customRender from "@/test-utils/render";
 
-import Index from "@/pages/login";
+import Index from "@/pages";
 import React from "react";
 import { useRouter } from "next/router";
 

@@ -102,7 +102,7 @@ export default function UploadFile() {
 					duration: 5000,
 					isClosable: true
 				});
-				router.push("/");
+				router.push("/home");
 			}
 		} catch (error) {
 			toast({
@@ -125,7 +125,7 @@ export default function UploadFile() {
 				variant="ghost"
 				colorScheme="whiteAlpha"
 				onClick={() => {
-					router.push("/");
+					router.push("/home");
 				}}
 			>
 				<Text color="white">Back to Home</Text>

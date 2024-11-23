@@ -35,7 +35,7 @@ export default function ForgotPassword() {
 	const handleLogout = async () => {
 		try {
 			await universalLogout();
-			router.push("/login");
+			router.push("/");
 		} catch (error) {
 			console.error(error);
 		}
@@ -127,7 +127,7 @@ export default function ForgotPassword() {
 
 								{/* Buttons */}
 								<div className="flex flex-row gap-4 justify-center mt-7">
-									<Link href={firebaseUser ? "/" : "/login"}>
+									<Link href={firebaseUser ? "/home" : "/"}>
 										<Button
 											className="border rounded-lg p-2"
 											leftIcon={<ArrowBackIcon />}

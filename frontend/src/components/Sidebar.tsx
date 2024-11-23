@@ -15,7 +15,7 @@ export default function Sidebar() {
 	const handleLogout = async () => {
 		try {
 			await universalLogout();
-			router.push("/login");
+			router.push("/");
 		} catch (error) {
 			console.error(error);
 		}
@@ -41,10 +41,10 @@ export default function Sidebar() {
 
 				<Link
 					className={`hover:text-gray-400`}
-					onClick={() => router.push("/")}
+					onClick={() => router.push("/home")}
 				>
 					<Text
-						className={`${currentRoute === "/" ? "text-gray-400" : ""}`}
+						className={`${currentRoute === "/home" ? "text-gray-400" : ""}`}
 					>
 						My Graphs
 					</Text>

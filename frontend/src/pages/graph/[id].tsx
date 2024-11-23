@@ -65,7 +65,7 @@ const GraphPage = () => {
 				if (graph) {
 					const jsonData = await getGraphData(graph);
 					if (!validateJsonDate(jsonData)) {
-						router.push("/");
+						router.push("/home");
 						toast({
 							title: "Error",
 							description: "Invalid graph data",
