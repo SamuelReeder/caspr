@@ -316,6 +316,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
                 onPointerOver={() => handlePointerOver(node.id)}
                 onPointerOut={handlePointerOut}
                 onClick={() => handleNodeClick(node.id)}
+                totalNodes={nodes.length}
               />
             );
           })}

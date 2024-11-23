@@ -20,6 +20,7 @@ interface NodeProps {
 	onPointerOver: () => void;
 	onPointerOut: () => void;
 	onClick: () => void;
+	totalNodes: number; 
 }
 
 const Node: React.FC<NodeProps> = ({
@@ -33,7 +34,8 @@ const Node: React.FC<NodeProps> = ({
 	isDimmed,
 	onPointerOver,
 	onPointerOut,
-	onClick
+	onClick,
+	totalNodes
 }) => {
 	const meshRef = useRef<Mesh>(null);
 	const [hovered, setHovered] = useState(false);
@@ -57,9 +59,16 @@ const Node: React.FC<NodeProps> = ({
 		}, 200);
 	};
 
+	const baseScale = 2;
+	const scaleFactor = Math.sqrt(totalNodes) * 0.05;
+	const scale: [number, number, number] = isSelected
+		? [baseScale * scaleFactor * 5, baseScale * scaleFactor * 5, baseScale * scaleFactor * 5]
+		: [baseScale * scaleFactor, baseScale * scaleFactor, baseScale * scaleFactor];
+
+		const finalScale: [number, number, number] = scale.map(value => Math.max(value, 2)) as [number, number, number];
 	return (
 		<mesh
-			scale={isSelected ? [4, 4, 4] : [2, 2, 2]} // Increase scale if selected
+			scale={finalScale} 
 			ref={meshRef}
 			position={position}
 			onPointerOver={handlePointerOver}
