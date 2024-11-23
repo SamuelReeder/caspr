@@ -3,10 +3,9 @@
  * @param {GraphSideBarProps} props
  * @returns {ReactElement} GraphSideBar component
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Input, Flex, List, ListItem, Text } from "@chakra-ui/react";
 import { NodeType, EdgeType } from "@/types";
-import data from "../data/100nodes_example.json"; // Import the JSON data
 
 interface GraphSideBarProps {
 	nodes: NodeType[];
@@ -14,12 +13,15 @@ interface GraphSideBarProps {
 	onNodeSelect: (node: NodeType | null) => void;
 }
 
-const GraphSideBar: React.FC<GraphSideBarProps> = ({ onNodeSelect }) => {
-	const sortedNodes = data.nodes.sort((a, b) => a.label.localeCompare(b.label));
+const GraphSideBar: React.FC<GraphSideBarProps> = ({ nodes, onNodeSelect }) => {
+	const [sortedNodes, setSortedNodes] = useState<NodeType[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-	const [nodes] = useState<NodeType[]>(sortedNodes);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+	useEffect(() => {
+    const sorted = [...nodes].sort((a, b) => a.label.localeCompare(b.label));
+    setSortedNodes(sorted);
+  }, [nodes]);
 
 	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchQuery(event.target.value);
@@ -35,12 +37,14 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({ onNodeSelect }) => {
 		}
 	};
 
-	const filteredNodes = nodes.filter(
-		(node) =>
-			node.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			node.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			node.category.toLowerCase().includes(searchQuery.toLowerCase())
-	);
+	const filteredNodes = searchQuery
+	? sortedNodes.filter(
+			(node) =>
+				node.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				node.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				node.category.toLowerCase().includes(searchQuery.toLowerCase())
+		)
+	: [];
 
 	return (
 		<Box p={4} backgroundColor="gray.100" height="100%">
@@ -52,7 +56,7 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({ onNodeSelect }) => {
 				/>
 			</Flex>
 			<Box height="880px" overflowY="auto">
-				{searchQuery ? (
+				{filteredNodes.length > 0 ? (
 					<List spacing={2}>
 						{filteredNodes.map((node) => (
 							<ListItem
