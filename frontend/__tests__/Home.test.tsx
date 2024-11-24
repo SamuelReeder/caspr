@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import React from "react";
-import Home from "@/pages/home"; // Ensure correct import
+import Home from "@/pages"; // Ensure correct import
 import customRender from "@/test-utils/render";
 import { fetchCurrUserGraphs } from "@/api/storage";
 import { AuthContext } from "@/context/AuthContext"; // Ensure correct import
