@@ -12,6 +12,7 @@ import Edge from "./Edge";
 import { EdgeType } from "../../types/edge";
 import Node from "./Node";
 import { NodeType } from "../../types/node";
+// import { Preset, ViewPosition } from "@/types";
 
 interface CausalDiagramProps {
 	nodes: NodeType[];
@@ -50,6 +51,8 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 	const [highlightedEdgeIds, setHighlightedEdgeIds] = useState<Set<string>>(
 		new Set()
 	);
+	// const [currentView, setCurrentView] = useState<ViewPosition | null>(null);
+
 
 	// function to assign colors based on category (same color for nodes from one category)
 	const getColorByCategory = (category: string): string => {
@@ -195,6 +198,19 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 		setNodePositions(positions);
 	}, [nodes]);
 
+	// const capturePreset = (presetName: string): Preset => {
+	// 	return {
+	// 		name: presetName,
+	// 		updated: null,
+	// 		filters: [
+	// 			`strength:${minStrength}-${maxStrength}`,
+	// 			...Array.from(highlightedNodeIds).map((id: string) => `node:${id}`)
+	// 		],
+	// 		pathways: clickedNodeId ? Array.from(highlightedNodeIds) : null,
+	// 		view: currentView
+	// 	};
+	// };
+
 	// Input handlers for min and max strength fields
 	const handleMinStrengthChange = (
 		event: React.ChangeEvent<HTMLInputElement>
@@ -260,6 +276,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 				<CameraController
 					nodePositions={nodePositions}
 					setIsInteracting={setIsInteracting}
+					// onCameraStateChange={setCurrentView}
 				/>
 
 				{Object.keys(nodePositions).length > 0 &&
