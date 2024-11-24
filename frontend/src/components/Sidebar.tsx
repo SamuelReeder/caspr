@@ -17,7 +17,7 @@ export default function Sidebar() {
 	const handleLogout = async () => {
 		try {
 			await universalLogout();
-			router.push("/login");
+			router.push("/explore");
 		} catch (error) {
 			console.error(error);
 		}
