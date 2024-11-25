@@ -53,7 +53,10 @@ describe('Node Component', () => {
         const props = { ...defaultProps, isSelected: true };
         const renderer = await create(<Node {...props} />);
         const mesh = renderer.scene.children[0];
-        expect(mesh.props.scale).toEqual([4, 4, 4]);
+        const baseScale = 2;
+        const scaleFactor = Math.sqrt(props.totalNodes) * 0.1;
+        const expectedScale = [baseScale * scaleFactor * 5, baseScale * scaleFactor * 5, baseScale * scaleFactor * 5].map(value => Math.max(value, 2));
+        expect(mesh.props.scale).toEqual(expectedScale);
     });
     test('handles click events', async () => {
         const renderer = await create(<Node {...defaultProps} />);
