@@ -125,7 +125,7 @@ const GraphPageContent = () => {
 				graph={graph}
 			/>
 			<Box display="flex" flex="1">
-				<Box flex="1">
+				<Box flex="1" minWidth="0"> {/* Allow main content to shrink */}
 					<Tabs index={selectedTab} onChange={(index) => setSelectedTab(index)}>
 						<TabPanels>
 							{diagrams.map((diagram) => (
@@ -140,7 +140,13 @@ const GraphPageContent = () => {
 						</TabPanels>
 					</Tabs>
 				</Box>
-				<Box width="350px">
+				<Box
+					width="350px"
+					minWidth="350px"
+					flexShrink={0}
+					overflowY="auto"
+					height="100%"
+				>
 					<GraphSideBar
 						onNodeSelect={handleNodeSelect}
 						nodes={diagrams[0]?.data.nodes || []}

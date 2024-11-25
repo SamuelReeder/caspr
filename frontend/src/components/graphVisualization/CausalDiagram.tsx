@@ -167,12 +167,6 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 			];
 		});
 
-		// Input handlers for min and max strength fields
-		const handleMinStrengthChange = (
-			event: React.ChangeEvent<HTMLInputElement>
-		) => {
-			setMinStrength(parseFloat(event.target.value));
-		};
 		// Calculate scaling factor based on the number of nodes
 		const scaleFactor = Math.sqrt(nodes.length) * 0.25;
 		const minDistance = 50 * scaleFactor; // Minimum distance between nodes
@@ -296,7 +290,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 					near: 0.1,
 					far: farClippingPlane
 				}}
-				style={{ width: "100%", height: "910px" }}
+				style={{ width: "100%", height: "89vh" }}
 				onPointerMissed={handleCanvasClick}
 			>
 				<ambientLight intensity={1.0} />

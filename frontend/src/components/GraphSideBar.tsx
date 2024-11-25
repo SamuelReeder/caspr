@@ -170,7 +170,7 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 								onChange={handleSearchChange}
 							/>
 						</Flex>
-						<Box height="880px" overflowY="auto">
+						<Box height="82vh" overflowY="auto">
 							{filteredNodes.length > 0 ? (
 								<List spacing={2}>
 									{filteredNodes.map((node) => (
@@ -199,19 +199,21 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 					</TabPanel>
 
 					<TabPanel>
-						<VStack spacing={4} align="stretch">
-							<Button colorScheme="blue" onClick={onOpen}>
-								Save Current View
-							</Button>
-							<Box overflowY="auto">
-								<PresetList
-									presets={graph?.presets ?? []}
-									activePreset={activePreset}
-									onPresetClick={handlePresetClick}
-									onDeletePreset={handleDeletePreset}
-								/>
-							</Box>
-						</VStack>
+						<Box height="86vh" overflowY="auto">
+							<VStack spacing={4} align="stretch">
+								<Button colorScheme="blue" onClick={onOpen}>
+									Save Current View
+								</Button>
+								<Box overflowY="auto">
+									<PresetList
+										presets={graph?.presets ?? []}
+										activePreset={activePreset}
+										onPresetClick={handlePresetClick}
+										onDeletePreset={handleDeletePreset}
+									/>
+								</Box>
+							</VStack>
+						</Box>
 					</TabPanel>
 				</TabPanels>
 			</Tabs>
