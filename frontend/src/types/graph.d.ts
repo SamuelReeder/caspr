@@ -43,7 +43,7 @@ interface MyGraphCardProps {
  */
 export interface Preset {
 	name: string;
-	// updated: Timestamp;
+	updated: Timestamp;
 	filters: string[] | null;
 	pathways: string[] | null;
 	view: ViewPosition | null;

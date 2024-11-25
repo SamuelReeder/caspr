@@ -10,9 +10,9 @@ import {
 	GraphNavbar,
 	FullScreenLoader
 } from "@/components";
-import CausalDiagram from '../../components/graphVisualization/CausalDiagram';
-import { NodeType, Graph, Preset } from "@/types";
-import { addPresetToGraph, fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api";
+import CausalDiagram from '@/components/graphVisualization/CausalDiagram';
+import { NodeType, Graph } from "@/types";
+import { fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { ViewProvider, useView } from "@/context/ViewContext";
 
@@ -40,7 +40,6 @@ const GraphPageContent = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const { firebaseUser } = useAuth();
 	const { graph, setGraph } = useView();
-	const [presets, setPresets] = useState<Preset[]>([]);
 	const toast = useToast();
 
 	const handleNodeSelect = (node: NodeType | null) => {
@@ -80,13 +79,12 @@ const GraphPageContent = () => {
 
 					setDiagrams([{ id: 0, data: jsonData, label: graph.graphName }]);
 					setGraph(graph);
-					setPresets(graph.presets || []);
 				} else {
 					router.push("/undefined");
 				}
 			} catch (error) {
 				console.error("Error fetching graph data:", error);
-				router.push("/undefined");
+				router.push("/");
 			} finally {
 				setLoading(false);
 			}
@@ -94,26 +92,6 @@ const GraphPageContent = () => {
 
 		fetchGraphData();
 	}, [firebaseUser, id, router, toast, setGraph]);
-
-	const handleSavePreset = async (preset: Preset) => {
-		try {
-			if (graph?.graphURL) {
-				await addPresetToGraph(graph.graphURL, preset);
-				setPresets([...presets, preset]);
-				toast({
-					title: "Preset saved",
-					status: "success",
-					duration: 2000,
-				});
-			}
-		} catch (error) {
-			toast({
-				title: "Error saving preset",
-				status: "error",
-				duration: 2000,
-			});
-		}
-	};
 
 	const addDiagram = () => {
 		const newId = diagrams.length ? diagrams[diagrams.length - 1].id + 1 : 0;
@@ -167,9 +145,6 @@ const GraphPageContent = () => {
 						onNodeSelect={handleNodeSelect}
 						nodes={diagrams[0]?.data.nodes || []}
 						edges={diagrams[0]?.data.edges || []}
-						presets={presets}
-						onSavePreset={handleSavePreset}
-						onLoadPreset={() => { }}
 					/>
 				</Box>
 			</Box>
