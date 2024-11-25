@@ -12,6 +12,16 @@ export default function Sidebar() {
 	const router = useRouter();
 	const currentRoute = location.pathname;
 	const [isCollapsed, setIsCollapsed] = useState(false);
+	const [isFullyExpanded, setIsFullyExpanded] = useState(true);
+
+	useEffect(() => {
+		if (!isCollapsed) {
+		  const timer = setTimeout(() => setIsFullyExpanded(true), 100);
+		  return () => clearTimeout(timer);
+		} else {
+		  setIsFullyExpanded(false);
+		}
+	  }, [isCollapsed]);
 
 	useEffect(() => {
 		// Retrieve the collapsed state from localStorage
@@ -42,7 +52,7 @@ export default function Sidebar() {
 	  };
 
 	return (
-		<div className={`bg-gray-800 text-white ${isCollapsed ? "w-20" : "w-60"} p-7 shadow-lg top-0 left-0 h-full transition-width duration-300`}>
+		<div className={`bg-gray-800 text-white ${isCollapsed ? "w-20" : "w-60"} p-7 shadow-lg top-0 left-0 h-full transition-width duration-300 transition-ease`}>
 			<div className="flex flex-col gap-4 w-full h-full">
 				<div className="flex flex-row items-center justify-between h-12">
 					{!isCollapsed && (
@@ -71,7 +81,7 @@ export default function Sidebar() {
 										className="w-full"
 										rightIcon={<ArrowForwardIcon />}
 									>
-										Upload a File
+										{isFullyExpanded && "Upload a File"}
 									</Button>
 								</Link>
 
@@ -82,7 +92,7 @@ export default function Sidebar() {
 									<Text
 										className={`${currentRoute === "/" ? "text-gray-400" : ""}`}
 									>
-										My Graphs
+										{isFullyExpanded && "My Graphs"}
 									</Text>
 								</Link>
 
@@ -93,7 +103,7 @@ export default function Sidebar() {
 									<Text
 										className={`${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}
 									>
-										Shared With Me
+										{isFullyExpanded && "Shared with Me"}
 									</Text>
 								</Link>
 							</>
@@ -105,7 +115,7 @@ export default function Sidebar() {
 							<Text
 								className={`${currentRoute === "/explore" ? "text-gray-400" : ""}`}
 							>
-								Explore
+								{isFullyExpanded && "Explore"}
 							</Text>
 						</Link>
 
