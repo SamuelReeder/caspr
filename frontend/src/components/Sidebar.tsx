@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { Button, Link, Text } from "@chakra-ui/react";
-import { ArrowForwardIcon, ChevronLeftIcon, ChevronRightIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, ChevronLeftIcon, ChevronRightIcon, HamburgerIcon, LockIcon, ViewIcon, ExternalLinkIcon, AttachmentIcon, Search2Icon, SearchIcon, UnlockIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { universalLogout } from "@/api";
+import { useAuth } from "@/context";
+import { MdShowChart } from "react-icons/md"
+import { RiLockPasswordLine } from "react-icons/ri"
 
 export default function Sidebar() {
 	const router = useRouter();
 	const currentRoute = location.pathname;
 	const [isCollapsed, setIsCollapsed] = useState(false);
+	const { firebaseUser } = useAuth()
 
 	const handleLogout = async () => {
 		try {
@@ -38,7 +42,7 @@ export default function Sidebar() {
 						colorScheme="white"
 						className={`p-3 ${isCollapsed ? "justify-center w-full" : ""} hover:bg-gray-500 hover:bg-opacity-50`}
 					>
-						{isCollapsed ? <ChevronRightIcon boxSize={5}/> : <HamburgerIcon boxSize={5}/>}
+						{isCollapsed ? <ChevronRightIcon boxSize={5} /> : <HamburgerIcon boxSize={5} />}
 					</Button>
 				</div>
 				{!isCollapsed && (
@@ -94,6 +98,49 @@ export default function Sidebar() {
 									Reset Password
 								</Button>
 							</Link>
+						</div>
+					</>
+				)}
+				{isCollapsed && (
+					<>
+						<Link href="/upload-file" className={`hover:text-gray-400 justify-center w-full mt-4`}>
+							<AttachmentIcon boxSize={5} />
+						</Link>
+
+						<Link
+							className={`hover:text-gray-400 justify-center w-full mt-4`}
+							onClick={() => router.push("/home")}
+						>
+							<MdShowChart size={20} />
+						</Link>
+
+						<Link
+							className={`hover:text-gray-400 justify-center w-full mt-4`}
+							onClick={() => router.push("/sharedWithMe")}
+						>
+							<ViewIcon boxSize={5} />
+						</Link>
+						<Link
+							className={`hover:text-gray-400 justify-center w-full mt-4`}
+							onClick={() => router.push("/explore")}
+						>
+							<SearchIcon boxSize={5} />
+						</Link>
+
+						<div className="flex flex-col gap-2 mt-auto justify-center w-full">
+							<Link
+								className={`hover:text-gray-400 justify-center w-full mt-4`}
+								onClick={handleLogout}
+							>
+								{firebaseUser ? <UnlockIcon boxSize={5} /> : <LockIcon boxSize={5} />}
+							</Link>
+							<Link
+								href="/forgot-password"
+								className={`hover:text-gray-400 justify-center w-full mb-4 mt-6`}
+							>
+								<RiLockPasswordLine size={20} />
+							</Link>
+
 						</div>
 					</>
 				)}
