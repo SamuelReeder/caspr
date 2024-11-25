@@ -4,17 +4,16 @@
  */
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-
-import { Graph } from "@/types";
 import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
 import { fetchCurrUserGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
+import { useGraph } from "@/context"
 
 function Home() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
-	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
+	const { graphs, setGraphs } = useGraph()
 
 	const fetchUsersGraphs = useCallback(async () => {
 		try {
