@@ -47,6 +47,8 @@ const CameraController: React.FC<CameraControllerProps> = ({
 		}
 	}, [nodePositions, camera]);
 
+	const maxDistance = Math.max(2000, Object.keys(nodePositions).length * 10);
+
 	return (
 		<OrbitControls
 			enablePan={true}
@@ -54,7 +56,7 @@ const CameraController: React.FC<CameraControllerProps> = ({
 			enableRotate={true}
 			ref={orbitControlsRef}
 			minDistance={10}
-			maxDistance={2000}
+			maxDistance={maxDistance}
 			onStart={() => setIsInteracting(true)}
 			onEnd={() => setIsInteracting(false)}
 		/>
