@@ -29,7 +29,7 @@ import { updateGraphData } from "@/api/storage";
 import formatDate from "@/utils/formatDate";
 import { useAuth } from "@/context";
 
-const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph }) => {
+const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { firebaseUser } = useAuth();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
@@ -101,7 +101,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph }) => {
 					</Switch>
 				</div>
 				<div className="flex flex-col">
-					<Text>{`by ${firebaseUser?.displayName || "unknown"}`}</Text>
+					<Text>{`by ${owner.user.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
 						Created: {formatDate(graph.createdAt)}
 

@@ -4,18 +4,16 @@
  */
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-
-import { Graph } from "@/types";
 import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
-import { fetchCurrUserGraphs } from "@/api";
 import { useAuth, useGraph } from "@/context";
 import { useRouter } from "next/router";
-
+import { fetchCurrUserGraphs } from "@/api";
 
 function Home() {
 	const { firebaseUser, loading } = useAuth();
 	const { graphs, setGraphs } = useGraph()
 	const router = useRouter();
+
 
 	const fetchUsersGraphs = useCallback(async () => {
 		try {
@@ -35,7 +33,7 @@ function Home() {
 	}
 
 	if (!firebaseUser) {
-		router.push("/");
+		router.push("/explore");
 		return null;
 	}
 

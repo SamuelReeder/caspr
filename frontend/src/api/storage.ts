@@ -41,7 +41,6 @@ export const uploadGraph = async (
 		const downloadURL = await getDownloadURL(storageRef);
 		const graph: Graph = {
 			owner: firebaseUser?.uid || "",
-			ownerName: firebaseUser?.displayName || "",
 			graphName: graphName,
 			graphDescription: graphDescription,
 			graphVisibility: graphVisibility,

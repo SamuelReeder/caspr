@@ -30,7 +30,6 @@ export default async function handler(
 
 		await graphsCollection.add({
 			owner: graph.graph.owner,
-			ownerName: graph.graph.ownerName,
 			graphName: graph.graph.graphName,
 			graphDescription: graph.graph.graphDescription || "",
 			graphVisibility: graph.graph.graphVisibility || false,

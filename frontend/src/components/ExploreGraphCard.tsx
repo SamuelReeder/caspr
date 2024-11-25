@@ -25,7 +25,7 @@ import React from "react";
 
 import { MyGraphCardProps } from "@/types";
 
-const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph }) => {
+const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const truncatedDescription =
@@ -42,12 +42,14 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph }) => {
   	window.location.href = `${baseURL}/graph/${graph.graphURL}`;
 	};
 
+	console.log(owner)
+
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">
 				<Heading size="md">{graph.graphName}</Heading>
 				<div className="flex flex-col">
-					<Text>{`by ${graph.ownerName || "unknown"}`}</Text>
+					<Text>{`by ${owner.user.name || "unknown"}`}</Text>
 				</div>
 			</CardHeader>
 			<CardBody className="flex justify-between">

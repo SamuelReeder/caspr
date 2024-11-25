@@ -40,7 +40,6 @@ export default async function handler(
 			graphs.push({
 				id: doc.id,
 				owner: data.owner,
-				ownerName: data.ownerName,
 				graphName: data.graphName,
 				graphDescription: data.graphDescription,
 				graphVisibility: data.graphVisibility,
@@ -53,7 +52,6 @@ export default async function handler(
 				presets: data.presets || []
 			});
 		});
-		console.log(graphs)
 		res.status(200).json(graphs);
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
