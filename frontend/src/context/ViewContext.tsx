@@ -4,9 +4,9 @@
  * @returns {ReactElement} The ViewProvider component
  * @Samuel
  */
-import React, { createContext, useContext, useState } from 'react';
-import { ViewPosition } from '@/types/camera';
-import { Graph, Preset } from '@/types/graph';
+import React, { createContext, useContext, useState } from "react";
+import { ViewPosition } from "@/types/camera";
+import { Graph, Preset } from "@/types/graph";
 
 interface ViewContextType {
 	graph: Graph | null;
@@ -17,11 +17,14 @@ interface ViewContextType {
 	loadPreset: (preset: Preset) => void;
 	clearActivePreset: () => void;
 	addPresetToGraph: (preset: Preset) => void;
+	deletePresetFromGraph: (preset: Preset) => void;
 }
 
 const ViewContext = createContext<ViewContextType | undefined>(undefined);
 
-export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({
+	children
+}) => {
 	const [currentView, setCurrentView] = useState<ViewPosition | null>(null);
 	const [graph, setGraph] = useState<Graph | null>(null);
 	const [activePreset, setActivePreset] = useState<Preset | null>(null);
@@ -38,7 +41,7 @@ export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({ children
 	};
 
 	const addPresetToGraph = (preset: Preset) => {
-		setGraph(currentGraph => {
+		setGraph((currentGraph) => {
 			if (!currentGraph) return null;
 			return {
 				...currentGraph,
@@ -47,17 +50,32 @@ export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({ children
 		});
 	};
 
+	const deletePresetFromGraph = (preset: Preset) => {
+		setGraph((currentGraph) => {
+			if (!currentGraph) return null;
+			return {
+				...currentGraph,
+				presets: (currentGraph.presets || []).filter(
+					(p) => p.name !== preset.name
+				)
+			};
+		});
+	};
+
 	return (
-		<ViewContext.Provider value={{
-			graph,
-			setGraph,
-			currentView,
-			setCurrentView,
-			activePreset,
-			loadPreset,
-			addPresetToGraph,
-			clearActivePreset
-		}}>
+		<ViewContext.Provider
+			value={{
+				graph,
+				setGraph,
+				currentView,
+				setCurrentView,
+				activePreset,
+				loadPreset,
+				addPresetToGraph,
+				deletePresetFromGraph,
+				clearActivePreset
+			}}
+		>
 			{children}
 		</ViewContext.Provider>
 	);
@@ -66,7 +84,7 @@ export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useView = () => {
 	const context = useContext(ViewContext);
 	if (!context) {
-		throw new Error('useView must be used within ViewProvider');
+		throw new Error("useView must be used within ViewProvider");
 	}
 	return context;
 };
