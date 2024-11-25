@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Link, Text } from "@chakra-ui/react";
-import { ArrowForwardIcon, ChevronLeftIcon, ChevronRightIcon, HamburgerIcon, LockIcon, ViewIcon, ExternalLinkIcon, AttachmentIcon, Search2Icon, SearchIcon, UnlockIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, ChevronRightIcon, HamburgerIcon, LockIcon, ViewIcon, ExternalLinkIcon, AttachmentIcon, Search2Icon, SearchIcon, UnlockIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { universalLogout } from "@/api";
 import { useAuth } from "@/context";
@@ -12,6 +12,14 @@ export default function Sidebar() {
 	const router = useRouter();
 	const currentRoute = location.pathname;
 	const [isCollapsed, setIsCollapsed] = useState(false);
+
+	useEffect(() => {
+		// Retrieve the collapsed state from localStorage
+		const collapsedState = localStorage.getItem("sidebarCollapsed");
+		if (collapsedState) {
+		  setIsCollapsed(JSON.parse(collapsedState));
+		}
+	  }, []);
 
 	const handleLogout = async () => {
 		try {
@@ -27,8 +35,11 @@ export default function Sidebar() {
 	}
 
 	const toggleCollapse = () => {
-		setIsCollapsed(!isCollapsed);
-	};
+		const newCollapsedState = !isCollapsed;
+		setIsCollapsed(newCollapsedState);
+		// Save the collapsed state to localStorage
+		localStorage.setItem("sidebarCollapsed", JSON.stringify(newCollapsedState));
+	  };
 
 	return (
 		<div className={`bg-gray-800 text-white ${isCollapsed ? "w-20" : "w-60"} p-7 shadow-lg top-0 left-0 h-full transition-width duration-300`}>
