@@ -11,7 +11,7 @@ export default function Sidebar() {
 	const { firebaseUser } = useAuth()
 	const router = useRouter();
 	const currentRoute = location.pathname;
-	const [isCollapsed, setIsCollapsed] = useState(false);
+	const [isCollapsed, setIsCollapsed] = useState<boolean>(JSON.parse(localStorage.getItem("sidebarCollapsed") || 'false'));
 	const [isFullyExpanded, setIsFullyExpanded] = useState(true);
 
 	useEffect(() => {
