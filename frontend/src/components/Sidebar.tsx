@@ -154,14 +154,14 @@ export default function Sidebar() {
 									className={`hover:text-gray-400 justify-center w-full mt-4`}
 									onClick={() => router.push("/")}
 								>
-									<MdShowChart size={20} />
+									<MdShowChart size={20} color={currentRoute === "/" ? "gray" : ""}/>
 								</Link>
 
 								<Link
 									className={`hover:text-gray-400 justify-center w-full mt-4`}
 									onClick={() => router.push("/sharedWithMe")}
 								>
-									<ViewIcon boxSize={5} />
+									<ViewIcon boxSize={5} color={currentRoute === "/sharedWithMe" ? "gray" : ""}/>
 								</Link>
 							</>
 						)}
@@ -169,7 +169,7 @@ export default function Sidebar() {
 							className={`hover:text-gray-400 justify-center w-full mt-4`}
 							onClick={() => router.push("/explore")}
 						>
-							<SearchIcon boxSize={5} />
+							<SearchIcon boxSize={5} color={currentRoute === "/explore" ? "gray" : ""}/>
 						</Link>
 
 						<div className="flex flex-col gap-2 mt-auto justify-center w-full">
