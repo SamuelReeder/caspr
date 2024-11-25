@@ -8,19 +8,23 @@ import { MdShowChart } from "react-icons/md"
 import { RiLockPasswordLine } from "react-icons/ri"
 
 export default function Sidebar() {
+	const { firebaseUser } = useAuth()
 	const router = useRouter();
 	const currentRoute = location.pathname;
 	const [isCollapsed, setIsCollapsed] = useState(false);
-	const { firebaseUser } = useAuth()
 
 	const handleLogout = async () => {
 		try {
 			await universalLogout();
-			router.push("/login");
+			router.push("/explore");
 		} catch (error) {
 			console.error(error);
 		}
 	};
+
+	const handleLogin = () => {
+		router.push("/login")
+	}
 
 	const toggleCollapse = () => {
 		setIsCollapsed(!isCollapsed);
@@ -47,79 +51,109 @@ export default function Sidebar() {
 				</div>
 				{!isCollapsed && (
 					<>
-						<Link href="/upload-file">
-							<Button
-								colorScheme="gray"
-								size="md"
-								className="w-full"
-								rightIcon={<ArrowForwardIcon />}
-							>
-								Upload a File
-							</Button>
-						</Link>
+						{firebaseUser && (
+							<>
+								<Link href="/upload-file">
+									<Button
+										colorScheme="gray"
+										size="md"
+										className="w-full"
+										rightIcon={<ArrowForwardIcon />}
+									>
+										Upload a File
+									</Button>
+								</Link>
 
-						<Link
-							className={`hover:text-gray-400`}
-							onClick={() => router.push("/home")}
-						>
-							<Text className={`${currentRoute === "/home" ? "text-gray-400" : ""}`}>
-								My Graphs
-							</Text>
-						</Link>
+								<Link
+									className={`hover:text-gray-400`}
+									onClick={() => router.push("/")}
+								>
+									<Text
+										className={`${currentRoute === "/" ? "text-gray-400" : ""}`}
+									>
+										My Graphs
+									</Text>
+								</Link>
 
-						<Link
-							className={`hover:text-gray-400`}
-							onClick={() => router.push("/sharedWithMe")}
-						>
-							<Text className={`${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}>
-								Shared With Me
-							</Text>
-						</Link>
+								<Link
+									className={`hover:text-gray-400`}
+									onClick={() => router.push("/sharedWithMe")}
+								>
+									<Text
+										className={`${currentRoute === "/sharedWithMe" ? "text-gray-400" : ""}`}
+									>
+										Shared With Me
+									</Text>
+								</Link>
+							</>
+						)}
 						<Link
 							className={`hover:text-gray-400`}
 							onClick={() => router.push("/explore")}
 						>
-							<Text className={`${currentRoute === "/explore" ? "text-gray-400" : ""}`}>
+							<Text
+								className={`${currentRoute === "/explore" ? "text-gray-400" : ""}`}
+							>
 								Explore
 							</Text>
 						</Link>
 
 						<div className="flex flex-col gap-2 mt-auto">
-							<Button
-								colorScheme="blue"
-								onClick={handleLogout}
-								size="md"
-								className="w-full"
-							>
-								Logout
-							</Button>
-							<Link href="/forgot-password">
-								<Button size="md" className="w-full">
-									Reset Password
-								</Button>
-							</Link>
+							{firebaseUser && (
+								<>
+									<Button
+										colorScheme="blue"
+										onClick={handleLogout}
+										size="md"
+										className="w-full"
+									>
+										Logout
+									</Button>
+
+									<Link href="/forgot-password">
+										<Button size="md" className="w-full">
+											Reset Password
+										</Button>
+									</Link>
+								</>)}
+							{!firebaseUser && (
+								<>
+									<Button
+										colorScheme="blue"
+										onClick={handleLogin}
+										size="md"
+										className="w-full"
+									>
+										Login
+									</Button>
+								</>
+							)}
 						</div>
 					</>
 				)}
 				{isCollapsed && (
 					<>
-						<Link href="/upload-file" className={`hover:text-gray-400 justify-center w-full mt-4`}>
-							<AttachmentIcon boxSize={5} />
-						</Link>
+						{firebaseUser && (
+							<>
+								<Link href="/upload-file" className={`hover:text-gray-400 justify-center w-full mt-4`}>
+									<AttachmentIcon boxSize={5} />
+								</Link>
 
-						<Link
-							className={`hover:text-gray-400 justify-center w-full mt-4`}
-							onClick={() => router.push("/home")}
-						>
-							<MdShowChart size={20} />
-						</Link>
+								<Link
+									className={`hover:text-gray-400 justify-center w-full mt-4`}
+									onClick={() => router.push("/")}
+								>
+									<MdShowChart size={20} />
+								</Link>
 
-						<Link
-							className={`hover:text-gray-400 justify-center w-full mt-4`}
-							onClick={() => router.push("/sharedWithMe")}
-						>
-							<ViewIcon boxSize={5} />
-						</Link>
+								<Link
+									className={`hover:text-gray-400 justify-center w-full mt-4`}
+									onClick={() => router.push("/sharedWithMe")}
+								>
+									<ViewIcon boxSize={5} />
+								</Link>
+							</>
+						)}
 						<Link
 							className={`hover:text-gray-400 justify-center w-full mt-4`}
 							onClick={() => router.push("/explore")}
@@ -128,18 +162,33 @@ export default function Sidebar() {
 						</Link>
 
 						<div className="flex flex-col gap-2 mt-auto justify-center w-full">
-							<Link
-								className={`hover:text-gray-400 justify-center w-full mt-4`}
-								onClick={handleLogout}
-							>
-								{firebaseUser ? <UnlockIcon boxSize={5} /> : <LockIcon boxSize={5} />}
-							</Link>
-							<Link
-								href="/forgot-password"
-								className={`hover:text-gray-400 justify-center w-full mb-4 mt-6`}
-							>
-								<RiLockPasswordLine size={20} />
-							</Link>
+							{firebaseUser && (
+								<>
+									<Link
+										className={`hover:text-gray-400 justify-center w-full mt-4`}
+										onClick={handleLogout}
+									>
+										<UnlockIcon boxSize={5} />
+									</Link>
+									<Link
+										href="/forgot-password"
+										className={`hover:text-gray-400 justify-center w-full mb-4 mt-6`}
+									>
+										<RiLockPasswordLine size={20} />
+									</Link>
+								</>
+							)}
+
+							{!firebaseUser && (
+								<>
+									<Link
+										className={`hover:text-gray-400 justify-center w-full mt-4 mb-4`}
+										onClick={handleLogin}
+									>
+										<LockIcon boxSize={5} />
+									</Link>
+								</>
+							)}
 
 						</div>
 					</>
