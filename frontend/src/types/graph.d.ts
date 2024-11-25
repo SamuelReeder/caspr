@@ -97,7 +97,7 @@ interface SharedUser {
  * Graph Context Type
  * @Terry
  */
-interface GraphContextType{
-	graphs: Graph[] 
+interface GraphContextType {
+	graphs: Graph[];
 	setGraphs: Dispatch<SetStateAction<Graph[]>>;
 }

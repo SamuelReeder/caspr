@@ -24,8 +24,9 @@ export default async function handler(
 	}
 
 	try {
-
-        const graphsRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
+		const graphsRef = dbAdmin.collection(
+			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
+		);
 
 		// Query Firestore for graphs with matching owner UID
 		const querySnapshot = await graphsRef

@@ -26,7 +26,9 @@ export default async function handler(
 
 	try {
 		// Create document in graphs collection
-		const graphsCollection = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
+		const graphsCollection = dbAdmin.collection(
+			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
+		);
 
 		await graphsCollection.add({
 			owner: graph.graph.owner,

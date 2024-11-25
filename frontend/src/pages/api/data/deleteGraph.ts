@@ -18,28 +18,29 @@ export default async function handler(
 	}
 
 	const graphID = req.body.graphID;
-    const graphFilePath = req.body.graphFilePath
+	const graphFilePath = req.body.graphFilePath;
 
-	if (!graphID || typeof graphID !== "string" ) {
+	if (!graphID || typeof graphID !== "string") {
 		return res.status(400).json({ message: "Invalid graph ID" });
 	}
 
-    if (!graphFilePath || typeof graphFilePath !== "string" ) {
+	if (!graphFilePath || typeof graphFilePath !== "string") {
 		return res.status(400).json({ message: "Invalid graph URL" });
 	}
 
 	try {
-
-        // Remove Graph File
-        const storage = getStorage();
-        const fileRef = ref(storage, graphFilePath);
-        await deleteObject(fileRef)
+		// Remove Graph File
+		const storage = getStorage();
+		const fileRef = ref(storage, graphFilePath);
+		await deleteObject(fileRef);
 
 		// Remove Graph File from Firebase
-		const graphsRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
-        await graphsRef.doc(graphID).delete()
+		const graphsRef = dbAdmin.collection(
+			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
+		);
+		await graphsRef.doc(graphID).delete();
 
-		res.status(200).json({message: "Graph Deleted Successfully"});
+		res.status(200).json({ message: "Graph Deleted Successfully" });
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		res.status(500).json({ message: "Error fetching graphs" });

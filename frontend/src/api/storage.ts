@@ -209,9 +209,8 @@ export const updateGraphData = async (
  * @Terry
  */
 export const deleteGraph = async (graph: Graph) => {
-
-	if(!graph){
-		return []
+	if (!graph) {
+		return [];
 	}
 
 	try {
@@ -231,4 +230,4 @@ export const deleteGraph = async (graph: Graph) => {
 		console.error("Error fetching graphs:", error);
 		return [];
 	}
-}
+};

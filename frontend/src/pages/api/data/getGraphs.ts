@@ -23,11 +23,13 @@ export default async function handler(
 		return res.status(400).json({ message: "Invalid UID" });
 	}
 
-	console.log(uid)
+	console.log(uid);
 
 	try {
 		// Query Firestore for graphs with matching owner UID
-		const graphsRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
+		const graphsRef = dbAdmin.collection(
+			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
+		);
 		const querySnapshot = await graphsRef.where("owner", "==", uid).get();
 
 		// Transform results into an array of Graph objects
