@@ -14,6 +14,7 @@ import { db } from "@/config/firebaseConfig";
 import { apiClient } from "@/utils/apiClient";
 
 import { v4 as uuidv4 } from "uuid";
+import { validateJSON } from "@/utils/validateJSON";
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
  * @param graphFile - The JSON file containing graph data.

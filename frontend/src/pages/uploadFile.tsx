@@ -24,6 +24,7 @@ import { uploadGraph } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { validateJSON } from "@/utils/validateJSON";
 
 export default function UploadFile() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -87,6 +88,24 @@ export default function UploadFile() {
 
 		try {
 			if (selectedFile) {
+				// Validate the file content before uploading
+				const fileContent = await selectedFile.text();
+				const validationResult = validateJSON(fileContent);
+
+				if (!validationResult.isValid) {
+					console.error("Invalid graph data:", validationResult.errorMessage);
+					toast({
+						title: "Invalid graph data",
+						description: validationResult.errorMessage,
+						status: "error",
+						duration: 5000,
+						isClosable: true
+					});
+					setIsLoading(false);
+					return;
+				}
+
+				// If validation passes, proceed with uploading
 				const graph = await uploadGraph(
 					firebaseUser,
 					selectedFile,
