@@ -34,10 +34,10 @@ function Explore() {
 		return <FullScreenLoader />;
 	}
 
-	if (!firebaseUser) {
-		router.push("/");
-		return null;
-	}
+	// if (!firebaseUser) {
+	// 	router.push("/explore");
+	// 	return null;
+	// }
 
 	return (
 		<div className="flex flex-row">
@@ -49,8 +49,17 @@ function Explore() {
 				<div className="flex flex-row w-full">
 					<div className="flex flex-col gap-2 w-full">
 						<Searchbar graphs={graphs} setGraphs={setGraphs} />
-						<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
-						<Text>Email: {firebaseUser?.email}</Text>
+						{firebaseUser && (
+							<>
+								<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
+								<Text>Email: {firebaseUser.email}</Text>
+							</>
+						)}
+						{!firebaseUser && (
+							<>
+							 <Heading>Welcome, Guest</Heading>
+							</>
+						)}
 					</div>
 				</div>
 

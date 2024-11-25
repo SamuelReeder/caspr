@@ -82,7 +82,7 @@ const NavBar: React.FC<NavBarProps> = ({
 
 	return (
 		<Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300">
-			<Link href="/home">
+			<Link href="/">
 				<IconButton
 					aria-label="Go Back"
 					icon={<ArrowBackIcon />}

@@ -100,10 +100,6 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
  * @Jaeyong @Terry
  */
 export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
-	if (!firebaseUser) {
-		return [];
-	}
-
 	try {
 		const uid = firebaseUser.uid;
 		const graphDataResponse = await apiClient(

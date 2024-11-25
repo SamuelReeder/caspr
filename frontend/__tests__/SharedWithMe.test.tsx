@@ -1,9 +1,9 @@
 import "@testing-library/jest-dom";
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import React from "react";
-import SharedWithMe from "@/pages/sharedWithMe"; // Ensure correct import
+import SharedWithMe from "@/pages/sharedWithMe";
 import customRender from "@/test-utils/render";
-import { AuthContext } from "@/context/AuthContext"; // Ensure correct import
+import { AuthContext } from "@/context/AuthContext";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { getSharedGraphs, getUser } from "@/api";
