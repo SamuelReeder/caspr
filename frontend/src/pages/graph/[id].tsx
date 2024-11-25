@@ -78,19 +78,19 @@ const GraphPage = () => {
           return graphId === id;
         });
 
-        if (graph) {
-          const jsonData = await getGraphData(graph);
-          if (!validateJsonData(jsonData)) {
-            router.push("/home");
-            toast({
-              title: "Error",
-              description: "Invalid graph data",
-              status: "error",
-              duration: 5000,
-              isClosable: true
-            });
-            return;
-          }
+				if (graph) {
+					const jsonData = await getGraphData(graph);
+					if (!validateJsonData(jsonData)) {
+						router.push("/");
+						toast({
+							title: "Error",
+							description: "Invalid graph data",
+							status: "error",
+							duration: 5000,
+							isClosable: true
+						});
+						return;
+					}
 
           if (jsonData.timestamps) {
             // Handle timestamped data

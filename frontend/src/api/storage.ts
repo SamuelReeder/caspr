@@ -101,17 +101,21 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
  * @Jaeyong
  */
 export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
-	if (!firebaseUser) {
-		return [];
-	}
-
 	try {
 		const graphsRef = collection(db, "graphs");
-		const q = query(
-			graphsRef,
-			where("graphVisibility", "==", true),
-			where("owner", "!=", firebaseUser.uid)
-		);
+		let q = null
+		if (firebaseUser) {
+			q = query(
+				graphsRef,
+				where("graphVisibility", "==", true),
+				where("owner", "!=", firebaseUser.uid)
+			);
+		} else {
+			q = query(
+				graphsRef,
+				where("graphVisibility", "==", true),
+			);
+		}
 		const querySnapshot = await getDocs(q);
 		return querySnapshot.docs.map((doc) => ({
 			id: doc.id,

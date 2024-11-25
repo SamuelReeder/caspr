@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Input } from "@chakra-ui/react";
 import { Graph } from "@/types";
+import { getUser } from "@/api/firestore"
 
 interface SearchbarProps {
 	graphs: Graph[] | undefined;
@@ -15,16 +16,24 @@ interface SearchbarProps {
 
 const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 	const [search, setSearch] = useState("");
-	const originalGraphsRef = useRef<Graph[] | undefined>([]);
+	const originalGraphsRef = useRef<[Graph | undefined, string][]>([]);
 
 	useEffect(() => {
-		if (
-			graphs &&
-			graphs.length > 0 &&
-			originalGraphsRef.current?.length === 0
-		) {
-			originalGraphsRef.current = [...graphs];
-		}
+		const fetchOwnerData = async () => {
+			if (
+				graphs &&
+				graphs.length > 0 &&
+				originalGraphsRef.current.length === 0
+			) {
+				originalGraphsRef.current = await Promise.all(
+					graphs.map(async (graph) => {
+						const user = await getUser(graph.owner);
+						return [graph, user.name];
+					})
+				);
+			}
+		};
+		fetchOwnerData();
 	}, [graphs]);
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,37 +43,36 @@ const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 		if (value.length > 0) {
 			const filteredResults = originalGraphsRef.current?.filter(
 				(item) =>
-					item.graphName.toLowerCase().includes(value) ||
-					item.graphDescription.toLowerCase().includes(value)
-				// item.author.toLowerCase().includes(value)
+					item[0]?.graphName.toLowerCase().includes(value) ||
+					item[0]?.graphDescription.toLowerCase().includes(value) ||
+					item[1]?.toLowerCase().includes(value)
 			);
 
 			// Prioritize results by name, then description, then author
 			const prioritizedResults = filteredResults?.sort((a, b) => {
-				const aNameMatch = a.graphName.toLowerCase().includes(value) ? 1 : 0;
-				const bNameMatch = b.graphName.toLowerCase().includes(value) ? 1 : 0;
-				const aDescriptionMatch = a.graphDescription
+				const aNameMatch = a[0]?.graphName.toLowerCase().includes(value) ? 1 : 0;
+				const bNameMatch = b[0]?.graphName.toLowerCase().includes(value) ? 1 : 0;
+				const aDescriptionMatch = a[0]?.graphDescription
 					.toLowerCase()
 					.includes(value)
 					? 1
 					: 0;
-				const bDescriptionMatch = b.graphDescription
+				const bDescriptionMatch = b[0]?.graphDescription
 					.toLowerCase()
 					.includes(value)
 					? 1
 					: 0;
-				// const aAuthorMatch = a.author.toLowerCase().includes(value) ? 1 : 0;
-				// const bAuthorMatch = b.author.toLowerCase().includes(value) ? 1 : 0;
+				const aAuthorMatch = a[1]?.toLowerCase().includes(value) ? 1 : 0;
+				const bAuthorMatch = b[1]?.toLowerCase().includes(value) ? 1 : 0;
 
 				return (
-					bNameMatch - aNameMatch || bDescriptionMatch - aDescriptionMatch
-					// bAuthorMatch - aAuthorMatch
+					bNameMatch - aNameMatch || bDescriptionMatch - aDescriptionMatch || bAuthorMatch - aAuthorMatch
 				);
 			});
 
-			setGraphs(prioritizedResults);
+			setGraphs(prioritizedResults.map(item => item[0]).filter(graph => graph !== undefined));
 		} else {
-			setGraphs(originalGraphsRef.current);
+			setGraphs(originalGraphsRef.current.map(item => item[0]).filter(graph => graph !== undefined));
 		}
 	};
 
