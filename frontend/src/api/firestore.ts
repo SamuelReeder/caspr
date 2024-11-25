@@ -90,19 +90,27 @@ export const createGraph = async (graph: Graph): Promise<void> => {
  * @returns A promise that resolves when the preset is added or updated.
  * @Danny @Samuel
  */
-export const addPresetToGraph = async (
+export const addPreset = async (
 	graphId: string,
 	preset: Preset
 ): Promise<void> => {
-	const response = await apiClient("/api/data/presets/add", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ graphId, preset })
-	});
+	try {
+		const response = await apiClient("/api/data/presets/add", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ graphId, preset })
+		});
 
-	if (!response.ok) {
-		throw new Error((await response.json()).error);
+		if (!response.ok) {
+			throw new Error((await response.json()).error);
+		}
+
+		await response.json();
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
+
 };
 
 
@@ -113,18 +121,24 @@ export const addPresetToGraph = async (
  * @returns A promise that resolves when the preset is deleted.
  * @Samuel
  */
-export const deletePresetFromGraph = async (
+export const deletePreset = async (
 	graphId: string,
 	presetName: string
 ): Promise<void> => {
-	const response = await apiClient("/api/data/presets/delete", {
-		method: "DELETE",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ graphId, presetName })
-	});
+	try {
+		const response = await apiClient("/api/data/presets/delete", {
+			method: "DELETE",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ graphId, presetName })
+		});
 
-	if (!response.ok) {
-		throw new Error((await response.json()).error);
+		if (!response.ok) {
+			throw new Error((await response.json()).error);
+		}
+		await response.json();
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
 };
 
@@ -140,17 +154,22 @@ export const getPresetByName = async (
 	graphId: string,
 	presetName: string
 ): Promise<Preset | null> => {
-	const response = await apiClient(
-		`/api/data/presets/getByName?graphId=${encodeURIComponent(graphId)}&presetName=${encodeURIComponent(presetName)}`,
-		{ method: "GET" }
-	);
+	try {
+		const response = await apiClient(
+			`/api/data/presets/getPreset?graphId=${encodeURIComponent(graphId)}&presetName=${encodeURIComponent(presetName)}`,
+			{ method: "GET" }
+		);
 
-	if (!response.ok) {
-		throw new Error((await response.json()).error);
+		if (!response.ok) {
+			throw new Error((await response.json()).error);
+		}
+
+		const data = await response.json();
+		return data.preset;
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
-
-	const data = await response.json();
-	return data.preset;
 };
 
 /**
@@ -162,17 +181,22 @@ export const getPresetByName = async (
 export const getAllPresets = async (
 	graphId: string
 ): Promise<Preset[] | null> => {
-	const response = await apiClient(
-		`/api/data/presets/getAll?graphId=${encodeURIComponent(graphId)}`,
-		{ method: "GET" }
-	);
+	try {
+		const response = await apiClient(
+			`/api/data/presets/getAll?graphId=${encodeURIComponent(graphId)}`,
+			{ method: "GET" }
+		);
 
-	if (!response.ok) {
-		throw new Error((await response.json()).error);
+		if (!response.ok) {
+			throw new Error((await response.json()).error);
+		}
+
+		const data = await response.json();
+		return data.presets;
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
-
-	const data = await response.json();
-	return data.presets;
 };
 
 /**

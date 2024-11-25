@@ -7,41 +7,61 @@
 import React, { useRef, useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { ViewPosition } from "@/types/camera";
 // import { ViewPosition } from "@/types";
 
 interface CameraControllerProps {
 	nodePositions: { [key: string]: [number, number, number] };
 	setIsInteracting: (isInteracting: boolean) => void;
-	// onCameraStateChange?: (state: ViewPosition) => void; // Add callback prop
+	onCameraStateChange?: (state: ViewPosition) => void; // Add callback prop
+	initialView?: ViewPosition | null;
 }
 
 const CameraController: React.FC<CameraControllerProps> = ({
 	nodePositions,
-	setIsInteracting
-	// onCameraStateChange
+	setIsInteracting,
+	onCameraStateChange,
+	initialView
 }) => {
 	const { camera } = useThree();
 	const orbitControlsRef = useRef<any>();
 
-	// const getCameraState = (): ViewPosition => {
-	// 	const controls = orbitControlsRef.current;
-	// 	return {
-	// 		x: camera.position.x,
-	// 		y: camera.position.y,
-	// 		z: camera.position.z,
-	// 		orientation: {
-	// 			pitch: controls.getPolarAngle(), // vertical rotation
-	// 			yaw: controls.getAzimuthalAngle(), // horizontal rotation
-	// 			roll: camera.rotation.z
-	// 		}
-	// 	};
-	// };
+	const getCameraState = (): ViewPosition => {
+		const controls = orbitControlsRef.current;
+		return {
+			x: camera.position.x,
+			y: camera.position.y,
+			z: camera.position.z,
+			orientation: {
+				pitch: controls.getPolarAngle(), // vertical rotation
+				yaw: controls.getAzimuthalAngle(), // horizontal rotation
+				roll: camera.rotation.z
+			}
+		};
+	};
 
-	// const handleCameraChange = () => {
-	// 	if (onCameraStateChange) {
-	// 		onCameraStateChange(getCameraState());
-	// 	}
-	// };
+	const handleCameraChange = () => {
+		if (onCameraStateChange) {
+			onCameraStateChange(getCameraState());
+		}
+	};
+
+	useEffect(() => {
+		if (initialView && orbitControlsRef.current) {
+			// Set camera position
+			camera.position.set(initialView.x, initialView.y, initialView.z);
+
+			// Set orientation if available
+			if (initialView.orientation) {
+				orbitControlsRef.current.setPolarAngle(initialView.orientation.pitch);
+				orbitControlsRef.current.setAzimuthalAngle(initialView.orientation.yaw);
+				camera.rotation.z = initialView.orientation.roll;
+			}
+
+			// Update controls
+			orbitControlsRef.current.update();
+		}
+	}, [initialView, camera]);
 
 	useEffect(() => {
 		if (Object.keys(nodePositions).length > 0) {
@@ -80,7 +100,7 @@ const CameraController: React.FC<CameraControllerProps> = ({
 			maxDistance={2000}
 			onStart={() => setIsInteracting(true)}
 			onEnd={() => setIsInteracting(false)}
-			// onChange={handleCameraChange}
+			onChange={handleCameraChange}
 		/>
 	);
 };

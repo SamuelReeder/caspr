@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase-admin/firestore";
+import { ViewPosition } from "./camera";
 
 /**
  * Represents a graph object from a Firebase document.
@@ -42,32 +43,12 @@ interface MyGraphCardProps {
  */
 export interface Preset {
 	name: string;
-	updated: Timestamp;
+	// updated: Timestamp;
 	filters: string[] | null;
 	pathways: string[] | null;
 	view: ViewPosition | null;
 }
 
-/**
- * Represents the viewing position for a graph.
- * @Samuel
- */
-export interface ViewPosition {
-	x: number;
-	y: number;
-	z: number;
-	orientation: Orientation | null;
-}
-
-/**
- * Represents the orientation in 3D space.
- * @Samuel
- */
-export interface Orientation {
-	pitch: number; // Rotation around the x-axis
-	yaw: number; // Rotation around the y-axis
-	roll: number; // Rotation around the z-axis
-}
 
 /**
  * Represents possible roles for shared access

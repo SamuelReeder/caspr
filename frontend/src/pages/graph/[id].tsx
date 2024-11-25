@@ -11,9 +11,10 @@ import {
 	FullScreenLoader
 } from "@/components";
 import CausalDiagram from '../../components/graphVisualization/CausalDiagram';
-import { NodeType, Graph } from "@/types";
-import { fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api"; // Import the function to fetch graphs
+import { NodeType, Graph, Preset } from "@/types";
+import { addPresetToGraph, fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api";
 import { useAuth } from "@/context/AuthContext";
+import { ViewProvider, useView } from "@/context/ViewContext";
 
 interface Diagram {
 	id: number;
@@ -29,15 +30,17 @@ interface Diagram {
 	label: string;
 }
 
-const GraphPage = () => {
+// Separate inner component that uses the context
+const GraphPageContent = () => {
 	const router = useRouter();
-	const { id } = router.query; // Get the graph ID from the URL
+	const { id } = router.query;
 	const [diagrams, setDiagrams] = useState<Diagram[]>([]);
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [selectedNode, setSelectedNode] = useState<NodeType | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const { firebaseUser } = useAuth();
-	const [graph, setGraph] = useState<Graph | null>(null);
+	const { graph, setGraph } = useView();
+	const [presets, setPresets] = useState<Preset[]>([]);
 	const toast = useToast();
 
 	const handleNodeSelect = (node: NodeType | null) => {
@@ -53,12 +56,11 @@ const GraphPage = () => {
 			if (!firebaseUser || !id) return;
 
 			try {
-				const userGraphs =
-					await fetchAllPublicGraphsIncludingUser(firebaseUser);
+				const userGraphs = await fetchAllPublicGraphsIncludingUser(firebaseUser);
 				const graph = userGraphs.find((g: Graph) => {
 					if (!g.graphURL) return false;
 					const urlParts = g.graphURL.split("/");
-					const graphId = urlParts[urlParts.indexOf("graph") + 1]; // Find the part after 'graph'
+					const graphId = urlParts[urlParts.indexOf("graph") + 1];
 					return graphId === id;
 				});
 
@@ -78,6 +80,7 @@ const GraphPage = () => {
 
 					setDiagrams([{ id: 0, data: jsonData, label: graph.graphName }]);
 					setGraph(graph);
+					setPresets(graph.presets || []);
 				} else {
 					router.push("/undefined");
 				}
@@ -90,13 +93,33 @@ const GraphPage = () => {
 		};
 
 		fetchGraphData();
-	}, [firebaseUser, id, router, toast]);
+	}, [firebaseUser, id, router, toast, setGraph]);
+
+	const handleSavePreset = async (preset: Preset) => {
+		try {
+			if (graph?.graphURL) {
+				await addPresetToGraph(graph.graphURL, preset);
+				setPresets([...presets, preset]);
+				toast({
+					title: "Preset saved",
+					status: "success",
+					duration: 2000,
+				});
+			}
+		} catch (error) {
+			toast({
+				title: "Error saving preset",
+				status: "error",
+				duration: 2000,
+			});
+		}
+	};
 
 	const addDiagram = () => {
 		const newId = diagrams.length ? diagrams[diagrams.length - 1].id + 1 : 0;
 		const newDiagram = {
 			id: newId,
-			data: diagrams[0].data, // Use the same data for new diagrams
+			data: diagrams[0].data,
 			label: `${graph?.graphName} ${newId + 1}`
 		};
 		setDiagrams([...diagrams, newDiagram]);
@@ -144,10 +167,22 @@ const GraphPage = () => {
 						onNodeSelect={handleNodeSelect}
 						nodes={diagrams[0]?.data.nodes || []}
 						edges={diagrams[0]?.data.edges || []}
+						presets={presets}
+						onSavePreset={handleSavePreset}
+						onLoadPreset={() => { }}
 					/>
 				</Box>
 			</Box>
 		</Box>
+	);
+};
+
+// Wrapper component that provides the context
+const GraphPage = () => {
+	return (
+		<ViewProvider>
+			<GraphPageContent />
+		</ViewProvider>
 	);
 };
 
