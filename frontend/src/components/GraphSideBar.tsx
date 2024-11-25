@@ -3,7 +3,7 @@
  * @param {GraphSideBarProps} props
  * @returns {ReactElement} GraphSideBar component
 */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	Box,
 	Input,
@@ -38,6 +38,7 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 	edges,
 	onNodeSelect,
 }) => {
+	const [sortedNodes, setSortedNodes] = useState<NodeType[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 	const [presetName, setPresetName] = useState("");
@@ -51,6 +52,11 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 		deletePresetFromGraph
 	} = useView();
 	const toast = useToast();
+
+	useEffect(() => {
+		const sorted = [...nodes].sort((a, b) => a.label.localeCompare(b.label));
+		setSortedNodes(sorted);
+	}, [nodes]);
 
 	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchQuery(event.target.value);
@@ -138,12 +144,14 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 		}
 	};
 
-	const filteredNodes = nodes.filter(
-		(node) =>
-			node.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			node.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			node.category.toLowerCase().includes(searchQuery.toLowerCase())
-	);
+	const filteredNodes = searchQuery
+		? sortedNodes.filter(
+			(node) =>
+				node.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				node.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				node.category.toLowerCase().includes(searchQuery.toLowerCase())
+		)
+		: [];
 
 	return (
 		<Box p={4} backgroundColor="gray.100" height="100%">
@@ -162,8 +170,8 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 								onChange={handleSearchChange}
 							/>
 						</Flex>
-						<Box height="800px" overflowY="auto">
-							{searchQuery ? (
+						<Box height="880px" overflowY="auto">
+							{filteredNodes.length > 0 ? (
 								<List spacing={2}>
 									{filteredNodes.map((node) => (
 										<ListItem
@@ -176,7 +184,6 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 											boxShadow="md"
 											onClick={() => handleNodeClick(node)}
 											cursor="pointer"
-											_hover={{ bg: "gray.200" }}
 										>
 											<Text fontWeight="bold">{node.label}</Text>
 											<Text>ID: {node.id}</Text>

@@ -3,9 +3,8 @@
  * @param {CausalDiagramProps} props - The props for the CausalDiagram component
  * @returns {ReactElement} The CausalDiagram component
  */
-import React, { use, useEffect, useRef, useState } from "react";
-
-import { Box } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Checkbox } from "@chakra-ui/react";
 import CameraController from "./CameraController";
 import { Canvas } from "@react-three/fiber";
 import Edge from "./Edge";
@@ -52,8 +51,11 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 	const [highlightedEdgeIds, setHighlightedEdgeIds] = useState<Set<string>>(
 		new Set()
 	);
+	const [showCausal, setShowCausal] = useState(true);
+	const [showCorrelated, setShowCorrelated] = useState(true);
+	const [showInhibitory, setShowInhibitory] = useState(true);
 	const { setCurrentView, activePreset } = useView();
-    const [initialViewState, setInitialViewState] = useState<ViewPosition | null>(null);
+	const [initialViewState, setInitialViewState] = useState<ViewPosition | null>(null);
 
 	// function to assign colors based on category (same color for nodes from one category)
 	const getColorByCategory = (category: string): string => {
@@ -100,6 +102,14 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 			setClickedNodeId(nodeId);
 		}
 	};
+
+	useEffect(() => {
+		if (edges.length > 150 || nodes.length > 500) {
+			setShowCausal(false);
+			setShowCorrelated(false);
+			setShowInhibitory(false);
+		}
+	}, [edges]);
 
 	useEffect(() => {
 		if (clickedNodeId) {
@@ -157,6 +167,12 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 			];
 		});
 
+		// Input handlers for min and max strength fields
+		const handleMinStrengthChange = (
+			event: React.ChangeEvent<HTMLInputElement>
+		) => {
+			setMinStrength(parseFloat(event.target.value));
+		};
 		// Calculate scaling factor based on the number of nodes
 		const scaleFactor = Math.sqrt(nodes.length) * 0.25;
 		const minDistance = 50 * scaleFactor; // Minimum distance between nodes
@@ -200,10 +216,10 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 	}, [nodes]);
 
 	useEffect(() => {
-        if (activePreset?.view) {
-            setInitialViewState(activePreset.view);
-        }
-    }, [activePreset]);
+		if (activePreset?.view) {
+			setInitialViewState(activePreset.view);
+		}
+	}, [activePreset]);
 
 	// Input handlers for min and max strength fields
 	const handleMinStrengthChange = (
@@ -218,41 +234,59 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 		setMaxStrength(parseFloat(event.target.value));
 	};
 
+	const filteredEdges = edges.filter(
+		(edge) =>
+			edge.strength >= minStrength &&
+			edge.strength <= maxStrength &&
+			((edge.relationship === "causal" && showCausal) ||
+				(edge.relationship === "correlated" && showCorrelated) ||
+				(edge.relationship === "inhibitory" && showInhibitory))
+	);
+
+	const farClippingPlane = Math.max(5000, nodes.length * 20);
+
 	return (
 		<div>
-			<Box
-				display="flex"
-				alignItems="center"
-				justifyContent="space-between"
-				marginBottom="10px"
-			/>
-			<Box display="flex" alignItems="center">
-				<label htmlFor="min-strength" style={{ marginRight: "10px" }}>
-					Min Strength:
-				</label>
-				<input
-					type="number"
-					id="min-strength"
-					value={minStrength}
-					onChange={handleMinStrengthChange}
-					step="0.1"
-					min="0"
-					max="1"
-					style={{ marginRight: "20px" }}
-				/>
+			<Box display="flex" alignItems="center" justifyContent="space-between" mb={4}>
+				<Box display="flex" alignItems="center" gap={4}>
+					<label htmlFor="min-strength" style={{ marginRight: "10px" }}>
+						Min Strength:
+					</label>
+					<input
+						type="number"
+						id="min-strength"
+						value={minStrength}
+						onChange={handleMinStrengthChange}
+						step="0.1"
+						min="0"
+						max="1"
+						style={{ marginRight: "20px" }}
+					/>
 
-				<label htmlFor="max-strength" style={{ marginRight: "10px" }}>
-					Max Strength:
-				</label>
-				<input
-					type="number"
-					id="max-strength"
-					value={maxStrength}
-					onChange={handleMaxStrengthChange}
-					step="0.1"
-					min="0"
-					max="1"
-				/>
+					<label htmlFor="max-strength" style={{ marginRight: "10px" }}>
+						Max Strength:
+					</label>
+					<input
+						type="number"
+						id="max-strength"
+						value={maxStrength}
+						onChange={handleMaxStrengthChange}
+						step="0.1"
+						min="0"
+						max="1"
+						style={{ marginRight: "20px" }}
+					/>
+
+					<Checkbox isChecked={showCausal} onChange={() => setShowCausal(!showCausal)}>
+						Causal
+					</Checkbox>
+					<Checkbox isChecked={showCorrelated} onChange={() => setShowCorrelated(!showCorrelated)}>
+						Correlated
+					</Checkbox>
+					<Checkbox isChecked={showInhibitory} onChange={() => setShowInhibitory(!showInhibitory)}>
+						Inhibitory
+					</Checkbox>
+				</Box>
 			</Box>
 
 			<Canvas
@@ -260,7 +294,7 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 					position: [0, 0, 100],
 					fov: 50,
 					near: 0.1,
-					far: 5000
+					far: farClippingPlane
 				}}
 				style={{ width: "100%", height: "910px" }}
 				onPointerMissed={handleCanvasClick}
@@ -270,10 +304,8 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 				<CameraController
 					nodePositions={nodePositions}
 					setIsInteracting={setIsInteracting}
-					onCameraStateChange={setCurrentView}
 					initialView={initialViewState}
 				/>
-
 				{Object.keys(nodePositions).length > 0 &&
 					nodes.map((node) => {
 						const isNeighbor =
@@ -302,46 +334,41 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 								onPointerOver={() => handlePointerOver(node.id)}
 								onPointerOut={handlePointerOut}
 								onClick={() => handleNodeClick(node.id)}
+								totalNodes={nodes.length}
 							/>
 						);
 					})}
 				{Object.keys(nodePositions).length > 0 &&
-					edges
-						.filter(
-							(edge) =>
-								edge.strength >= minStrength && edge.strength <= maxStrength
-						)
-						.map((edge) => {
-							const sourcePosition = nodePositions[edge.source];
-							const targetPosition = nodePositions[edge.target];
-							if (!sourcePosition || !targetPosition) return null;
-							const edgeId = `${edge.source}-${edge.target}`;
-							const isEdgeHighlighted = highlightedEdgeIds.has(edgeId);
-							const isNeighborEdge =
-								hoveredNodeId &&
-								(edge.source === hoveredNodeId ||
-									edge.target === hoveredNodeId) &&
-								edge.relationship === "causal";
+					filteredEdges.map((edge) => {
+						const sourcePosition = nodePositions[edge.source];
+						const targetPosition = nodePositions[edge.target];
+						if (!sourcePosition || !targetPosition) return null;
+						const edgeId = `${edge.source}-${edge.target}`;
+						const isEdgeHighlighted = highlightedEdgeIds.has(edgeId);
+						const isNeighborEdge =
+							hoveredNodeId &&
+							(edge.source === hoveredNodeId || edge.target === hoveredNodeId) &&
+							edge.relationship === "causal";
 
-							let isDimmed = false;
+						let isDimmed = false;
 
-							if (clickedNodeId) {
-								isDimmed = !isEdgeHighlighted && !isNeighborEdge;
-							} else if (hoveredNodeId) {
-								isDimmed = !isNeighborEdge;
-							}
+						if (clickedNodeId) {
+							isDimmed = !isEdgeHighlighted && !isNeighborEdge;
+						} else if (hoveredNodeId) {
+							isDimmed = !isNeighborEdge;
+						}
 
-							return (
-								<Edge
-									key={`${edge.source}-${edge.target}`}
-									sourcePosition={sourcePosition}
-									targetPosition={targetPosition}
-									relationship={edge.relationship}
-									strength={edge.strength}
-									isDimmed={isDimmed}
-								/>
-							);
-						})}
+						return (
+							<Edge
+								key={`${edge.source}-${edge.target}`}
+								sourcePosition={sourcePosition}
+								targetPosition={targetPosition}
+								relationship={edge.relationship}
+								strength={edge.strength}
+								isDimmed={isDimmed}
+							/>
+						);
+					})}
 			</Canvas>
 		</div>
 	);
