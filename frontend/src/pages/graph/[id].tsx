@@ -1,3 +1,7 @@
+/**
+ * Graph page
+ * @returns {ReactElement} Graph page
+ */
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Tabs, TabPanels, TabPanel, Box, useToast, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Flex, Input } from "@chakra-ui/react";
@@ -167,7 +171,7 @@ const GraphPage = () => {
       <Box display="flex" flex="1">
         <Box flex="1" padding={1} >
 					{timestamps.length > 0 && (
-            <Flex alignItems="center">
+            <Flex alignItems="center" ml={4} mr={4}>
 							Timestamp:
               <Input
                 type="number"
