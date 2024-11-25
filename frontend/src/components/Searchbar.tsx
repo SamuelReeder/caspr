@@ -19,7 +19,6 @@ const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 	const originalGraphsRef = useRef<[Graph | undefined, string][]>([]);
 
 	useEffect(() => {
-		console.log("fetch owner data")
 		const fetchOwnerData = async () => {
 			if (
 				graphs &&
