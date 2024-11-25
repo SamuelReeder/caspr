@@ -43,9 +43,23 @@ export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({
 	const addPresetToGraph = (preset: Preset) => {
 		setGraph((currentGraph) => {
 			if (!currentGraph) return null;
+
+			const existingPresetIndex =
+				currentGraph.presets?.findIndex((p) => p.name === preset.name) ?? -1;
+
+			const updatedPresets = currentGraph.presets || [];
+
+			if (existingPresetIndex >= 0) {
+				// update existing preset
+				updatedPresets[existingPresetIndex] = preset;
+			} else {
+				// add new preset
+				updatedPresets.push(preset);
+			}
+
 			return {
 				...currentGraph,
-				presets: [...(currentGraph.presets || []), preset]
+				presets: updatedPresets
 			};
 		});
 	};
