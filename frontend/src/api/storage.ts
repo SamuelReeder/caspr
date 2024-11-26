@@ -9,12 +9,13 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
-import { createGraph } from "@/api";
+import { createGraph, getSharedGraphs } from "@/api";
 import { db } from "@/config/firebaseConfig";
 import { apiClient } from "@/utils/apiClient";
 
 import { v4 as uuidv4 } from "uuid";
-import { validateJSON } from "@/utils/validateJSON";
+
+
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
  * @param graphFile - The JSON file containing graph data.
@@ -104,7 +105,7 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
 export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 	try {
 		const graphsRef = collection(db, "graphs");
-		let q = null
+		let q = null;
 		if (firebaseUser) {
 			q = query(
 				graphsRef,
@@ -112,10 +113,7 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 				where("owner", "!=", firebaseUser.uid)
 			);
 		} else {
-			q = query(
-				graphsRef,
-				where("graphVisibility", "==", true),
-			);
+			q = query(graphsRef, where("graphVisibility", "==", true));
 		}
 		const querySnapshot = await getDocs(q);
 		return querySnapshot.docs.map((doc) => ({
@@ -133,7 +131,7 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
  * @returns A promise that resolves to the array of graphs.
  * @Samuel
  */
-export const fetchAllPublicGraphsIncludingUser = async (
+export const fetchAllUserAccessibleGraphs = async (
 	firebaseUser: User | null
 ): Promise<Graph[]> => {
 	if (!firebaseUser) {
@@ -142,7 +140,13 @@ export const fetchAllPublicGraphsIncludingUser = async (
 	try {
 		const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
 		const userGraphs = await fetchCurrUserGraphs(firebaseUser);
-		const allGraphs = [...publicGraphs, ...userGraphs];
+		let sharedGraphs: Graph[] = [];
+		try {
+			sharedGraphs = await getSharedGraphs(firebaseUser?.email ?? "");
+		} catch (error) {
+			console.error("Error fetching shared graphs:", error);
+		}
+		const allGraphs = [...publicGraphs, ...userGraphs, ...sharedGraphs];
 
 		const uniqueGraphs = Array.from(
 			new Set(allGraphs.map((graph) => graph.id))

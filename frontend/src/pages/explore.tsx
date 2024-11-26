@@ -9,17 +9,17 @@ import { Graph } from "@/types";
 import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
 import { fetchAllPublicGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/router";
 
 function Explore() {
 	const { firebaseUser, loading } = useAuth();
-	const router = useRouter();
+	const [loadingGraphs, setLoadingGraphs] = useState<boolean>(true);
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 
 	const fetchExplorePageGraphs = useCallback(async () => {
 		try {
 			const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
 			setGraphs(publicGraphs);
+			setLoadingGraphs(false);
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
 		}
@@ -32,11 +32,6 @@ function Explore() {
 	if (loading) {
 		return <FullScreenLoader />;
 	}
-
-	// if (!firebaseUser) {
-	// 	router.push("/explore");
-	// 	return null;
-	// }
 
 	return (
 		<div className="flex flex-row">
@@ -56,13 +51,15 @@ function Explore() {
 						)}
 						{!firebaseUser && (
 							<>
-							 <Heading>Welcome, Guest</Heading>
+								<Heading>Welcome, Guest</Heading>
 							</>
 						)}
 					</div>
 				</div>
-
-				<GraphList graphs={graphs} page="Explore" />
+				{loadingGraphs ? (
+					<FullScreenLoader />
+				) : (
+					<GraphList graphs={graphs} page="Explore" />)}
 			</div>
 		</div>
 	);
