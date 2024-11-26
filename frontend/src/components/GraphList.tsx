@@ -5,7 +5,7 @@ import { Graph, GraphListProps } from "@/types/graph";
  * @param {String} page - Page title
  * @returns {ReactElement} Graph list component
  */
-import { Heading, Select } from "@chakra-ui/react";
+import { Heading, Select, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import ExploreGraphCard from "./ExploreGraphCard";
@@ -113,7 +113,11 @@ const GraphList = ({
 				</div>
 			</div>
 
-			{page === "Explore" ? (
+			{graphsWithOwners.length === 0 ? (
+				<div className="flex flex-col gap-4 items-center justify-center h-full">
+					<Text fontSize="xl">No graphs to show!</Text>
+				</div>
+			) : page === "Explore" ? (
 				<div className="flex flex-col gap-4">
 					{graphsWithOwners.map(({ graph, owner }, i) => (
 						<ExploreGraphCard key={graph.id || i} graph={graph} owner={owner} />
