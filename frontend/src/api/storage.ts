@@ -9,12 +9,13 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
+import { apiClient } from "@/utils/apiClient";
 import { createGraph } from "@/api";
 import { db } from "@/config/firebaseConfig";
-import { apiClient } from "@/utils/apiClient";
-
+import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
 import { validateJSON } from "@/utils/validateJSON";
+
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
  * @param graphFile - The JSON file containing graph data.
@@ -69,7 +70,11 @@ export const uploadGraph = async (
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong @Samuel
  */
-export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
+export const fetchCurrUserGraphs = async (
+	firebaseUser: User | null,
+	sortType: string = "nameAsc",
+	filter: string = "none"
+) => {
 	if (!firebaseUser) {
 		return [];
 	}
@@ -78,7 +83,7 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
 		try {
 			const uid = firebaseUser.uid;
 			const graphDataResponse = await apiClient(
-				`/api/data/getGraphs?uid=${uid}`,
+				`/api/data/getGraphs?uid=${uid}&filter=${filter}`,
 				{
 					method: "GET",
 					headers: {
@@ -87,6 +92,8 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
 				}
 			);
 			const graphData = await graphDataResponse.json();
+			sortGraphs(graphData, sortType);
+
 			return graphData;
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
@@ -101,10 +108,13 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong
  */
-export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
+export const fetchAllPublicGraphs = async (
+	firebaseUser: User | null,
+	sortType: string = "nameAsc"
+) => {
 	try {
 		const graphsRef = collection(db, "graphs");
-		let q = null
+		let q = null;
 		if (firebaseUser) {
 			q = query(
 				graphsRef,
@@ -112,16 +122,16 @@ export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
 				where("owner", "!=", firebaseUser.uid)
 			);
 		} else {
-			q = query(
-				graphsRef,
-				where("graphVisibility", "==", true),
-			);
+			q = query(graphsRef, where("graphVisibility", "==", true));
 		}
 		const querySnapshot = await getDocs(q);
-		return querySnapshot.docs.map((doc) => ({
+		const graphs = querySnapshot.docs.map((doc) => ({
 			id: doc.id,
 			...doc.data()
 		})) as Graph[];
+		sortGraphs(graphs, sortType);
+
+		return graphs;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
