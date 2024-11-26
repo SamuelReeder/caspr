@@ -66,7 +66,7 @@ export default function Sidebar() {
 						variant="ghost"
 						size="xl"
 						colorScheme="white"
-						className="p-3 hover:bg-gray-500 hover:bg-opacity-50"
+						className={`p-3 ${isCollapsed ? "justify-center w-full" : ""} hover:bg-gray-500 hover:bg-opacity-50`}
 					>
 					{isCollapsed ? <ChevronRightIcon boxSize={5} /> : <HamburgerIcon boxSize={5} />}
 					</Button>
