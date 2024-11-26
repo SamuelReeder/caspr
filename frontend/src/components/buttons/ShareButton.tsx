@@ -40,6 +40,7 @@ import {
 	updateGraphData
 } from "@/api";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import formatDate from "@/utils/formatDate";
 
 interface ShareButtonProps {
 	graph: Graph;
@@ -269,15 +270,9 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 													<Checkbox value={preset.name}>
 														<Box>
 															<Text fontWeight="medium">{preset.name}</Text>
-															{preset.updated &&
-																preset.updated instanceof Timestamp && (
-																	<Text fontSize="sm" color="gray.600">
-																		Updated:{" "}
-																		{preset.updated
-																			.toDate()
-																			.toLocaleDateString()}
-																	</Text>
-																)}
+															<Text fontSize="sm" color="gray.600">
+																Updated: {formatDate(preset.updated)}
+															</Text>
 															{preset.filters && (
 																<Wrap mt={1}>
 																	{preset.filters.map((filter) => (

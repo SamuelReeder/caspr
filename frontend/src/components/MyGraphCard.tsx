@@ -85,7 +85,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	};
 
 	return (
-		<Card>
+		<Card maxW="full">
 			<CardHeader className="flex justify-between">
 				<div className="flex flex-col space-y-3">
 					<Heading className="hover:underline" size="md" onClick={handleOpenClick}>{graph.graphName}</Heading>

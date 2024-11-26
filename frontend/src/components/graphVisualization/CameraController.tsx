@@ -7,18 +7,60 @@
 import React, { useRef, useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { ViewPosition } from "@/types/camera";
+import { useView } from "@/context/ViewContext";
 
 interface CameraControllerProps {
 	nodePositions: { [key: string]: [number, number, number] };
 	setIsInteracting: (isInteracting: boolean) => void;
+	onCameraStateChange?: (state: ViewPosition) => void; // Add callback prop
 }
 
 const CameraController: React.FC<CameraControllerProps> = ({
 	nodePositions,
-	setIsInteracting
+	setIsInteracting,
+	onCameraStateChange,
 }) => {
 	const { camera } = useThree();
 	const orbitControlsRef = useRef<any>();
+	const { activePreset, setActivePreset} = useView();
+
+	const getCameraState = (): ViewPosition => {
+		const controls = orbitControlsRef.current;
+		return {
+			x: camera.position.x,
+			y: camera.position.y,
+			z: camera.position.z,
+			orientation: {
+				pitch: controls.getPolarAngle(), // vertical rotation
+				yaw: controls.getAzimuthalAngle(), // horizontal rotation
+				roll: camera.rotation.z
+			}
+		};
+	};
+
+	const handleCameraChange = () => {
+		if (onCameraStateChange) {
+			onCameraStateChange(getCameraState());
+		}
+	};
+
+	useEffect(() => {
+		if (activePreset && activePreset.view && orbitControlsRef.current) {
+			// Set camera position
+			camera.position.set(activePreset.view.x, activePreset.view.y, activePreset.view.z);
+
+			// Set orientation if available
+			if (activePreset.view.orientation) {
+				orbitControlsRef.current.setPolarAngle(activePreset.view.orientation.pitch);
+				orbitControlsRef.current.setAzimuthalAngle(activePreset.view.orientation.yaw);
+				camera.rotation.z = activePreset.view.orientation.roll;
+			}
+
+			// Update controls
+			orbitControlsRef.current.update();
+		}
+	}, [activePreset, camera, setActivePreset]);
 
 	useEffect(() => {
 		if (Object.keys(nodePositions).length > 0) {
@@ -59,6 +101,7 @@ const CameraController: React.FC<CameraControllerProps> = ({
 			maxDistance={maxDistance}
 			onStart={() => setIsInteracting(true)}
 			onEnd={() => setIsInteracting(false)}
+			onChange={handleCameraChange}
 		/>
 	);
 };
