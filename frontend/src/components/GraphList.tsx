@@ -9,6 +9,7 @@ import { Heading, Select, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import ExploreGraphCard from "./ExploreGraphCard";
+import { FullScreenLoader } from "@/components";
 import MyGraphCard from "./MyGraphCard";
 import { User } from "@/types";
 import { getUser } from "@/api";
@@ -26,6 +27,7 @@ const GraphList = ({
 }: GraphListProps) => {
 	const { firestoreUser } = useAuth();
 
+	const [isLoading, setIsLoading] = useState(true);
 	const [graphsWithOwners, setGraphsWithOwners] = useState<
 		Array<{
 			graph: Graph;
@@ -37,6 +39,7 @@ const GraphList = ({
 		const fetchOwners = async () => {
 			if (!graphs) return;
 
+			setIsLoading(true);
 			const withOwners = await Promise.all(
 				graphs.map(async (graph) => {
 					try {
@@ -53,10 +56,15 @@ const GraphList = ({
 			);
 
 			setGraphsWithOwners(withOwners);
+			setIsLoading(false);
 		};
 
 		fetchOwners();
 	}, [firestoreUser, graphs]);
+
+	if (isLoading) {
+		return <FullScreenLoader />;
+	}
 
 	return (
 		<div className="mt-8">
