@@ -6,7 +6,7 @@ import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { getSharedGraphs, getUser } from "@/api";
+import { getSharedGraphs } from "@/api";
 import { Graph } from "@/types";
 import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
 import { useAuth } from "@/context/AuthContext";
@@ -23,24 +23,7 @@ function SharedWithMe() {
 		try {
 			setIsLoading(true);
 			const sharedGraphs = await getSharedGraphs(firebaseUser.email);
-			const graphsWithOwners = await Promise.all(
-				sharedGraphs.map(async (graph) => {
-					try {
-						const owner = await getUser(graph.owner);
-						return {
-							...graph,
-							owner: owner.name || "Unknown"
-						};
-					} catch (error) {
-						return {
-							...graph,
-							ownerName: "Unknown"
-						};
-					}
-				})
-			);
-
-			setGraphs(graphsWithOwners);
+			setGraphs(sharedGraphs);
 		} catch (error) {
 			console.error("Error fetching shared graphs:", error);
 			setGraphs([]);
