@@ -28,7 +28,7 @@ export default async function handler(
 		// Query Firestore for graphs with matching owner UID
 		if(uid){
 			querySnapshot = await graphsRef
-				.where("owner", "==", uid)
+				.where("owner", "!=", uid)
 				.where("graphVisibility", "==", true)
 				.get();
 		} else {
