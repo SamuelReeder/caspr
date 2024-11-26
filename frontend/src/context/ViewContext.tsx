@@ -14,6 +14,7 @@ interface ViewContextType {
 	currentView: ViewPosition | null;
 	setCurrentView: (view: ViewPosition | null) => void;
 	activePreset: Preset | null;
+	setActivePreset: (preset: Preset) => void;
 	loadPreset: (preset: Preset) => void;
 	clearActivePreset: () => void;
 	addPresetToGraph: (preset: Preset) => void;
@@ -30,7 +31,7 @@ export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [activePreset, setActivePreset] = useState<Preset | null>(null);
 
 	const loadPreset = (preset: Preset) => {
-		setActivePreset(preset);
+		setActivePreset({ ...preset });
 		if (preset.view) {
 			setCurrentView(preset.view);
 		}
@@ -84,6 +85,7 @@ export const ViewProvider: React.FC<{ children: React.ReactNode }> = ({
 				currentView,
 				setCurrentView,
 				activePreset,
+				setActivePreset,
 				loadPreset,
 				addPresetToGraph,
 				deletePresetFromGraph,

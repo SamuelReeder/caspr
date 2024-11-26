@@ -299,7 +299,6 @@ const CausalDiagram: React.FC<CausalDiagramProps> = ({
 					nodePositions={nodePositions}
 					setIsInteracting={setIsInteracting}
 					onCameraStateChange={setCurrentView}
-					initialView={initialViewState}
 				/>
 				{Object.keys(nodePositions).length > 0 &&
 					nodes.map((node) => {

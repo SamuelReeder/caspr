@@ -8,23 +8,22 @@ import React, { useRef, useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { ViewPosition } from "@/types/camera";
-// import { ViewPosition } from "@/types";
+import { useView } from "@/context/ViewContext";
 
 interface CameraControllerProps {
 	nodePositions: { [key: string]: [number, number, number] };
 	setIsInteracting: (isInteracting: boolean) => void;
 	onCameraStateChange?: (state: ViewPosition) => void; // Add callback prop
-	initialView?: ViewPosition | null;
 }
 
 const CameraController: React.FC<CameraControllerProps> = ({
 	nodePositions,
 	setIsInteracting,
 	onCameraStateChange,
-	initialView
 }) => {
 	const { camera } = useThree();
 	const orbitControlsRef = useRef<any>();
+	const { activePreset, setActivePreset} = useView();
 
 	const getCameraState = (): ViewPosition => {
 		const controls = orbitControlsRef.current;
@@ -47,21 +46,21 @@ const CameraController: React.FC<CameraControllerProps> = ({
 	};
 
 	useEffect(() => {
-		if (initialView && orbitControlsRef.current) {
+		if (activePreset && activePreset.view && orbitControlsRef.current) {
 			// Set camera position
-			camera.position.set(initialView.x, initialView.y, initialView.z);
+			camera.position.set(activePreset.view.x, activePreset.view.y, activePreset.view.z);
 
 			// Set orientation if available
-			if (initialView.orientation) {
-				orbitControlsRef.current.setPolarAngle(initialView.orientation.pitch);
-				orbitControlsRef.current.setAzimuthalAngle(initialView.orientation.yaw);
-				camera.rotation.z = initialView.orientation.roll;
+			if (activePreset.view.orientation) {
+				orbitControlsRef.current.setPolarAngle(activePreset.view.orientation.pitch);
+				orbitControlsRef.current.setAzimuthalAngle(activePreset.view.orientation.yaw);
+				camera.rotation.z = activePreset.view.orientation.roll;
 			}
 
 			// Update controls
 			orbitControlsRef.current.update();
 		}
-	}, [initialView, camera]);
+	}, [activePreset, camera, setActivePreset]);
 
 	useEffect(() => {
 		if (Object.keys(nodePositions).length > 0) {
