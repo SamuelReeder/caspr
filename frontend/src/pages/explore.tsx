@@ -19,7 +19,7 @@ function Explore() {
 
 	const fetchExplorePageGraphs = useCallback(async () => {
 		try {
-			const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
+			const publicGraphs = await fetchAllPublicGraphs();
 			setGraphs(publicGraphs);
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
