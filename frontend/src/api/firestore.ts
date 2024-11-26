@@ -291,11 +291,12 @@ export const unshareGraphFromUser = async (
  */
 export const getSharedGraphs = async (
 	email: string,
-	sortType: string = "nameAsc"
+	sortType: string = "none",
+	filterType: string = "none"
 ): Promise<Graph[]> => {
 	try {
 		const response = await apiClient(
-			`/api/data/getSharedGraphs?email=${email}`
+			`/api/data/getSharedGraphs?email=${email}&filterType=${filterType}`
 		);
 
 		if (!response.ok) {

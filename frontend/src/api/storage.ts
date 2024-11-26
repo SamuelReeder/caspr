@@ -73,7 +73,7 @@ export const uploadGraph = async (
 export const fetchCurrUserGraphs = async (
 	firebaseUser: User | null,
 	sortType: string = "none",
-	filter: string = "none"
+	filterType: string = "none"
 ) => {
 	if (!firebaseUser) {
 		return [];
@@ -83,7 +83,7 @@ export const fetchCurrUserGraphs = async (
 		try {
 			const uid = firebaseUser.uid;
 			const graphDataResponse = await apiClient(
-				`/api/data/getGraphs?uid=${uid}&filter=${filter}`,
+				`/api/data/getGraphs?uid=${uid}&filterType=${filterType}`,
 				{
 					method: "GET",
 					headers: {

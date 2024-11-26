@@ -17,13 +17,18 @@ function SharedWithMe() {
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [sortType, setSortType] = useState("none");
+	const [filterType, setFilterType] = useState("none");
 
 	const fetchUsersSharedGraphs = useCallback(async () => {
 		if (!firebaseUser?.email) return;
 
 		try {
 			setIsLoading(true);
-			const sharedGraphs = await getSharedGraphs(firebaseUser.email, sortType);
+			const sharedGraphs = await getSharedGraphs(
+				firebaseUser.email,
+				sortType,
+				filterType
+			);
 			setGraphs(sharedGraphs);
 		} catch (error) {
 			console.error("Error fetching shared graphs:", error);
@@ -31,7 +36,7 @@ function SharedWithMe() {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [firebaseUser?.email, sortType]);
+	}, [firebaseUser?.email, sortType, filterType]);
 
 	useEffect(() => {
 		fetchUsersSharedGraphs();
@@ -54,6 +59,12 @@ function SharedWithMe() {
 		{ value: "uploadDateAsc", label: "Sort: Oldest First" }
 	];
 
+	const filterOptions = [
+		{ value: "none", label: "Filter: None" },
+		{ value: "publicOnly", label: "Filter: Public Only" },
+		{ value: "privateOnly", label: "Filter: Private Only" }
+	];
+
 	return (
 		<div className="flex flex-row">
 			<div className="sticky top-0 h-screen">
@@ -73,8 +84,11 @@ function SharedWithMe() {
 					graphs={graphs}
 					page="Shared With Me"
 					sortOptions={sortOptions}
+					filterOptions={filterOptions}
 					sortType={sortType}
 					setSortType={setSortType}
+					filterType={filterType}
+					setFilterType={setFilterType}
 				/>
 			</div>
 		</div>

@@ -17,7 +17,7 @@ export default async function handler(
 		return res.status(405).json({ message: "Method not allowed" });
 	}
 
-	const { uid, filter } = req.query;
+	const { uid, filterType } = req.query;
 
 	if (!uid || typeof uid !== "string") {
 		return res.status(400).json({ message: "Invalid UID" });
@@ -27,12 +27,12 @@ export default async function handler(
 		// Query Firestore for graphs with matching owner UID
 		const graphsRef = dbAdmin.collection("graphs");
 		let querySnapshot;
-		if (filter === "publicOnly") {
+		if (filterType === "publicOnly") {
 			querySnapshot = await graphsRef
 				.where("owner", "==", uid)
 				.where("graphVisibility", "==", true)
 				.get();
-		} else if (filter === "privateOnly") {
+		} else if (filterType === "privateOnly") {
 			querySnapshot = await graphsRef
 				.where("owner", "==", uid)
 				.where("graphVisibility", "==", false)
