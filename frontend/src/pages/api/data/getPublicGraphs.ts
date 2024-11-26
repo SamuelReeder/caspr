@@ -7,45 +7,45 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { dbAdmin } from "@/config/firebaseAdmin";
+import { db } from "@/config/firebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { Graph } from "@/types";
 
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	if (req.method !== "GET") {
+	if (req.method !== "POST") {
 		return res.status(405).json({ message: "Method not allowed" });
 	}
 
+	const uid = req.body.id
+
 	try {
-		const graphsRef = dbAdmin.collection(
+		const graphsRef = collection(
+			db,
 			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
 		);
 
 		// Query Firestore for graphs with matching owner UID
-		const querySnapshot = await graphsRef
-			.where("graphVisibility", "==", true)
-			.get();
+		let q = null;
+		if (uid) {
+			q = query(
+				graphsRef,
+				where("graphVisibility", "==", true),
+				where("owner", "!=", uid)
+			);
+		} else {
+			q = query(graphsRef, where("graphVisibility", "==", true));
+		}
 
 		// Transform results into an array of Graph objects
-		const graphs: Graph[] = [];
-		querySnapshot.forEach((doc) => {
-			const data = doc.data();
-			graphs.push({
+		const querySnapshot = await getDocs(q);
+		const graphs = querySnapshot.docs.map((doc) => ({
 				id: doc.id,
-				owner: data.owner,
-				graphName: data.graphName,
-				graphDescription: data.graphDescription,
-				graphVisibility: data.graphVisibility,
-				graphFileURL: data.graphFileURL,
-				graphFilePath: data.graphFilePath,
-				graphURL: data.graphURL,
-				createdAt: data.createdAt,
-				sharing: data.sharing,
-				sharedEmails: data.sharedEmails,
-				presets: data.presets || []
-			});
-		});
+				...doc.data()
+			})) as Graph[];
+
 		res.status(200).json(graphs);
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
