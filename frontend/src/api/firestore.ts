@@ -113,9 +113,7 @@ export const addPreset = async (
 		console.error(error);
 		throw error;
 	}
-
 };
-
 
 /**
  * Deletes a specific preset from Firestore for a given graph by preset name.

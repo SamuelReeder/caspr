@@ -16,7 +16,11 @@ import {
 import { GraphSideBar, GraphNavbar, FullScreenLoader } from "@/components";
 import CausalDiagram from "@/components/graphVisualization/CausalDiagram";
 import { NodeType, Graph } from "@/types";
-import { fetchAllPublicGraphs, fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api";
+import {
+	fetchAllPublicGraphs,
+	fetchAllUserAccessibleGraphs,
+	getGraphData
+} from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { ViewProvider, useView } from "@/context/ViewContext";
 
@@ -75,9 +79,9 @@ const GraphPageContent = () => {
 			if (!id) return;
 
 			try {
-        const tempGraphs = firebaseUser
-          ? await fetchAllPublicGraphsIncludingUser(firebaseUser)
-          : await fetchAllPublicGraphs(firebaseUser);
+				const tempGraphs = firebaseUser
+					? await fetchAllUserAccessibleGraphs(firebaseUser)
+					: await fetchAllPublicGraphs(null);
 				const graph = tempGraphs.find((g: Graph) => {
 					if (!g.graphURL) return false;
 					const urlParts = g.graphURL.split("/");
@@ -150,22 +154,22 @@ const GraphPageContent = () => {
 	const addDiagram = () => {
 		const newId = diagrams.length ? diagrams[diagrams.length - 1].id + 1 : 0;
 		let newTimestamp;
-    let newData;
+		let newData;
 
-    if (diagrams[0].timestamp) {
-      newTimestamp = diagrams[diagrams.length - 1].timestamp! + 1;
-      newData = diagrams[0].data;
-    } else {
-      newData = diagrams[0].data;
-    }
+		if (diagrams[0].timestamp) {
+			newTimestamp = diagrams[diagrams.length - 1].timestamp! + 1;
+			newData = diagrams[0].data;
+		} else {
+			newData = diagrams[0].data;
+		}
 
-    const newDiagram = {
-      id: newId,
-      ...(newTimestamp ? { timestamp: newTimestamp } : {}),
-      data: newData,
-      label: `${graph?.graphName} ${newTimestamp || newId + 1}`
-    };
-    setDiagrams([...diagrams, newDiagram]);
+		const newDiagram = {
+			id: newId,
+			...(newTimestamp ? { timestamp: newTimestamp } : {}),
+			data: newData,
+			label: `${graph?.graphName} ${newTimestamp || newId + 1}`
+		};
+		setDiagrams([...diagrams, newDiagram]);
 	};
 
 	const removeDiagram = (id: number) => {

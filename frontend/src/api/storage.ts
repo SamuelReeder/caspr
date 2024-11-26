@@ -8,12 +8,11 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
+import { createGraph, getSharedGraphs } from "@/api";
 import { apiClient } from "@/utils/apiClient";
-import { createGraph } from "@/api";
 import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/config/firebaseConfig";
-import { validateJSON } from "@/utils/validateJSON";
 
 
 /**
@@ -146,7 +145,7 @@ export const fetchAllPublicGraphs = async (
  * @returns A promise that resolves to the array of graphs.
  * @Samuel
  */
-export const fetchAllPublicGraphsIncludingUser = async (
+export const fetchAllUserAccessibleGraphs = async (
 	firebaseUser: User | null
 ): Promise<Graph[]> => {
 	if (!firebaseUser) {
@@ -155,7 +154,13 @@ export const fetchAllPublicGraphsIncludingUser = async (
 	try {
 		const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
 		const userGraphs = await fetchCurrUserGraphs(firebaseUser);
-		const allGraphs = [...publicGraphs, ...userGraphs];
+		let sharedGraphs: Graph[] = [];
+		try {
+			sharedGraphs = await getSharedGraphs(firebaseUser?.email ?? "");
+		} catch (error) {
+			console.error("Error fetching shared graphs:", error);
+		}
+		const allGraphs = [...publicGraphs, ...userGraphs, ...sharedGraphs];
 
 		const uniqueGraphs = Array.from(
 			new Set(allGraphs.map((graph) => graph.id))
