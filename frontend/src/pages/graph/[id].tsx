@@ -133,11 +133,11 @@ const GraphPageContent = () => {
 
 					setGraph(graph);
 				} else {
-					router.push("/undefined");
+					router.push("/");
 				}
 			} catch (error) {
 				console.error("Error fetching graph data:", error);
-				router.push("/undefined");
+				router.push("/");
 			} finally {
 				setLoading(false);
 			}
