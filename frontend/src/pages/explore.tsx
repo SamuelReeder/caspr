@@ -9,10 +9,11 @@ import { useCallback, useEffect, useState } from "react";
 import { Graph } from "@/types";
 import { fetchAllPublicGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
+import { useGraph } from "@/context"
 
 function Explore() {
 	const { firebaseUser, loading } = useAuth();
-	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
+	const [ graphs, setGraphs ] = useState<Graph[] | undefined>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [sortType, setSortType] = useState("none");
 

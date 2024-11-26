@@ -22,7 +22,9 @@ export default async function handler(
 
 	try {
 		// Query Firestore for graphs with matching owner UID
-		const graphRef = dbAdmin.collection("graphs").doc(id);
+		const graphRef = dbAdmin
+			.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
+			.doc(id);
 
 		// Update the Desired Graph
 		await graphRef.update(updates);

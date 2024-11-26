@@ -5,7 +5,6 @@
  */
 import {
 	Box,
-	Button,
 	Card,
 	CardBody,
 	CardHeader,
@@ -25,13 +24,14 @@ import {
 
 import { MyGraphCardProps } from "@/types";
 import React, { useState } from "react";
-import { ShareButton } from "@/components";
+import { DeleteButton, ShareButton } from "@/components";
 import { updateGraphData } from "@/api/storage";
 import formatDate from "@/utils/formatDate";
-
+import { useAuth } from "@/context";
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { firebaseUser } = useAuth();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
 	const [switchDisabled, setSwitchDisabled] = useState(false);
 	const toast = useToast();
@@ -50,12 +50,13 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		try {
 			const updateValues = { graphVisibility: visibility };
 			await updateGraphData(graph.id, updateValues);
+			graph.graphVisibility = visibility
 
 			toast({
 				title: "Graph saved",
-				description: `Graph visibility updated for: ${graph.graphName}`,
+				description: `Set: ${graph.graphName} to ${graph.graphVisibility ? "public" : "private"}`,
 				status: "success",
-				duration: 1500,
+				duration: 2500,
 				isClosable: true
 			});
 		} catch (error) {
@@ -68,7 +69,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 			});
 		}
 	};
-
+	
 	const truncatedDescription =
 		graph.graphDescription.length > 100
 			? `${graph.graphDescription.substring(0, 100)}...`
@@ -83,11 +84,13 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		window.location.href = `${baseURL}/graph/${graph.graphURL}`;
 	};
 
+	console.log(owner)
+
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">
 				<div className="flex flex-col space-y-3">
-					<Heading size="md">{graph.graphName}</Heading>
+					<Heading className="hover:underline" size="md" onClick={handleOpenClick}>{graph.graphName}</Heading>
 					<Switch
 						aria-label="Enable Public Visibility"
 						fontSize="sm"
@@ -100,7 +103,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 					</Switch>
 				</div>
 				<div className="flex flex-col">
-					<Text>{`by ${owner?.name || "unknown"}`}</Text>
+					<Text>{`by ${owner.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
 						Created: {formatDate(graph.createdAt)}
 
@@ -132,14 +135,11 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 					)}
 				</Box>
 
-				<Box className="flex flex-row gap-2" alignItems="center">
-					<ShareButton
-						graph={graph}
-					/>
-					<Button colorScheme="blue" onClick={handleOpenClick}>
-						Open
-					</Button>
+				<Box className="flex flex-row gap-2">
+					<ShareButton graph={graph} />
+					<DeleteButton graph={graph}/>
 				</Box>
+
 			</CardBody>
 
 			<Modal isOpen={isOpen} onClose={onClose}>

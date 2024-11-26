@@ -8,11 +8,14 @@
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "@/context";
+import { GraphsProvider } from "@/context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<ChakraProvider>
-			<AuthProvider>{children}</AuthProvider>
+			<AuthProvider>
+				<GraphsProvider> {children} </GraphsProvider>
+			</AuthProvider>
 		</ChakraProvider>
 	);
 }
