@@ -72,7 +72,7 @@ export const uploadGraph = async (
  */
 export const fetchCurrUserGraphs = async (
 	firebaseUser: User | null,
-	sortType: string = "nameAsc",
+	sortType: string = "none",
 	filter: string = "none"
 ) => {
 	if (!firebaseUser) {
