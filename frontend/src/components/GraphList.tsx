@@ -1,11 +1,11 @@
-import { Graph, GraphListProps } from "@/types/graph";
 /**
  * Graph list component
  * @param {Array} graphs - List of graphs
  * @param {String} page - Page title
  * @returns {ReactElement} Graph list component
  */
-import { Heading, Select, Text } from "@chakra-ui/react";
+import { Divider, Heading, Select, Text } from "@chakra-ui/react";
+import { Graph, GraphListProps } from "@/types/graph";
 import { useEffect, useState } from "react";
 
 import ExploreGraphCard from "./ExploreGraphCard";
@@ -120,6 +120,8 @@ const GraphList = ({
 					)}
 				</div>
 			</div>
+
+			<Divider className="mb-4" />
 
 			{graphsWithOwners.length === 0 ? (
 				<div className="flex flex-col gap-4 items-center justify-center h-full">
