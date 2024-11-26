@@ -5,7 +5,7 @@ import { Graph, GraphListProps } from "@/types/graph";
  * @param {String} page - Page title
  * @returns {ReactElement} Graph list component
  */
-import { Heading, Select, SelectProps } from "@chakra-ui/react";
+import { Heading, Select } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import ExploreGraphCard from "./ExploreGraphCard";
@@ -14,7 +14,16 @@ import { User } from "@/types";
 import { getUser } from "@/api";
 import { useAuth } from "@/context";
 
-const GraphList = ({ graphs, page }: GraphListProps) => {
+const GraphList = ({
+	graphs,
+	page,
+	sortOptions,
+	filterOptions,
+	sortType,
+	setSortType,
+	filterType,
+	setFilterType
+}: GraphListProps) => {
 	const { firestoreUser } = useAuth();
 
 	const [graphsWithOwners, setGraphsWithOwners] = useState<
@@ -49,11 +58,6 @@ const GraphList = ({ graphs, page }: GraphListProps) => {
 		fetchOwners();
 	}, [firestoreUser, graphs]);
 
-	const handleSelectChange: SelectProps["onChange"] = (event) => {
-		const selectedValue = event.target.value;
-		console.log(selectedValue);
-	};
-
 	return (
 		<div className="mt-8">
 			<div className="flex flex-row">
@@ -61,14 +65,54 @@ const GraphList = ({ graphs, page }: GraphListProps) => {
 					{page}
 				</Heading>
 
-				<div className="ml-auto">
-					<Select placeholder="Select option" onChange={handleSelectChange}>
-						<option value="option1">Option 1</option>
-						<option value="option2">Option 2</option>
-						<option value="option3">Option 3</option>
-					</Select>
+				<div className="ml-auto flex flex-row gap-2">
+					{setSortType && sortOptions && (
+						<Select
+							placeholder={
+								sortOptions.find((option) => option.value === sortType)
+									?.label || "Apply Sort"
+							}
+							size="sm"
+							onChange={(e) => {
+								setSortType(e.target.value);
+							}}
+							className="!min-w-[125px] !rounded-md"
+							variant="filled"
+						>
+							{sortOptions
+								.filter((option) => option.value !== sortType)
+								.map((option) => (
+									<option key={option.value} value={option.value}>
+										{option.label}
+									</option>
+								))}
+						</Select>
+					)}
+					{setFilterType && filterOptions && (
+						<Select
+							placeholder={
+								filterOptions.find((option) => option.value === filterType)
+									?.label || "Apply filter"
+							}
+							size="sm"
+							onChange={(e) => {
+								setFilterType(e.target.value);
+							}}
+							className="!min-w-[125px] !rounded-md"
+							variant="filled"
+						>
+							{filterOptions
+								.filter((option) => option.value !== filterType)
+								.map((option) => (
+									<option key={option.value} value={option.value}>
+										{option.label}
+									</option>
+								))}
+						</Select>
+					)}
 				</div>
 			</div>
+
 			{page === "Explore" ? (
 				<div className="flex flex-col gap-4">
 					{graphsWithOwners.map(({ graph, owner }, i) => (

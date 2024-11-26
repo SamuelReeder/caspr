@@ -26,6 +26,12 @@ export interface Graph {
 export interface GraphListProps {
 	graphs: Graph[] | undefined;
 	page: string;
+	sortOptions?: { value: string; label: string }[];
+	filterOptions?: { value: string; label: string }[];
+	sortType?: string;
+	setSortType?: React.Dispatch<React.SetStateAction<string>>;
+	filterType?: string;
+	setFilterType?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 /**

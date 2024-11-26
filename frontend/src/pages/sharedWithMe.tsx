@@ -1,28 +1,29 @@
+import { FullScreenLoader, GraphList, Searchbar, Sidebar } from "@/components";
 /**
  * Shared With Me Page
  * @returns {ReactElement} Shared With Me Page
  */
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
-import { getSharedGraphs } from "@/api";
 import { Graph } from "@/types";
-import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
+import { getSharedGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/router";
 
 function SharedWithMe() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [sortType, setSortType] = useState("none");
 
 	const fetchUsersSharedGraphs = useCallback(async () => {
 		if (!firebaseUser?.email) return;
 
 		try {
 			setIsLoading(true);
-			const sharedGraphs = await getSharedGraphs(firebaseUser.email);
+			const sharedGraphs = await getSharedGraphs(firebaseUser.email, sortType);
 			setGraphs(sharedGraphs);
 		} catch (error) {
 			console.error("Error fetching shared graphs:", error);
@@ -30,7 +31,7 @@ function SharedWithMe() {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [firebaseUser?.email]);
+	}, [firebaseUser?.email, sortType]);
 
 	useEffect(() => {
 		fetchUsersSharedGraphs();
@@ -44,6 +45,14 @@ function SharedWithMe() {
 		router.push("/");
 		return null;
 	}
+
+	const sortOptions = [
+		{ value: "none", label: "Sort: None" },
+		{ value: "nameAsc", label: "Sort: Name (A - Z)" },
+		{ value: "nameDesc", label: "Sort: Name (Z - A)" },
+		{ value: "uploadDateDesc", label: "Sort: Newest First" },
+		{ value: "uploadDateAsc", label: "Sort: Oldest First" }
+	];
 
 	return (
 		<div className="flex flex-row">
@@ -60,7 +69,13 @@ function SharedWithMe() {
 					</div>
 				</div>
 
-				<GraphList graphs={graphs} page="Shared With Me" />
+				<GraphList
+					graphs={graphs}
+					page="Shared With Me"
+					sortOptions={sortOptions}
+					sortType={sortType}
+					setSortType={setSortType}
+				/>
 			</div>
 		</div>
 	);
