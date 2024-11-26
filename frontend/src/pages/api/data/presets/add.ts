@@ -21,7 +21,7 @@ export default async function handler(
 	if (!graphId || !preset) {
 		return res.status(400).json({ error: "Graph ID and preset are required" });
 	}
-
+	
 	try {
 		const graphRef = dbAdmin.collection("graphs").doc(graphId);
 		const graphSnap = await graphRef.get();
