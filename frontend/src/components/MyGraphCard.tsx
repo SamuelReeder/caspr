@@ -101,7 +101,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 					</Switch>
 				</div>
 				<div className="flex flex-col">
-					<Text>{`by ${owner.user.name || "unknown"}`}</Text>
+					<Text>{`by ${owner.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
 						Created: {formatDate(graph.createdAt)}
 

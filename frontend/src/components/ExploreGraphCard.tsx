@@ -49,7 +49,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 			<CardHeader className="flex justify-between">
 				<Heading size="md">{graph.graphName}</Heading>
 				<div className="flex flex-col">
-					<Text>{`by ${owner.user.name || "unknown"}`}</Text>
+					<Text>{`by ${owner.name || "unknown"}`}</Text>
 				</div>
 			</CardHeader>
 			<CardBody className="flex justify-between">
