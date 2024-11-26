@@ -23,8 +23,6 @@ export default async function handler(
 		return res.status(400).json({ message: "Invalid UID" });
 	}
 
-	console.log(uid);
-
 	try {
 		// Query Firestore for graphs with matching owner UID
 

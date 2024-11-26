@@ -113,31 +113,26 @@ export const fetchAllPublicGraphs = async (
 	sortType: string = "nameAsc"
 ) => {
 	try {
-		const graphsRef = collection(db, "graphs");
-		let q = null;
-		if (firebaseUser) {
-			q = query(
-				graphsRef,
-				where("graphVisibility", "==", true),
-				where("owner", "!=", firebaseUser.uid)
-			);
-		} else {
-			q = query(graphsRef, where("graphVisibility", "==", true));
-		}
-		const querySnapshot = await getDocs(q);
-		const graphs = querySnapshot.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data()
-		})) as Graph[];
-		sortGraphs(graphs, sortType);
 
+		const graphDataResponse = await apiClient(`/api/data/getPublicGraphs`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				id: firebaseUser?.uid
+			})
+		})
+
+		const graphs = await graphDataResponse.json()
+		sortGraphs(graphs, sortType)
+		
 		return graphs;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
 	}
 };
-
 
 
 /**
