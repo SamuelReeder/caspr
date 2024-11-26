@@ -16,7 +16,7 @@ import {
 import { GraphSideBar, GraphNavbar, FullScreenLoader } from "@/components";
 import CausalDiagram from "@/components/graphVisualization/CausalDiagram";
 import { NodeType, Graph } from "@/types";
-import { fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api";
+import { fetchAllPublicGraphs, fetchAllPublicGraphsIncludingUser, getGraphData } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { ViewProvider, useView } from "@/context/ViewContext";
 
@@ -75,9 +75,10 @@ const GraphPageContent = () => {
 			if (!id) return;
 
 			try {
-				const userGraphs =
-					await fetchAllPublicGraphsIncludingUser(firebaseUser);
-				const graph = userGraphs.find((g: Graph) => {
+        const tempGraphs = firebaseUser
+          ? await fetchAllPublicGraphsIncludingUser(firebaseUser)
+          : await fetchAllPublicGraphs(firebaseUser);
+				const graph = tempGraphs.find((g: Graph) => {
 					if (!g.graphURL) return false;
 					const urlParts = g.graphURL.split("/");
 					const graphId = urlParts[urlParts.indexOf("graph") + 1];
