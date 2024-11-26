@@ -17,7 +17,7 @@ export default async function handler(
 		return res.status(405).json({ message: "Method not allowed" });
 	}
 
-	const { uid, filter } = req.query; // Extract filter from query
+	const { uid, filter } = req.query;
 
 	if (!uid || typeof uid !== "string") {
 		return res.status(400).json({ message: "Invalid UID" });
