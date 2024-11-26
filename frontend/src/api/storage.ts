@@ -205,8 +205,8 @@ export const updateGraphData = async (
 };
 
 /**
- * Update a graph object
- * @returns A promise that resolves to a string containing the updated graph id
+ * Delete a graph object
+ * @returns A promise that resolves to a string containing the deleted
  * @Terry
  */
 export const deleteGraph = async (graph: Graph) => {
@@ -229,6 +229,6 @@ export const deleteGraph = async (graph: Graph) => {
 		return deleteGraphResponse;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
-		return [];
+		throw new Error("Failed to Delete")
 	}
 };
