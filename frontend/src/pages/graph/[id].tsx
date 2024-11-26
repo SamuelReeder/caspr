@@ -154,7 +154,7 @@ const GraphPageContent = () => {
 
     if (diagrams[0].timestamp) {
       newTimestamp = diagrams[diagrams.length - 1].timestamp! + 1;
-      newData = parseTimestampedData(diagrams[0].data, newTimestamp);
+      newData = diagrams[0].data;
     } else {
       newData = diagrams[0].data;
     }
