@@ -99,11 +99,11 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong @Terry
  */
-export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
+export const fetchAllPublicGraphs = async () => {
+
 	try {
-		const uid = firebaseUser.uid;
 		const graphDataResponse = await apiClient(
-			`/api/data/getPublicGraphs?uid=${uid}`,
+			`/api/data/getPublicGraphs`,
 			{
 				method: "GET",
 				headers: {
@@ -131,7 +131,7 @@ export const fetchAllPublicGraphsIncludingUser = async (
 		return [];
 	}
 	try {
-		const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
+		const publicGraphs = await fetchAllPublicGraphs();
 		const userGraphs = await fetchCurrUserGraphs(firebaseUser);
 		const allGraphs = [...publicGraphs, ...userGraphs];
 

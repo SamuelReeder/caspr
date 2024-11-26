@@ -17,12 +17,6 @@ export default async function handler(
 		return res.status(405).json({ message: "Method not allowed" });
 	}
 
-	const { uid } = req.query;
-
-	if (!uid || typeof uid !== "string") {
-		return res.status(400).json({ message: "Invalid UID" });
-	}
-
 	try {
 		const graphsRef = dbAdmin.collection(
 			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
@@ -31,7 +25,6 @@ export default async function handler(
 		// Query Firestore for graphs with matching owner UID
 		const querySnapshot = await graphsRef
 			.where("graphVisibility", "==", true)
-			.where("owner", "!=", uid)
 			.get();
 
 		// Transform results into an array of Graph objects
