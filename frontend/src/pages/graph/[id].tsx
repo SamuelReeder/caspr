@@ -169,9 +169,11 @@ const GraphPageContent = () => {
 	};
 
 	const removeDiagram = (id: number) => {
-		setDiagrams(diagrams.filter((diagram) => diagram.id !== id));
-		if (selectedTab >= diagrams.length - 1) {
-			setSelectedTab(diagrams.length - 2);
+		if (diagrams.length > 1) {
+			setDiagrams(diagrams.filter((diagram) => diagram.id !== id));
+			if (selectedTab >= diagrams.length - 1) {
+				setSelectedTab(diagrams.length - 2);
+			}
 		}
 	};
 
