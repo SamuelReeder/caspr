@@ -9,11 +9,9 @@ import { useCallback, useEffect, useState } from "react";
 import { Graph } from "@/types";
 import { fetchAllPublicGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/router";
 
 function Explore() {
 	const { firebaseUser, loading } = useAuth();
-	const router = useRouter();
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [sortType, setSortType] = useState("none");
@@ -37,11 +35,6 @@ function Explore() {
 	if (loading || isLoading) {
 		return <FullScreenLoader />;
 	}
-
-	// if (!firebaseUser) {
-	// 	router.push("/explore");
-	// 	return null;
-	// }
 
 	const sortOptions = [
 		{ value: "none", label: "Sort: None" },
