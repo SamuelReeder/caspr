@@ -1,3 +1,4 @@
+import { FullScreenLoader, GraphList, Searchbar, Sidebar } from "@/components";
 /**
  * Explore Page
  * @returns {ReactElement} Explore Page
@@ -6,25 +7,27 @@ import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
 import { Graph } from "@/types";
-import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
 import { fetchAllPublicGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/router";
 import { useGraph } from "@/context"
 
 function Explore() {
 	const { firebaseUser, loading } = useAuth();
-	const router = useRouter();
 	const [ graphs, setGraphs ] = useState<Graph[] | undefined>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [sortType, setSortType] = useState("none");
 
 	const fetchExplorePageGraphs = useCallback(async () => {
 		try {
-			const publicGraphs = await fetchAllPublicGraphs();
+			setIsLoading(true);
+			const publicGraphs = await fetchAllPublicGraphs(firebaseUser, sortType);
 			setGraphs(publicGraphs);
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
+		} finally {
+			setIsLoading(false);
 		}
-	}, [firebaseUser, setGraphs]);
+	}, [firebaseUser, sortType]);
 
 	useEffect(() => {
 		fetchExplorePageGraphs();
@@ -34,10 +37,11 @@ function Explore() {
 		return <FullScreenLoader />;
 	}
 
-	// if (!firebaseUser) {
-	// 	router.push("/explore");
-	// 	return null;
-	// }
+	const sortOptions = [
+		{ value: "none", label: "Sort: None" },
+		{ value: "nameAsc", label: "Sort: Name (A - Z)" },
+		{ value: "nameDesc", label: "Sort: Name (Z - A)" }
+	];
 
 	return (
 		<div className="flex flex-row">
@@ -51,19 +55,28 @@ function Explore() {
 						<Searchbar graphs={graphs} setGraphs={setGraphs} />
 						{firebaseUser && (
 							<>
-								<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
+								<Heading>
+									Welcome, {firebaseUser?.displayName || "User"}
+								</Heading>
 								<Text>Email: {firebaseUser.email}</Text>
 							</>
 						)}
 						{!firebaseUser && (
 							<>
-							 <Heading>Welcome, Guest</Heading>
+								<Heading>Welcome, Guest</Heading>
 							</>
 						)}
 					</div>
 				</div>
 
-				<GraphList graphs={graphs} page="Explore" />
+				<GraphList
+					isLoading={isLoading}
+					graphs={graphs}
+					page="Explore"
+					sortOptions={sortOptions}
+					sortType={sortType}
+					setSortType={setSortType}
+				/>
 			</div>
 		</div>
 	);

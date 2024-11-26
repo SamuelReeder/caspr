@@ -3,10 +3,12 @@
  * This module contains functions for interacting with Firestore.
  */
 
-import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/config/firebaseConfig";
 import { Graph, Preset, User } from "@/types";
+import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
+
 import { apiClient } from "@/utils/apiClient";
+import { db } from "@/config/firebaseConfig";
+import { sortGraphs } from "@/utils/sortGraphs";
 
 /**
  * Get a user document from Firestore.
@@ -288,10 +290,14 @@ export const unshareGraphFromUser = async (
  * @returns A promise that resolves to true if the user was removed.
  * @Samuel
  */
-export const getSharedGraphs = async (email: string): Promise<Graph[]> => {
+export const getSharedGraphs = async (
+	email: string,
+	sortType: string = "none",
+	filterType: string = "none"
+): Promise<Graph[]> => {
 	try {
 		const response = await apiClient(
-			`/api/data/getSharedGraphs?email=${email}`
+			`/api/data/getSharedGraphs?email=${email}&filterType=${filterType}`
 		);
 
 		if (!response.ok) {
@@ -299,6 +305,8 @@ export const getSharedGraphs = async (email: string): Promise<Graph[]> => {
 		}
 
 		const { graphs } = await response.json();
+		sortGraphs(graphs, sortType);
+
 		return graphs;
 	} catch (error) {
 		console.error(error);
