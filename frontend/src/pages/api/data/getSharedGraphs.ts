@@ -28,7 +28,7 @@ export default async function handler(
 
 		if (filterType === "publicOnly") {
 			graphsSnap = await dbAdmin
-				.collection("graphs")
+				.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
 				.where("sharedEmails", "array-contains", email)
 				.where("graphVisibility", "==", true)
 				.get();
@@ -40,7 +40,7 @@ export default async function handler(
 				.get();
 		} else {
 			graphsSnap = await dbAdmin
-				.collection("graphs")
+				.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
 				.where("sharedEmails", "array-contains", email)
 				.get();
 		}

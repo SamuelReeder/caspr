@@ -11,6 +11,7 @@ export interface Graph {
 	graphName: string;
 	graphDescription: string;
 	graphVisibility: boolean;
+	graphFilePath: string;
 	graphFileURL: string;
 	graphURL: string;
 	createdAt: Timestamp;
@@ -41,7 +42,7 @@ export interface GraphListProps {
  */
 interface MyGraphCardProps {
 	graph: Graph;
-	owner: User | null;
+	owner: User;
 }
 
 /**
@@ -78,4 +79,13 @@ interface SharedUser {
 	addedAt: Timestamp;
 	addedBy: string;
 	acceptedAt?: Timestamp;
+}
+
+/**
+ * Graph Context Type
+ * @Terry
+ */
+interface GraphContextType {
+	graphs: Graph[];
+	setGraphs: Dispatch<SetStateAction<Graph[]>>;
 }

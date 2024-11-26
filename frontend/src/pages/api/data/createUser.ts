@@ -20,7 +20,9 @@ export default async function handler(
 
 	try {
 		// Store user in Firestore
-		const userDocumentRef = dbAdmin.collection("users").doc(user.uid);
+		const userDocumentRef = dbAdmin
+			.collection(process.env.NEXT_FIREBASE_USER_COLLECTION || "")
+			.doc(user.uid);
 		await userDocumentRef.set({ user });
 
 		res.status(200).json({ message: "Successfully created user" });

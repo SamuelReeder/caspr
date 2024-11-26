@@ -5,16 +5,16 @@
 import { app, auth } from "@/config/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { apiClient } from "@/utils/apiClient";
 import { createGraph } from "@/api";
-import { db } from "@/config/firebaseConfig";
 import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "@/config/firebaseConfig";
 import { validateJSON } from "@/utils/validateJSON";
+
 
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
@@ -48,6 +48,7 @@ export const uploadGraph = async (
 			graphName: graphName,
 			graphDescription: graphDescription,
 			graphVisibility: graphVisibility,
+			graphFilePath: `graphs/${auth.currentUser?.uid}/${graphName}.json`,
 			graphFileURL: downloadURL,
 			graphURL: graphURL,
 			createdAt: Timestamp.now(),
@@ -106,7 +107,7 @@ export const fetchCurrUserGraphs = async (
  * Fetches all publically visible graphs stored in Firestore.
  * @param firebaseUser - The current user object.
  * @returns A promise that resolves to the array of graphs.
- * @Jaeyong
+ * @Jaeyong @Terry
  */
 export const fetchAllPublicGraphs = async (
 	firebaseUser: User | null,
@@ -137,6 +138,8 @@ export const fetchAllPublicGraphs = async (
 		return [];
 	}
 };
+
+
 
 /**
  * Fetches all publically visible graphs stored in Firestore inclduing the current user's graphs.
@@ -219,5 +222,34 @@ export const updateGraphData = async (
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
+	}
+};
+
+/**
+ * Delete a graph object
+ * @returns A promise that resolves to a string containing the deleted
+ * @Terry
+ */
+export const deleteGraph = async (graph: Graph) => {
+	if (!graph) {
+		return [];
+	}
+
+	try {
+		const graphDataResponse = await apiClient(`/api/data/deleteGraph`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				graphID: graph.id,
+				graphFilePath: graph.graphFilePath
+			})
+		});
+		const deleteGraphResponse = await graphDataResponse.json();
+		return deleteGraphResponse;
+	} catch (error) {
+		console.error("Error fetching graphs:", error);
+		throw new Error("Failed to Delete")
 	}
 };

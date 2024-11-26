@@ -66,6 +66,7 @@ export const createUser = async (user: User): Promise<void> => {
  * @Danny @Samuel
  */
 export const createGraph = async (graph: Graph): Promise<void> => {
+	
 	try {
 		const response = await apiClient("/api/data/createGraph", {
 			method: "POST",

@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon, CloseIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import ShareButton from "./ShareButton";
+import ShareButton from "./buttons/ShareButton";
 import { Graph } from "@/types/graph";
 
 interface Diagram {
