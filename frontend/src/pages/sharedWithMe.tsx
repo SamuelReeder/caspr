@@ -36,7 +36,7 @@ function SharedWithMe() {
 		fetchUsersSharedGraphs();
 	}, [fetchUsersSharedGraphs]);
 
-	if (loading) {
+	if (loading || isLoading) {
 		return <FullScreenLoader />;
 	}
 
@@ -61,11 +61,6 @@ function SharedWithMe() {
 				</div>
 
 				<GraphList graphs={graphs} page="Shared With Me" />
-				{isLoading ? (
-					<FullScreenLoader />
-				) : (
-					<GraphList graphs={graphs} page="Shared With Me" />
-				)}
 			</div>
 		</div>
 	);

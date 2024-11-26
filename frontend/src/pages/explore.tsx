@@ -12,14 +12,12 @@ import { useAuth } from "@/context/AuthContext";
 
 function Explore() {
 	const { firebaseUser, loading } = useAuth();
-	const [loadingGraphs, setLoadingGraphs] = useState<boolean>(true);
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 
 	const fetchExplorePageGraphs = useCallback(async () => {
 		try {
 			const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
 			setGraphs(publicGraphs);
-			setLoadingGraphs(false);
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
 		}
@@ -45,7 +43,9 @@ function Explore() {
 						<Searchbar graphs={graphs} setGraphs={setGraphs} />
 						{firebaseUser && (
 							<>
-								<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
+								<Heading>
+									Welcome, {firebaseUser?.displayName || "User"}
+								</Heading>
 								<Text>Email: {firebaseUser.email}</Text>
 							</>
 						)}
@@ -56,10 +56,8 @@ function Explore() {
 						)}
 					</div>
 				</div>
-				{loadingGraphs ? (
-					<FullScreenLoader />
-				) : (
-					<GraphList graphs={graphs} page="Explore" />)}
+
+				<GraphList graphs={graphs} page="Explore" />
 			</div>
 		</div>
 	);

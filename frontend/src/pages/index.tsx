@@ -52,7 +52,6 @@ function Home() {
 						<Text>Email: {firebaseUser.email}</Text>
 					</div>
 				</div>
-
 				<GraphList graphs={graphs} page="My Graphs" />
 			</div>
 		</div>
