@@ -89,8 +89,8 @@ describe("POST /api/graphs/createGraph", () => {
 
 		await handler(req, res);
 
-		expect(dbAdmin.collection).toHaveBeenCalledWith("graphs");
-		expect(dbAdmin.collection("graphs").doc).toHaveBeenCalledWith(mockID);
+		expect(dbAdmin.collection).toHaveBeenCalledWith(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
+		expect(dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "").doc).toHaveBeenCalledWith(mockID);
 		expect(updateMock).toHaveBeenCalledWith(mockUpdateOneField);
 		expect(res._getStatusCode()).toBe(200);
 		expect(JSON.parse(res._getData())).toEqual({
@@ -108,8 +108,8 @@ describe("POST /api/graphs/createGraph", () => {
 
 		await handler(req, res);
 
-		expect(dbAdmin.collection).toHaveBeenCalledWith("graphs");
-		expect(dbAdmin.collection("graphs").doc).toHaveBeenCalledWith(mockID);
+		expect(dbAdmin.collection).toHaveBeenCalledWith(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
+		expect(dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "").doc).toHaveBeenCalledWith(mockID);
 		expect(updateMock).toHaveBeenCalledWith(mockUpdateMultiField);
 		expect(res._getStatusCode()).toBe(200);
 		expect(JSON.parse(res._getData())).toEqual({
