@@ -42,7 +42,7 @@ function SharedWithMe() {
 		fetchUsersSharedGraphs();
 	}, [fetchUsersSharedGraphs]);
 
-	if (loading || isLoading) {
+	if (loading) {
 		return <FullScreenLoader />;
 	}
 
@@ -81,6 +81,7 @@ function SharedWithMe() {
 				</div>
 
 				<GraphList
+					isLoading={isLoading}
 					graphs={graphs}
 					page="Shared With Me"
 					sortOptions={sortOptions}

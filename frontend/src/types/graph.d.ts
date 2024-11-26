@@ -24,6 +24,7 @@ export interface Graph {
  * @Jaeyong
  */
 export interface GraphListProps {
+	isLoading: boolean;
 	graphs: Graph[] | undefined;
 	page: string;
 	sortOptions?: { value: string; label: string }[];

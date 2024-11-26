@@ -39,7 +39,7 @@ function Home() {
 		fetchUsersGraphs();
 	}, [fetchUsersGraphs, firebaseUser]);
 
-	if (loading || isLoading) {
+	if (loading) {
 		return <FullScreenLoader />;
 	}
 
@@ -78,6 +78,7 @@ function Home() {
 				</div>
 
 				<GraphList
+					isLoading={isLoading}
 					graphs={graphs}
 					page="My Graphs"
 					sortOptions={sortOptions}

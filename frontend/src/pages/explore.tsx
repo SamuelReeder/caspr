@@ -32,7 +32,7 @@ function Explore() {
 		fetchExplorePageGraphs();
 	}, [fetchExplorePageGraphs]);
 
-	if (loading || isLoading) {
+	if (loading) {
 		return <FullScreenLoader />;
 	}
 
@@ -69,6 +69,7 @@ function Explore() {
 				</div>
 
 				<GraphList
+					isLoading={isLoading}
 					graphs={graphs}
 					page="Explore"
 					sortOptions={sortOptions}

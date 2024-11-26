@@ -16,6 +16,7 @@ import { getUser } from "@/api";
 import { useAuth } from "@/context";
 
 const GraphList = ({
+	isLoading,
 	graphs,
 	page,
 	sortOptions,
@@ -27,7 +28,7 @@ const GraphList = ({
 }: GraphListProps) => {
 	const { firestoreUser } = useAuth();
 
-	const [isLoading, setIsLoading] = useState(true);
+	const [isOwnersLoading, setIsOwnersLoading] = useState(true);
 	const [graphsWithOwners, setGraphsWithOwners] = useState<
 		Array<{
 			graph: Graph;
@@ -39,7 +40,7 @@ const GraphList = ({
 		const fetchOwners = async () => {
 			if (!graphs) return;
 
-			setIsLoading(true);
+			setIsOwnersLoading(true);
 			const withOwners = await Promise.all(
 				graphs.map(async (graph) => {
 					try {
@@ -56,13 +57,13 @@ const GraphList = ({
 			);
 
 			setGraphsWithOwners(withOwners);
-			setIsLoading(false);
+			setIsOwnersLoading(false);
 		};
 
 		fetchOwners();
 	}, [firestoreUser, graphs]);
 
-	if (isLoading) {
+	if (isLoading || isOwnersLoading) {
 		return <FullScreenLoader />;
 	}
 
