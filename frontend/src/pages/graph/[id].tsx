@@ -149,22 +149,23 @@ const GraphPageContent = () => {
 
 	const addDiagram = () => {
 		const newId = diagrams.length ? diagrams[diagrams.length - 1].id + 1 : 0;
-		const newTimestamp =
-			diagrams.length && diagrams[0].timestamp
-				? diagrams[diagrams.length - 1].timestamp! + 1
-				: diagrams[0]?.timestamp || 1;
+		let newTimestamp;
+    let newData;
 
-		const newData = newTimestamp
-			? parseTimestampedData(diagrams[0].data, newTimestamp)
-			: diagrams[0].data;
+    if (diagrams[0].timestamp) {
+      newTimestamp = diagrams[diagrams.length - 1].timestamp! + 1;
+      newData = parseTimestampedData(diagrams[0].data, newTimestamp);
+    } else {
+      newData = diagrams[0].data;
+    }
 
-		const newDiagram = {
-			id: newId,
-			...(newTimestamp ? { timestamp: newTimestamp } : {}),
-			data: newData,
-			label: `${graph?.graphName} ${newTimestamp || newId + 1}`
-		};
-		setDiagrams([...diagrams, newDiagram]);
+    const newDiagram = {
+      id: newId,
+      ...(newTimestamp ? { timestamp: newTimestamp } : {}),
+      data: newData,
+      label: `${graph?.graphName} ${newTimestamp || newId + 1}`
+    };
+    setDiagrams([...diagrams, newDiagram]);
 	};
 
 	const removeDiagram = (id: number) => {
