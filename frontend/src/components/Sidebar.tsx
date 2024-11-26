@@ -53,21 +53,22 @@ export default function Sidebar() {
 
 	return (
 		<div className={`bg-gray-800 text-white ${isCollapsed ? "w-20" : "w-60"} p-7 shadow-lg top-0 left-0 h-full transition-width duration-300 transition-ease`}>
-			<div className="flex flex-col gap-4 w-full h-full">
-				<div className="flex flex-row items-center justify-between h-12">
+			<div className="flex flex-col gap-4 h-full">
+				<div className="flex flex-row justify-between items-start">
 					{!isCollapsed && (
-						<Text fontSize="3xl" fontWeight="bold">
-							Caspr
-						</Text>
+					<div className="flex flex-col justify-center ml-10">
+						<img src="/favicon.ico" alt="Logo" style={{ height: '90px'}} />
+						<img src="/logo.png" alt="Logo" style={{ height: '30px'}} />
+					</div>
 					)}
 					<Button
 						onClick={toggleCollapse}
 						variant="ghost"
 						size="xl"
 						colorScheme="white"
-						className={`p-3 ${isCollapsed ? "justify-center w-full" : ""} hover:bg-gray-500 hover:bg-opacity-50`}
+						className="p-3 hover:bg-gray-500 hover:bg-opacity-50"
 					>
-						{isCollapsed ? <ChevronRightIcon boxSize={5} /> : <HamburgerIcon boxSize={5} />}
+					{isCollapsed ? <ChevronRightIcon boxSize={5} /> : <HamburgerIcon boxSize={5} />}
 					</Button>
 				</div>
 				{!isCollapsed && (
