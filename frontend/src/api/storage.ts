@@ -115,7 +115,7 @@ export const fetchAllPublicGraphs = async (
 ) => {
 	try {
 
-		const graphDataResponse = await apiClient(`/api/data/updateGraph`, {
+		const graphDataResponse = await apiClient(`/api/data/getPublicGraphs`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"

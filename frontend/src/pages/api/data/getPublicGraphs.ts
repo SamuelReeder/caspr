@@ -22,25 +22,22 @@ export default async function handler(
 	const uid = req.body.id
 
 	try {
-		const graphsRef = collection(
-			db,
-			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
-		);
+		const graphsRef = dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "");
+		let querySnapshot;
 
 		// Query Firestore for graphs with matching owner UID
-		let q = null;
-		if (uid) {
-			q = query(
-				graphsRef,
-				where("graphVisibility", "==", true),
-				where("owner", "!=", uid)
-			);
+		if(uid){
+			querySnapshot = await graphsRef
+				.where("owner", "==", uid)
+				.where("graphVisibility", "==", true)
+				.get();
 		} else {
-			q = query(graphsRef, where("graphVisibility", "==", true));
+			querySnapshot = await graphsRef
+				.where("graphVisibility", "==", true)
+				.get();
 		}
 
 		// Transform results into an array of Graph objects
-		const querySnapshot = await getDocs(q);
 		const graphs = querySnapshot.docs.map((doc) => ({
 				id: doc.id,
 				...doc.data()
