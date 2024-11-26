@@ -8,6 +8,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { dbAdmin } from "@/config/firebaseAdmin";
+import { Graph } from "@/types";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -45,10 +46,29 @@ export default async function handler(
 				.get();
 		}
 
-		const graphs = graphsSnap.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data()
-		}));
+		const graphs = graphsSnap.docs.map((doc) => {
+			const data = doc.data();
+			const graph = {
+				id: doc.id,
+				...data
+			} as Graph;
+
+			// if graph is not public, filter presets based on access
+			if (!graph.graphVisibility) {
+				const sharedUser = graph.sharing?.find((user) => user.email === email);
+
+				if (sharedUser && graph.presets) {
+					// only include presets that are in presetAccess
+					graph.presets = graph.presets.filter((preset) =>
+						sharedUser.presetAccess.includes(preset.name)
+					);
+				} else {
+					graph.presets = [];
+				}
+			}
+
+			return graph;
+		});
 
 		res.status(200).json({ graphs });
 	} catch (error) {
