@@ -135,7 +135,7 @@ const GraphList = ({
 					))}
 				</div>
 			) : (
-				<div className="flex flex-col sm:w-[50vw] md:w-[65vw] lg:w-[70vw] xl:w-[80] gap-4">
+				<div className="flex flex-col gap-4">
 					{graphsWithOwners?.map(({ graph, owner }, i) => {
 						return (
 							<MyGraphCard key={graph.id || i} graph={graph} owner={owner} />

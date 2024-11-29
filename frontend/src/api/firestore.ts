@@ -113,9 +113,7 @@ export const addPreset = async (
 		console.error(error);
 		throw error;
 	}
-
 };
-
 
 /**
  * Deletes a specific preset from Firestore for a given graph by preset name.
@@ -329,7 +327,7 @@ export const acceptShareInvite = async (
 	uid: string
 ): Promise<boolean> => {
 	try {
-		const graphRef = doc(db, "graphs", graphId);
+		const graphRef = doc(db, process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "", graphId);
 		const graphSnap = await getDoc(graphRef);
 
 		if (!graphSnap.exists()) return false;
@@ -368,7 +366,7 @@ export const getUserAccessiblePresets = async (
 	email: string
 ): Promise<Preset[]> => {
 	try {
-		const graphRef = doc(db, "graphs", graphId);
+		const graphRef = doc(db, process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "", graphId);
 		const graphSnap = await getDoc(graphRef);
 
 		if (!graphSnap.exists()) return [];
@@ -403,7 +401,7 @@ export const updatePresetAccess = async (
 	presetNames: string[]
 ): Promise<boolean> => {
 	try {
-		const graphRef = doc(db, "graphs", graphId);
+		const graphRef = doc(db, process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "", graphId);
 		const graphSnap = await getDoc(graphRef);
 
 		if (!graphSnap.exists()) return false;

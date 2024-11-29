@@ -2,7 +2,7 @@
  * GraphSideBar.tsx
  * @param {GraphSideBarProps} props
  * @returns {ReactElement} GraphSideBar component
-*/
+ */
 import React, { useState, useEffect } from "react";
 import {
 	Box,
@@ -26,6 +26,7 @@ import { useView } from "@/context/ViewContext";
 import { addPreset, deletePreset } from "@/api";
 import { Timestamp } from "firebase/firestore";
 import { SavePresetModal, PresetList } from "@/components";
+import { useAuth } from "@/context";
 
 interface GraphSideBarProps {
 	nodes: NodeType[];
@@ -36,13 +37,14 @@ interface GraphSideBarProps {
 const GraphSideBar: React.FC<GraphSideBarProps> = ({
 	nodes,
 	edges,
-	onNodeSelect,
+	onNodeSelect
 }) => {
 	const [sortedNodes, setSortedNodes] = useState<NodeType[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 	const [presetName, setPresetName] = useState("");
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { firestoreUser } = useAuth();
 	const {
 		graph,
 		currentView,
@@ -78,7 +80,7 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 			title: "Preset Loaded",
 			description: `Loaded preset: ${preset.name}`,
 			status: "info",
-			duration: 2000,
+			duration: 2000
 		});
 	};
 
@@ -89,7 +91,21 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 					title: "Error",
 					description: "Please enter a preset name",
 					status: "error",
-					duration: 2000,
+					duration: 2000
+				});
+				return;
+			}
+
+			if (
+				!firestoreUser ||
+				(!graph?.sharedEmails?.includes(firestoreUser.email) &&
+					graph?.owner != firestoreUser.uid)
+			) {
+				toast({
+					title: "Error",
+					description: "You must be logged in to save presets",
+					status: "error",
+					duration: 2000
 				});
 				return;
 			}
@@ -109,7 +125,7 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 					title: "Success",
 					description: "Preset saved successfully",
 					status: "success",
-					duration: 2000,
+					duration: 2000
 				});
 				setPresetName("");
 				onClose();
@@ -119,27 +135,41 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 				title: "Error",
 				description: "Failed to save preset",
 				status: "error",
-				duration: 2000,
+				duration: 2000
 			});
 		}
 	};
 
 	const handleDeletePreset = async (preset: Preset) => {
 		try {
+			if (
+				!firestoreUser ||
+				(!graph?.sharedEmails?.includes(firestoreUser.email) &&
+					graph?.owner != firestoreUser.uid)
+			) {
+				toast({
+					title: "Error",
+					description: "You must be logged in to delete presets",
+					status: "error",
+					duration: 2000,
+				});
+				return;
+			}
+
 			if (graph?.id) {
 				await deletePreset(graph.id, preset.name);
 				deletePresetFromGraph(preset);
 				toast({
 					title: "Preset deleted",
 					status: "success",
-					duration: 2000,
+					duration: 2000
 				});
 			}
 		} catch (error) {
 			toast({
 				title: "Failed to delete preset",
 				status: "error",
-				duration: 2000,
+				duration: 2000
 			});
 		}
 	};

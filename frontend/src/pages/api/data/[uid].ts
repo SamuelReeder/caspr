@@ -31,7 +31,7 @@ export default async function handler(
 	}
 
 	try {
-		const userDocRef = dbAdmin.collection("users").doc(uid as string);
+		const userDocRef = dbAdmin.collection(process.env.NEXT_FIREBASE_USER_COLLECTION || "").doc(uid as string);
 		const userDoc = await userDocRef.get();
 
 		if (userDoc) {
