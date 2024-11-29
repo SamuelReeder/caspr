@@ -35,6 +35,7 @@ export default async function handler(
 			graphName: graph.graph.graphName,
 			graphDescription: graph.graph.graphDescription || "",
 			graphVisibility: graph.graph.graphVisibility || false,
+			graphContent: graph.graph.graphTags || [],
 			graphFileURL: graph.graph.graphFileURL || "",
 			graphFilePath: graph.graph.graphFilePath || "",
 			graphURL: graph.graph.graphURL || "",
