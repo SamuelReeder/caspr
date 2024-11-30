@@ -84,6 +84,8 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		window.location.href = `${baseURL}/graph/${graph.graphURL}`;
 	};
 
+	console.log(graph)
+
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">

@@ -51,7 +51,7 @@ export default async function handler(
 				owner: data.owner,
 				graphName: data.graphName,
 				graphDescription: data.graphDescription,
-				graphContent: data.graphContent,
+				graphTags: data.graphTags,
 				graphVisibility: data.graphVisibility,
 				graphFileURL: data.graphFileURL,
 				graphFilePath: data.graphFilePath,
