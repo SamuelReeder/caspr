@@ -3,7 +3,7 @@ import { render, screen, fireEvent, act, waitFor } from "@testing-library/react"
 import GraphPage from "../src/pages/graph/[id]";
 import "@testing-library/jest-dom";
 import customRender from "@/test-utils/render";
-import { fetchAllPublicGraphsIncludingUser, getGraphData } from '@/api';
+import { fetchAllUserAccessibleGraphs, getGraphData } from '@/api';
 import { useAuth } from "@/context";
 import { useRouter } from "next/router";
 
@@ -68,13 +68,13 @@ jest.mock('@/context/AuthContext', () => ({
 	  const pushMock = jest.fn();
 	  (useRouter as jest.Mock).mockReturnValue({ query: { id: mockId }, push: pushMock });
   
-	  (fetchAllPublicGraphsIncludingUser as jest.Mock).mockResolvedValue([mockGraph]);
+	  (fetchAllUserAccessibleGraphs as jest.Mock).mockResolvedValue([mockGraph]);
 	  (getGraphData as jest.Mock).mockResolvedValue(mockJsonData);
   
 	  render(<GraphPage />);
   
 	  await waitFor(() => {
-		expect(fetchAllPublicGraphsIncludingUser).toHaveBeenCalledWith(mockFirebaseUser);
+		expect(fetchAllUserAccessibleGraphs).toHaveBeenCalledWith(mockFirebaseUser);
 	  });
   
 	  await waitFor(() => {
@@ -101,7 +101,7 @@ jest.mock('@/context/AuthContext', () => ({
 	  const pushMock = jest.fn();
 	  (useRouter as jest.Mock).mockReturnValue({ query: { id: mockId }, push: pushMock });
   
-	  (fetchAllPublicGraphsIncludingUser as jest.Mock).mockResolvedValue([mockGraph]);
+	  (fetchAllUserAccessibleGraphs as jest.Mock).mockResolvedValue([mockGraph]);
 	  (getGraphData as jest.Mock).mockResolvedValue(invalidJsonData);
   
 	  render(<GraphPage />);
@@ -119,7 +119,7 @@ jest.mock('@/context/AuthContext', () => ({
 	  const pushMock = jest.fn();
 	  (useRouter as jest.Mock).mockReturnValue({ query: { id: mockId }, push: pushMock });
   
-	  (fetchAllPublicGraphsIncludingUser as jest.Mock).mockResolvedValue([]);
+	  (fetchAllUserAccessibleGraphs as jest.Mock).mockResolvedValue([]);
   
 	  render(<GraphPage />);
   
@@ -143,7 +143,7 @@ jest.mock('@/context/AuthContext', () => ({
 	  (useAuth as jest.Mock).mockReturnValue({ firebaseUser: mockFirebaseUser });
 	  (useRouter as jest.Mock).mockReturnValue({ query: { id: mockId }, push: jest.fn() });
   
-	  (fetchAllPublicGraphsIncludingUser as jest.Mock).mockResolvedValue([mockGraph]);
+	  (fetchAllUserAccessibleGraphs as jest.Mock).mockResolvedValue([mockGraph]);
 	  (getGraphData as jest.Mock).mockResolvedValue(mockJsonData);
   
 	  render(<GraphPage />);
@@ -174,7 +174,7 @@ jest.mock('@/context/AuthContext', () => ({
 	  (useAuth as jest.Mock).mockReturnValue({ firebaseUser: mockFirebaseUser });
 	  (useRouter as jest.Mock).mockReturnValue({ query: { id: mockId }, push: jest.fn() });
   
-	  (fetchAllPublicGraphsIncludingUser as jest.Mock).mockResolvedValue([mockGraph]);
+	  (fetchAllUserAccessibleGraphs as jest.Mock).mockResolvedValue([mockGraph]);
 	  (getGraphData as jest.Mock).mockResolvedValue(mockJsonData);
   
 	  render(<GraphPage />);
@@ -207,7 +207,7 @@ jest.mock('@/context/AuthContext', () => ({
 	  (useAuth as jest.Mock).mockReturnValue({ firebaseUser: mockFirebaseUser });
 	  (useRouter as jest.Mock).mockReturnValue({ query: { id: mockId }, push: jest.fn() });
   
-	  (fetchAllPublicGraphsIncludingUser as jest.Mock).mockResolvedValue([mockGraph]);
+	  (fetchAllUserAccessibleGraphs as jest.Mock).mockResolvedValue([mockGraph]);
 	  (getGraphData as jest.Mock).mockResolvedValue(mockJsonData);
   
 	  render(<GraphPage />);

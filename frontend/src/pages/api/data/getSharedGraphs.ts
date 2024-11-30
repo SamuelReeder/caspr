@@ -6,6 +6,7 @@
  * @Samuel
  */
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import { dbAdmin } from "@/config/firebaseAdmin";
 
 export default async function handler(
@@ -16,17 +17,33 @@ export default async function handler(
 		return res.status(405).json({ message: "Method not allowed" });
 	}
 
-	const { email } = req.query;
+	const { email, filterType } = req.query;
 
 	if (!email) {
 		return res.status(400).json({ error: "Email is required" });
 	}
 
 	try {
-		const graphsSnap = await dbAdmin
-			.collection("graphs")
-			.where("sharedEmails", "array-contains", email)
-			.get();
+		let graphsSnap;
+
+		if (filterType === "publicOnly") {
+			graphsSnap = await dbAdmin
+				.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
+				.where("sharedEmails", "array-contains", email)
+				.where("graphVisibility", "==", true)
+				.get();
+		} else if (filterType === "privateOnly") {
+			graphsSnap = await dbAdmin
+				.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
+				.where("sharedEmails", "array-contains", email)
+				.where("graphVisibility", "==", false)
+				.get();
+		} else {
+			graphsSnap = await dbAdmin
+				.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
+				.where("sharedEmails", "array-contains", email)
+				.get();
+		}
 
 		const graphs = graphsSnap.docs.map((doc) => ({
 			id: doc.id,

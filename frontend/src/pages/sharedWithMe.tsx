@@ -1,59 +1,48 @@
+import { FullScreenLoader, GraphList, Searchbar, Sidebar } from "@/components";
 /**
  * Shared With Me Page
  * @returns {ReactElement} Shared With Me Page
  */
 import { Heading, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
-import { getSharedGraphs, getUser } from "@/api";
 import { Graph } from "@/types";
-import { GraphList, Searchbar, Sidebar, FullScreenLoader } from "@/components";
+import { getSharedGraphs } from "@/api";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/router";
 
 function SharedWithMe() {
 	const { firebaseUser, loading } = useAuth();
 	const router = useRouter();
 	const [graphs, setGraphs] = useState<Graph[] | undefined>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [sortType, setSortType] = useState("none");
+	const [filterType, setFilterType] = useState("none");
 
 	const fetchUsersSharedGraphs = useCallback(async () => {
 		if (!firebaseUser?.email) return;
 
 		try {
 			setIsLoading(true);
-			const sharedGraphs = await getSharedGraphs(firebaseUser.email);
-			const graphsWithOwners = await Promise.all(
-				sharedGraphs.map(async (graph) => {
-					try {
-						const owner = await getUser(graph.owner);
-						return {
-							...graph,
-							owner: owner.name || "Unknown"
-						};
-					} catch (error) {
-						return {
-							...graph,
-							ownerName: "Unknown"
-						};
-					}
-				})
+			const sharedGraphs = await getSharedGraphs(
+				firebaseUser.email,
+				sortType,
+				filterType
 			);
-
-			setGraphs(graphsWithOwners);
+			setGraphs(sharedGraphs);
 		} catch (error) {
 			console.error("Error fetching shared graphs:", error);
 			setGraphs([]);
 		} finally {
 			setIsLoading(false);
 		}
-	}, [firebaseUser?.email]);
+	}, [firebaseUser?.email, sortType, filterType]);
 
 	useEffect(() => {
 		fetchUsersSharedGraphs();
 	}, [fetchUsersSharedGraphs]);
 
-	if (loading || isLoading) {
+	if (loading) {
 		return <FullScreenLoader />;
 	}
 
@@ -61,6 +50,20 @@ function SharedWithMe() {
 		router.push("/");
 		return null;
 	}
+
+	const sortOptions = [
+		{ value: "none", label: "Sort: None" },
+		{ value: "nameAsc", label: "Sort: Name (A - Z)" },
+		{ value: "nameDesc", label: "Sort: Name (Z - A)" },
+		{ value: "uploadDateDesc", label: "Sort: Newest First" },
+		{ value: "uploadDateAsc", label: "Sort: Oldest First" }
+	];
+
+	const filterOptions = [
+		{ value: "none", label: "Filter: None" },
+		{ value: "publicOnly", label: "Filter: Public Only" },
+		{ value: "privateOnly", label: "Filter: Private Only" }
+	];
 
 	return (
 		<div className="flex flex-row">
@@ -77,7 +80,17 @@ function SharedWithMe() {
 					</div>
 				</div>
 
-				<GraphList graphs={graphs} page="Shared With Me" />
+				<GraphList
+					isLoading={isLoading}
+					graphs={graphs}
+					page="Shared With Me"
+					sortOptions={sortOptions}
+					filterOptions={filterOptions}
+					sortType={sortType}
+					setSortType={setSortType}
+					filterType={filterType}
+					setFilterType={setFilterType}
+				/>
 			</div>
 		</div>
 	);

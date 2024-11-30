@@ -102,6 +102,9 @@ export default function Index() {
 			<div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-[80%]">
 					<Box className="text-center">
+						<div className="flex flex-col items-center justify-center w-full">
+							<img src="/favicon.ico" alt="Logo" style={{ height: '100px'}} />
+						</div>
 						<Heading className="text-center text-4xl">Welcome to Caspr</Heading>
 						<Text className="pt-2">Log in to your account</Text>
 

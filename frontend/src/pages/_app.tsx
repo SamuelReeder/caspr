@@ -7,10 +7,15 @@
 import { AppProps } from "next/app";
 import { Providers } from "../app/providers";
 import "../app/globals.css";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<Providers>
+			<Head>
+				<link rel='icon' href='/favicon.ico' />
+			</Head>
+
 			<Component {...pageProps} />
 		</Providers>
 	);

@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase-admin/firestore";
+import { ViewPosition } from "./camera";
 
 /**
  * Represents a graph object from a Firebase document.
@@ -10,6 +11,8 @@ export interface Graph {
 	graphName: string;
 	graphDescription: string;
 	graphVisibility: boolean;
+	graphTags: String[],
+	graphFilePath: string;
 	graphFileURL: string;
 	graphURL: string;
 	createdAt: Timestamp;
@@ -23,8 +26,15 @@ export interface Graph {
  * @Jaeyong
  */
 export interface GraphListProps {
+	isLoading: boolean;
 	graphs: Graph[] | undefined;
 	page: string;
+	sortOptions?: { value: string; label: string }[];
+	filterOptions?: { value: string; label: string }[];
+	sortType?: string;
+	setSortType?: React.Dispatch<React.SetStateAction<string>>;
+	filterType?: string;
+	setFilterType?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 /**
@@ -33,7 +43,7 @@ export interface GraphListProps {
  */
 interface MyGraphCardProps {
 	graph: Graph;
-	owner: User | null;
+	owner: User;
 }
 
 /**
@@ -48,26 +58,6 @@ export interface Preset {
 	view: ViewPosition | null;
 }
 
-/**
- * Represents the viewing position for a graph.
- * @Samuel
- */
-export interface ViewPosition {
-	x: number;
-	y: number;
-	z: number;
-	orientation: Orientation | null;
-}
-
-/**
- * Represents the orientation in 3D space.
- * @Samuel
- */
-export interface Orientation {
-	pitch: number; // Rotation around the x-axis
-	yaw: number; // Rotation around the y-axis
-	roll: number; // Rotation around the z-axis
-}
 
 /**
  * Represents possible roles for shared access
@@ -90,4 +80,13 @@ interface SharedUser {
 	addedAt: Timestamp;
 	addedBy: string;
 	acceptedAt?: Timestamp;
+}
+
+/**
+ * Graph Context Type
+ * @Terry
+ */
+interface GraphContextType {
+	graphs: Graph[];
+	setGraphs: Dispatch<SetStateAction<Graph[]>>;
 }

@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon, CloseIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import ShareButton from "./ShareButton";
+import ShareButton from "./buttons/ShareButton";
 import { Graph } from "@/types/graph";
 
 interface Diagram {
@@ -81,7 +81,7 @@ const NavBar: React.FC<NavBarProps> = ({
 	};
 
 	return (
-		<Flex alignItems="center" mb={0} p={2} backgroundColor="gray.300">
+		<Flex alignItems="center" mb={0} p={2} backgroundColor="gray.800">
 			<Link href="/">
 				<IconButton
 					aria-label="Go Back"
@@ -93,10 +93,11 @@ const NavBar: React.FC<NavBarProps> = ({
 					p={2}
 				/>
 			</Link>
+			<Avatar src="/favicon.ico" size="sm" mr={3} /> 
 			<Tabs index={selectedTab} onChange={(index) => setSelectedTab(index)}>
 				<TabList>
 					{diagrams.map((diagram) => (
-						<Tab key={diagram.id} p={2}>
+						<Tab key={diagram.id} p={2} color={'white'}>
 							{diagram.label}
 							<IconButton
 								aria-label="Delete Diagram"

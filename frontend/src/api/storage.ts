@@ -5,15 +5,18 @@
 import { app, auth } from "@/config/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
-import { createGraph } from "@/api";
-import { db } from "@/config/firebaseConfig";
+import { createGraph, getSharedGraphs } from "@/api";
 import { apiClient } from "@/utils/apiClient";
-
+import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "@/config/firebaseConfig";
+import { list } from "postcss";
+import { List } from "postcss/lib/list";
+
+
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
  * @param graphFile - The JSON file containing graph data.
@@ -27,7 +30,8 @@ export const uploadGraph = async (
 	graphFile: File,
 	graphName: string,
 	graphDescription: string,
-	graphVisibility: boolean
+	graphVisibility: boolean,
+	graphTags: String[]
 ): Promise<Graph | undefined> => {
 	try {
 		const storage = getStorage(app);
@@ -45,7 +49,9 @@ export const uploadGraph = async (
 			owner: firebaseUser?.uid || "",
 			graphName: graphName,
 			graphDescription: graphDescription,
+			graphTags: graphTags,
 			graphVisibility: graphVisibility,
+			graphFilePath: `graphs/${auth.currentUser?.uid}/${graphName}.json`,
 			graphFileURL: downloadURL,
 			graphURL: graphURL,
 			createdAt: Timestamp.now(),
@@ -68,7 +74,11 @@ export const uploadGraph = async (
  * @returns A promise that resolves to the array of graphs.
  * @Jaeyong @Samuel
  */
-export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
+export const fetchCurrUserGraphs = async (
+	firebaseUser: User | null,
+	sortType: string = "none",
+	filterType: string = "none"
+) => {
 	if (!firebaseUser) {
 		return [];
 	}
@@ -77,7 +87,7 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
 		try {
 			const uid = firebaseUser.uid;
 			const graphDataResponse = await apiClient(
-				`/api/data/getGraphs?uid=${uid}`,
+				`/api/data/getGraphs?uid=${uid}&filterType=${filterType}`,
 				{
 					method: "GET",
 					headers: {
@@ -86,6 +96,8 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
 				}
 			);
 			const graphData = await graphDataResponse.json();
+			sortGraphs(graphData, sortType);
+
 			return graphData;
 		} catch (error) {
 			console.error("Error fetching graphs:", error);
@@ -98,41 +110,41 @@ export const fetchCurrUserGraphs = async (firebaseUser: User | null) => {
  * Fetches all publically visible graphs stored in Firestore.
  * @param firebaseUser - The current user object.
  * @returns A promise that resolves to the array of graphs.
- * @Jaeyong
+ * @Jaeyong @Terry
  */
-export const fetchAllPublicGraphs = async (firebaseUser: User | null) => {
+export const fetchAllPublicGraphs = async (
+	firebaseUser: User | null,
+	sortType: string = "nameAsc"
+) => {
 	try {
-		const graphsRef = collection(db, "graphs");
-		let q = null
-		if (firebaseUser) {
-			q = query(
-				graphsRef,
-				where("graphVisibility", "==", true),
-				where("owner", "!=", firebaseUser.uid)
-			);
-		} else {
-			q = query(
-				graphsRef,
-				where("graphVisibility", "==", true),
-			);
-		}
-		const querySnapshot = await getDocs(q);
-		return querySnapshot.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data()
-		})) as Graph[];
+
+		const graphDataResponse = await apiClient(`/api/data/getPublicGraphs`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				id: firebaseUser?.uid
+			})
+		})
+
+		const graphs = await graphDataResponse.json()
+		sortGraphs(graphs, sortType)
+		
+		return graphs;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
 	}
 };
 
+
 /**
  * Fetches all publically visible graphs stored in Firestore inclduing the current user's graphs.
  * @returns A promise that resolves to the array of graphs.
  * @Samuel
  */
-export const fetchAllPublicGraphsIncludingUser = async (
+export const fetchAllUserAccessibleGraphs = async (
 	firebaseUser: User | null
 ): Promise<Graph[]> => {
 	if (!firebaseUser) {
@@ -141,7 +153,13 @@ export const fetchAllPublicGraphsIncludingUser = async (
 	try {
 		const publicGraphs = await fetchAllPublicGraphs(firebaseUser);
 		const userGraphs = await fetchCurrUserGraphs(firebaseUser);
-		const allGraphs = [...publicGraphs, ...userGraphs];
+		let sharedGraphs: Graph[] = [];
+		try {
+			sharedGraphs = await getSharedGraphs(firebaseUser?.email ?? "");
+		} catch (error) {
+			console.error("Error fetching shared graphs:", error);
+		}
+		const allGraphs = [...publicGraphs, ...userGraphs, ...sharedGraphs];
 
 		const uniqueGraphs = Array.from(
 			new Set(allGraphs.map((graph) => graph.id))
@@ -208,5 +226,34 @@ export const updateGraphData = async (
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
 		return [];
+	}
+};
+
+/**
+ * Delete a graph object
+ * @returns A promise that resolves to a string containing the deleted
+ * @Terry
+ */
+export const deleteGraph = async (graph: Graph) => {
+	if (!graph) {
+		return [];
+	}
+
+	try {
+		const graphDataResponse = await apiClient(`/api/data/deleteGraph`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				graphID: graph.id,
+				graphFilePath: graph.graphFilePath
+			})
+		});
+		const deleteGraphResponse = await graphDataResponse.json();
+		return deleteGraphResponse;
+	} catch (error) {
+		console.error("Error fetching graphs:", error);
+		throw new Error("Failed to Delete")
 	}
 };

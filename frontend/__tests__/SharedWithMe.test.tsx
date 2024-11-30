@@ -37,8 +37,10 @@ const mockSharedGraphs = [
 		graphName: "Shared Graph 1",
 		graphDescription: "Description 1",
 		owner: "owner1",
+		ownerName: "user1",
 		graphVisibility: true,
 		graphURL: "http://test.com/1",
+		graphFilePath: "/graphs/456/graph1.json",
 		graphFileURL: "http://test.com/file1",
 		createdAt: Timestamp.now(),
 		sharing: [],
@@ -50,8 +52,10 @@ const mockSharedGraphs = [
 		graphName: "Shared Graph 2",
 		graphDescription: "Description 2",
 		owner: "owner2",
+		ownerName: "user2",
 		graphVisibility: false,
 		graphURL: "http://test.com/2",
+		graphFilePath: "/graphs/567/graph2.json",
 		graphFileURL: "http://test.com/file2",
 		createdAt: Timestamp.now(),
 		sharing: [],
@@ -130,7 +134,6 @@ describe("Shared With Me Page Component", () => {
 		expect(
 			await screen.findByPlaceholderText(/Enter email address and press Enter/i)
 		).toBeInTheDocument;
-		expect(await screen.findByText(/Make graph public/i)).toBeInTheDocument;
 		expect(await screen.findByRole("button", { name: /Share/i }))
 			.toBeInTheDocument;
 		expect(await screen.findByRole("button", { name: /Cancel/i }))
