@@ -30,7 +30,7 @@ export default async function handler(
 		let querySnapshot;
 		if (filterType === "publicOnly") {
 			querySnapshot = await graphsRef
-				.where("owner", "!=", uid)
+				.where("owner", "==", uid)
 				.where("graphVisibility", "==", true)
 				.get();
 		} else if (filterType === "privateOnly") {
