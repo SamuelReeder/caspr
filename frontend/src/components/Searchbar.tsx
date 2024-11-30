@@ -17,7 +17,6 @@ interface SearchbarProps {
 const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 	const [search, setSearch] = useState("");
 	const originalGraphsRef = useRef<[Graph | undefined, string][]>([]);
-	console.log("GRAPHS", graphs)
 
 	useEffect(() => {
 		const fetchOwnerData = async () => {
