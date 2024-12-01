@@ -7,18 +7,18 @@
  */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbAdmin } from "@/config/firebaseAdmin";
-import { auth as adminAuth } from "firebase-admin";
+import { auth } from "firebase-admin";
 import { getStorage } from "firebase-admin/storage";
 
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	if (req.method !== "POST") {
+	if (req.method !== "GET") {
 		return res.status(405).json({ error: "Method not allowed" });
 	}
 
-	const graphId = req.body.id;
+	const graphId = req.query.id;
 
 	if (!graphId || typeof graphId !== "string") {
 		return res.status(400).json({ error: "Missing or invalid graph ID" });
@@ -31,7 +31,7 @@ export default async function handler(
 	if (authHeader && authHeader.startsWith("Bearer ")) {
 		const idToken = authHeader.split("Bearer ")[1];
 		try {
-			const decodedToken = await adminAuth().verifyIdToken(idToken);
+			const decodedToken = await auth().verifyIdToken(idToken);
 			userUid = decodedToken.uid;
 			userEmail = decodedToken.email;
 		} catch (error) {
@@ -56,9 +56,8 @@ export default async function handler(
 			return res.status(500).json({ error: "Failed to retrieve graph data" });
 		}
 
-		// Enforce read rules
 		const canRead =
-			graphData.graphVisibility === true || // Publicly visible
+			graphData.graphVisibility === true ||
 			(userUid && graphData.owner === userUid) ||
 			(userEmail && graphData.sharedEmails.includes(userEmail));
 

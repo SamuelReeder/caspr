@@ -8,6 +8,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { dbAdmin } from "@/config/firebaseAdmin";
 import { getStorage, ref, deleteObject } from "firebase/storage";
+import { auth } from "firebase-admin";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -28,17 +29,49 @@ export default async function handler(
 		return res.status(400).json({ message: "Invalid graph URL" });
 	}
 
+	const authHeader = req.headers.authorization;
+	if (!authHeader?.startsWith("Bearer ")) {
+		return res.status(401).json({ error: "Unauthorized" });
+	}
+
+	let userUid;
 	try {
+		const token = authHeader.split("Bearer ")[1];
+		const decodedToken = await auth().verifyIdToken(token);
+		userUid = decodedToken.uid;
+	} catch (error) {
+		return res.status(401).json({ error: "Invalid token" });
+	}
+
+	try {
+		const graphRef = dbAdmin
+			.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "")
+			.doc(graphID);
+		const graphSnap = await graphRef.get();
+
+		if (!graphSnap.exists) {
+			return res.status(404).json({ error: "Graph not found" });
+		}
+
+		const graph = graphSnap.data();
+		if (!graph) {
+			return res.status(500).json({ error: "Failed to retrieve graph data" });
+		}
+
+		// Check if user is the owner
+		if (graph.owner !== userUid) {
+			return res
+				.status(403)
+				.json({ error: "No permission to delete this graph" });
+		}
+
 		// Remove Graph File
 		const storage = getStorage();
 		const fileRef = ref(storage, graphFilePath);
 		await deleteObject(fileRef);
 
 		// Remove Graph File from Firebase
-		const graphsRef = dbAdmin.collection(
-			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
-		);
-		await graphsRef.doc(graphID).delete();
+		await graphRef.delete();
 
 		res.status(200).json({ message: "Graph Deleted Successfully" });
 	} catch (error) {

@@ -3,7 +3,6 @@
  */
 
 import { app, auth } from "@/config/firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
@@ -12,9 +11,7 @@ import { createGraph, getSharedGraphs } from "@/api";
 import { apiClient } from "@/utils/apiClient";
 import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
-import { db } from "@/config/firebaseConfig";
 import { getAuth } from "firebase/auth";
-
 
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
@@ -114,7 +111,6 @@ export const fetchAllPublicGraphs = async (
 	sortType: string = "nameAsc"
 ) => {
 	try {
-
 		const graphDataResponse = await apiClient(`/api/data/getPublicGraphs`, {
 			method: "POST",
 			headers: {
@@ -123,10 +119,10 @@ export const fetchAllPublicGraphs = async (
 			body: JSON.stringify({
 				id: firebaseUser?.uid
 			})
-		})
+		});
 
-		const graphs = await graphDataResponse.json()
-		sortGraphs(graphs, sortType)
+		const graphs = await graphDataResponse.json();
+		sortGraphs(graphs, sortType);
 
 		return graphs;
 	} catch (error) {
@@ -134,7 +130,6 @@ export const fetchAllPublicGraphs = async (
 		return [];
 	}
 };
-
 
 /**
  * Fetches all publically visible graphs stored in Firestore inclduing the current user's graphs.
@@ -175,7 +170,7 @@ export const fetchAllUserAccessibleGraphs = async (
  * @returns A promise that resolves to the graph data
  * @Samuel
  */
-export const getGraphData = async (graph: Graph): Promise<any> => {
+export const getGraphData = async (graph: Graph): Promise<Graph> => {
 	if (!graph || !graph.id) {
 		throw new Error("Invalid graph object");
 	}
@@ -185,17 +180,16 @@ export const getGraphData = async (graph: Graph): Promise<any> => {
 		const idToken = await auth.currentUser?.getIdToken();
 
 		const headers: Record<string, string> = {
-			"Content-Type": "application/json",
+			"Content-Type": "application/json"
 		};
 
 		if (idToken) {
 			headers["Authorization"] = `Bearer ${idToken}`;
 		}
 
-		const response = await apiClient(`/api/data/getGraphData`, {
-			method: "POST",
-			headers,
-			body: JSON.stringify({ id: graph.id }),
+		const response = await apiClient(`/api/data/getGraphData?id=${graph.id}`, {
+			method: "GET",
+			headers
 		});
 
 		if (!response.ok) {
@@ -232,7 +226,7 @@ export const updateGraphData = async (
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
-				"Authorization": `Bearer ${idToken}`
+				Authorization: `Bearer ${idToken}`
 			},
 			body: JSON.stringify({
 				id: id,
@@ -250,7 +244,7 @@ export const updateGraphData = async (
 /**
  * Delete a graph object
  * @returns A promise that resolves to a string containing the deleted
- * @Terry
+ * @Terry @Samuel
  */
 export const deleteGraph = async (graph: Graph) => {
 	if (!graph) {
@@ -258,10 +252,14 @@ export const deleteGraph = async (graph: Graph) => {
 	}
 
 	try {
+		const auth = getAuth();
+		const idToken = await auth.currentUser?.getIdToken();
+
 		const graphDataResponse = await apiClient(`/api/data/deleteGraph`, {
 			method: "DELETE",
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${idToken}`
 			},
 			body: JSON.stringify({
 				graphID: graph.id,
@@ -271,7 +269,7 @@ export const deleteGraph = async (graph: Graph) => {
 		const deleteGraphResponse = await graphDataResponse.json();
 		return deleteGraphResponse;
 	} catch (error) {
-		console.error("Error fetching graphs:", error);
-		throw new Error("Failed to Delete")
+		console.error("Error deleting graph:", error);
+		throw new Error("Failed to Delete");
 	}
 };

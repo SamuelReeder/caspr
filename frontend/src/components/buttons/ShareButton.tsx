@@ -33,14 +33,13 @@ import {
 	Text
 } from "@chakra-ui/react";
 import { Graph, Preset } from "@/types";
-import { Timestamp } from "firebase/firestore";
 import {
 	shareGraphWithUser,
-	unshareGraphFromUser,
-	updateGraphData
+	unshareGraphFromUser
 } from "@/api";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import formatDate from "@/utils/formatDate";
+import { useAuth } from "@/context";
 
 interface ShareButtonProps {
 	graph: Graph;
@@ -55,8 +54,30 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		graph.sharedEmails || []
 	);
 	const [isLoading, setIsLoading] = useState(false);
+	const { firestoreUser } = useAuth();
+	const [canShare, setCanShare] = useState<boolean>(false);
 	const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 	const toast = useToast();
+
+	useEffect(() => {
+		const checkPermission = async () => {
+			if (!firestoreUser) return;
+
+			console.log(firestoreUser.email, graph.owner, graph.sharedEmails);
+
+			if (
+				graph.owner === firestoreUser.uid ||
+				(graph.sharedEmails && graph.sharedEmails.includes(firestoreUser.email))
+			) {
+				 console.log("Can share");
+				setCanShare(true);
+			} else {
+				setCanShare(false);
+			}
+		};
+
+		checkPermission();
+	}, [firestoreUser, graph]);
 
 	const handleShare = async () => {
 		if (emailList.length === 0) {
@@ -91,11 +112,10 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 				setEmailList([]);
 				toast({
 					title: "Graph shared",
-					description: `Successfully shared with ${successCount} recipient(s)${
-						failureCount > 0
+					description: `Successfully shared with ${successCount} recipient(s)${failureCount > 0
 							? `. Failed to share with ${failureCount} recipient(s).`
 							: ""
-					}`,
+						}`,
 					status: "success",
 					duration: 5000,
 					isClosable: true
@@ -149,7 +169,6 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		}
 	};
 
-
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(`${baseURL}/graph/${graph.graphURL}`);
 		toast({
@@ -195,121 +214,131 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 					<ModalHeader>Share Graph</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<FormControl mb={4}>
-							<FormLabel>Already shared with</FormLabel>
-							<Wrap spacing={2} mb={4}>
-								{sharedEmails.map((email) => (
-									<WrapItem key={email}>
-										<Tag
-											size="md"
-											borderRadius="full"
-											variant="solid"
-											colorScheme="green"
-										>
-											<TagLabel>{email}</TagLabel>
-											<TagCloseButton onClick={() => handleUnshare(email)} />
-										</Tag>
-									</WrapItem>
-								))}
-							</Wrap>
-
-							<FormLabel>Share with new people</FormLabel>
-							<Input
-								type="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								onKeyDown={handleEmailKeyDown}
-								placeholder="Enter email address and press Enter"
-							/>
-							<Wrap spacing={2} mt={2}>
-								{emailList.map((email) => (
-									<WrapItem key={email}>
-										<Tag
-											size="md"
-											borderRadius="full"
-											variant="solid"
-											colorScheme="blue"
-										>
-											<TagLabel>{email}</TagLabel>
-											<TagCloseButton
-												aria-label="close"
-												onClick={() => removeEmail(email)}
-											/>
-										</Tag>
-									</WrapItem>
-								))}
-							</Wrap>
-						</FormControl>
-						{graph.presets && graph.presets.length > 0 && (
-							<FormControl mb={4}>
-								<FormLabel>
-									Select Presets ({selectedPresets.length} selected)
-								</FormLabel>
-								<Box
-									maxHeight="200px"
-									overflowY="auto"
-									border="1px"
-									borderColor="gray.200"
-									borderRadius="md"
-									p={2}
-								>
-									<CheckboxGroup
-										value={selectedPresets}
-										onChange={(values) =>
-											setSelectedPresets(values as string[])
-										}
-									>
-										<Stack spacing={2}>
-											{graph.presets.map((preset: Preset) => (
-												<Box
-													key={preset.name}
-													p={2}
-													_hover={{ bg: "gray.50" }}
-													borderRadius="md"
+						{canShare && (
+							<>
+								<FormControl mb={4}>
+									<FormLabel>Already shared with</FormLabel>
+									<Wrap spacing={2} mb={4}>
+										{sharedEmails.map((email) => (
+											<WrapItem key={email}>
+												<Tag
+													size="md"
+													borderRadius="full"
+													variant="solid"
+													colorScheme="green"
 												>
-													<Checkbox value={preset.name}>
-														<Box>
-															<Text fontWeight="medium">{preset.name}</Text>
-															<Text fontSize="sm" color="gray.600">
-																Updated: {formatDate(preset.updated)}
-															</Text>
-															{preset.filters && (
-																<Wrap mt={1}>
-																	{preset.filters.map((filter) => (
-																		<WrapItem key={filter}>
-																			<Tag size="sm" colorScheme="purple">
-																				{filter}
-																			</Tag>
-																		</WrapItem>
-																	))}
-																</Wrap>
-															)}
-															{preset.pathways && (
-																<Wrap mt={1}>
-																	{preset.pathways.map((pathway) => (
-																		<WrapItem key={pathway}>
-																			<Tag size="sm" colorScheme="green">
-																				{pathway}
-																			</Tag>
-																		</WrapItem>
-																	))}
-																</Wrap>
-															)}
+													<TagLabel>{email}</TagLabel>
+													<TagCloseButton
+														onClick={() => handleUnshare(email)}
+													/>
+												</Tag>
+											</WrapItem>
+										))}
+									</Wrap>
+
+									<FormLabel>Share with new people</FormLabel>
+									<Input
+										type="email"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										onKeyDown={handleEmailKeyDown}
+										placeholder="Enter email address and press Enter"
+									/>
+									<Wrap spacing={2} mt={2}>
+										{emailList.map((email) => (
+											<WrapItem key={email}>
+												<Tag
+													size="md"
+													borderRadius="full"
+													variant="solid"
+													colorScheme="blue"
+												>
+													<TagLabel>{email}</TagLabel>
+													<TagCloseButton
+														aria-label="close"
+														onClick={() => removeEmail(email)}
+													/>
+												</Tag>
+											</WrapItem>
+										))}
+									</Wrap>
+								</FormControl>
+								{graph.presets && graph.presets.length > 0 && (
+									<FormControl mb={4}>
+										<FormLabel>
+											Select Presets ({selectedPresets.length} selected)
+										</FormLabel>
+										<Box
+											maxHeight="200px"
+											overflowY="auto"
+											border="1px"
+											borderColor="gray.200"
+											borderRadius="md"
+											p={2}
+										>
+											<CheckboxGroup
+												value={selectedPresets}
+												onChange={(values) =>
+													setSelectedPresets(values as string[])
+												}
+											>
+												<Stack spacing={2}>
+													{graph.presets.map((preset: Preset) => (
+														<Box
+															key={preset.name}
+															p={2}
+															_hover={{ bg: "gray.50" }}
+															borderRadius="md"
+														>
+															<Checkbox value={preset.name}>
+																<Box>
+																	<Text fontWeight="medium">{preset.name}</Text>
+																	<Text fontSize="sm" color="gray.600">
+																		Updated: {formatDate(preset.updated)}
+																	</Text>
+																	{preset.filters && (
+																		<Wrap mt={1}>
+																			{preset.filters.map((filter) => (
+																				<WrapItem key={filter}>
+																					<Tag size="sm" colorScheme="purple">
+																						{filter}
+																					</Tag>
+																				</WrapItem>
+																			))}
+																		</Wrap>
+																	)}
+																	{preset.pathways && (
+																		<Wrap mt={1}>
+																			{preset.pathways.map((pathway) => (
+																				<WrapItem key={pathway}>
+																					<Tag size="sm" colorScheme="green">
+																						{pathway}
+																					</Tag>
+																				</WrapItem>
+																			))}
+																		</Wrap>
+																	)}
+																</Box>
+															</Checkbox>
 														</Box>
-													</Checkbox>
-												</Box>
-											))}
-										</Stack>
-									</CheckboxGroup>
-								</Box>
-							</FormControl>
+													))}
+												</Stack>
+											</CheckboxGroup>
+										</Box>
+									</FormControl>
+								)}
+							</>
 						)}
 
 						{graph.graphVisibility && (
 							<FormControl>
 								<FormLabel>Public Link</FormLabel>
 								<InputGroup>
-									<Input value={`${baseURL}/graph/${graph.graphURL}`} color="gray.500" isReadOnly />
+									<Input
+										value={`${baseURL}/graph/${graph.graphURL}`}
+										color="gray.500"
+										isReadOnly
+									/>
 									<InputRightElement width="4.5rem">
 										<Button h="1.75rem" size="sm" onClick={copyToClipboard}>
 											Copy
@@ -321,16 +350,18 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button
-							colorScheme="blue"
-							mr={3}
-							onClick={handleShare}
-							isLoading={isLoading}
-							loadingText="Sharing..."
-							disabled={emailList.length === 0}
-						>
-							Share
-						</Button>
+						{canShare && (
+							<Button
+								colorScheme="blue"
+								mr={3}
+								onClick={handleShare}
+								isLoading={isLoading}
+								loadingText="Sharing..."
+								disabled={emailList.length === 0}
+							>
+								Share
+							</Button>
+						)}
 						<Button variant="ghost" onClick={onClose}>
 							Cancel
 						</Button>
