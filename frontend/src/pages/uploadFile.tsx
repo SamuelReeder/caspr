@@ -19,13 +19,24 @@ import {
 	Heading,
 	IconButton,
 	Input,
-	SlideFade,
 	Switch,
 	Text,
 	Textarea,
 	useToast
 } from "@chakra-ui/react";
 
+import {
+	Step,
+	StepIcon,
+	StepIndicator,
+	StepNumber,
+	StepSeparator,
+	StepStatus,
+	StepTitle,
+	Stepper,
+	useSteps,
+  } from "@chakra-ui/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
 import { RiArrowRightUpLine } from "react-icons/ri";
 import { uploadGraph } from "@/api";
 import { useAuth } from "@/context/AuthContext";
@@ -33,7 +44,17 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { validateJSON } from "@/utils/validateJSON";
 
+const steps = [
+	{ title: "Select File", description: "Choose the JSON file to upload" },
+	{ title: "Configure Details", description: "Provide details about your graph" },
+	{ title: "Review & Save", description: "Review the details and save the graph" },
+];
+
 export default function UploadFile() {
+	const { activeStep, setActiveStep } = useSteps({
+		index: 0,
+		count: steps.length,
+	});
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [graphName, setGraphName] = useState("");
 	const [graphDescription, setGraphDescription] = useState("");
@@ -98,15 +119,65 @@ export default function UploadFile() {
 		}
 	};
 
-	const handleFileChange = (file: File | null) => {
+	const handleFileChange = async (file: File | null) => {
 		if (file && file.type === "application/json") {
-			setSelectedFile(file);
+			try {
+				const fileContent = await file.text();
+				const validationResult = validateJSON(fileContent);
+	
+				if (!validationResult.isValid) {
+					toast({
+						title: "Invalid Graph Data",
+						description: validationResult.errorMessage,
+						status: "error",
+						duration: 5000,
+						isClosable: true,
+					});
+					setSelectedFile(null);
+					return;
+				}
+	
+				toast({
+					title: "File Uploaded",
+					description: "Graph data is valid.",
+					status: "success",
+					duration: 5000,
+					isClosable: true,
+				});
+	
+				setSelectedFile(file);
+			} catch (error) {
+				toast({
+					title: "Error Reading File",
+					description: "An error occurred while reading the file.",
+					status: "error",
+					duration: 5000,
+					isClosable: true,
+				});
+				setSelectedFile(null);
+			}
 		} else {
-			// TODO - display invalid file error
+			toast({
+				title: "Invalid File Type",
+				description: "Only JSON files are allowed.",
+				status: "error",
+				duration: 5000,
+				isClosable: true,
+			});
 			setSelectedFile(null);
 		}
 	};
-
+	
+	const handleNextStep = () => {
+		if (activeStep < steps.length - 1) {
+		  setActiveStep(activeStep + 1);
+		}
+	};
+	const handlePrevStep = () => {
+		if (activeStep > 0) {
+		  setActiveStep(activeStep - 1);
+		}
+	};
 	const handleSaveClick = async () => {
 		setIsLoading(true);
 
@@ -159,7 +230,6 @@ export default function UploadFile() {
 			setIsLoading(false);
 		}
 	};
-
 	return (
 		<div className="bg-gray-800 h-screen overflow-auto relative">
 			<Button
@@ -177,105 +247,133 @@ export default function UploadFile() {
 			<div className="h-full max-w-4xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-full">
 					<Box className="text-center">
-						<Heading className="text-center text-4xl">File Upload</Heading>
-						<Text className="pt-2">
-							Upload your JSON data to be used in your graph.
-						</Text>
-
-						{/* Drag and Drop box */}
-						<div
-							className={`border border-dashed border-black rounded-lg h-48 mt-4 flex flex-col items-center justify-center ${
-								isDragging ? "bg-gray-100" : ""
-							}`}
-							onDragEnter={handleDragEnter}
-							onDragLeave={handleDragLeave}
-							onDragOver={handleDragOver}
-							onDrop={handleDrop}
-						>
-							<input
-								type="file"
-								accept=".json"
-								onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-								className="hidden"
-								id="fileInput"
-							/>
-							<label htmlFor="fileInput" className="cursor-pointer">
-								<span className="underline">
-									Browse your computer or drag and drop here
-								</span>
-							</label>
-							{selectedFile && (
-								<div className="flex flex-col gap-2">
-									<Text mt={2} className="text-primary-500">
-										Selected file: {selectedFile.name}
-									</Text>
-									<IconButton
-										isRound={true}
-										aria-label="delete file"
-										variant="ghost"
-										size="sm"
-										icon={<CloseIcon />}
-										onClick={handleRemoveFile}
+						<Stepper index={activeStep}>
+							{steps.map((step, index) => (
+								<Step key={index}>
+									<StepIndicator>
+									<StepStatus
+										complete={<StepIcon />}
+										incomplete={<StepNumber />}
+										active={<StepNumber />}
 									/>
-								</div>
-							)}
-						</div>
-
-						{/* Sample JSON Files */}
-						{!selectedFile && (
-							<div className="flex flex-col gap-2 mt-6">
-								<Divider orientation="horizontal" borderColor="gray.400" />
+									</StepIndicator>
+									<Box flexShrink="0">
+									<StepTitle>{step.title}</StepTitle>
+									</Box>
+									<StepSeparator />
+								</Step>
+							))}
+						</Stepper>
+						{/* Upload File */}
+						{activeStep === 0 && (
+							<>
+								<Heading className="text-center text-4xl mt-6">File Upload</Heading>
 								<Text className="pt-2">
-									Try our example files, which can be uploaded and opened. Not
-									sure where to start? Check out our User Guide.
+									Upload your JSON data to be used in your graph.
 								</Text>
 
-								<div className="flex flex-row gap-2 justify-center w-full">
-									<Button
-										className="border rounded-lg p-2"
-										size="sm"
-										rightIcon={<DownloadIcon />}
-										onClick={() => handleDownloadExample(10)}
-									>
-										10 Node Example
-									</Button>
-
-									<Button
-										className="border rounded-lg p-2"
-										size="sm"
-										rightIcon={<DownloadIcon />}
-										onClick={() => handleDownloadExample(100)}
-									>
-										100 Node Example
-									</Button>
-
-									<Button
-										className="border rounded-lg p-2"
-										as="a"
-										href="https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing"
-										target="_blank"
-										rel="noopener noreferrer"
-										size="sm"
-									>
-										Open user guide{" "}
-										<RiArrowRightUpLine className="ml-2" size={16} />
-									</Button>
+								{/* Drag and Drop box */}
+								<div
+									className={`border border-dashed border-black rounded-lg h-48 mt-4 flex flex-col items-center justify-center ${
+										isDragging ? "bg-gray-100" : ""
+									}`}
+									onDragEnter={handleDragEnter}
+									onDragLeave={handleDragLeave}
+									onDragOver={handleDragOver}
+									onDrop={handleDrop}
+								>
+									<input
+										type="file"
+										accept=".json"
+										onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+										className="hidden"
+										id="fileInput"
+									/>
+									<label htmlFor="fileInput" className="cursor-pointer">
+										<span className="underline">
+											Browse your computer or drag and drop here
+										</span>
+									</label>
+									{selectedFile && (
+										<div className="flex flex-col gap-2">
+											<Text mt={2} className="text-primary-500">
+												Selected file: {selectedFile.name}
+											</Text>
+											<IconButton
+												isRound={true}
+												aria-label="delete file"
+												variant="ghost"
+												size="sm"
+												icon={<CloseIcon />}
+												onClick={handleRemoveFile}
+											/>
+										</div>
+									)}
 								</div>
-							</div>
-						)}
 
-						{selectedFile && (
-							<SlideFade
-								in={!!selectedFile}
-								offsetY="50px"
-								transition={{ enter: { duration: 0.6 } }}
-							>
+								{/* Sample JSON Files */}
+								{!selectedFile && (
+									<div className="flex flex-col gap-2 mt-6">
+										<Divider orientation="horizontal" borderColor="gray.400" />
+										<Text className="pt-2">
+											Try our example files, which can be uploaded and opened. Not
+											sure where to start? Check out our User Guide.
+										</Text>
+
+										<div className="flex flex-row gap-2 justify-center w-full">
+											<Button
+												className="border rounded-lg p-2"
+												size="sm"
+												rightIcon={<DownloadIcon />}
+												onClick={() => handleDownloadExample(10)}
+											>
+												10 Node Example
+											</Button>
+
+											<Button
+												className="border rounded-lg p-2"
+												size="sm"
+												rightIcon={<DownloadIcon />}
+												onClick={() => handleDownloadExample(100)}
+											>
+												100 Node Example
+											</Button>
+
+											<Button
+												className="border rounded-lg p-2"
+												as="a"
+												href="https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing"
+												target="_blank"
+												rel="noopener noreferrer"
+												size="sm"
+											>
+												Open user guide{" "}
+												<RiArrowRightUpLine className="ml-2" size={16} />
+											</Button>
+										</div>
+									</div>
+								)}
+								<Button
+									mt={4}
+									onClick={handleNextStep}
+									colorScheme="blue"
+									isDisabled={!selectedFile}
+								>
+									Next
+								</Button>
+							</>
+						)}
+						{/* Add Details */}
+						{activeStep === 1 && (
+							<>
+								<Heading className="text-center text-4xl mt-6">Add Details</Heading>
 								<form>
 									<FormControl>
 										{/* Graph Name */}
-										<FormLabel className="pt-7">Graph Name</FormLabel>
+										<FormLabel className="pt-7 ml-6">Graph Name</FormLabel>
 										<Input
-											className="w-full p-2 border rounded-lg"
+											maxWidth="800px"
+											className="w-full p-2 border rounded-lg  ml-6"
 											placeholder="Enter a name for your graph"
 											_placeholder={{ opacity: 1, color: "gray.600" }}
 											onChange={(e) => setGraphName(e.target.value)}
@@ -283,17 +381,18 @@ export default function UploadFile() {
 										/>
 
 										{/* Graph Description */}
-										<FormLabel className="pt-7">Graph Description</FormLabel>
+										<FormLabel className="pt-7 ml-6">Graph Description</FormLabel>
 										<Textarea
-											className="w-full p-2 border rounded-lg"
+											maxWidth="800px"
+											className="w-full p-2 border rounded-lg ml-6"
 											placeholder="Enter a description for your graph"
 											_placeholder={{ opacity: 1, color: "gray.600" }}
 											onChange={(e) => setGraphDescription(e.target.value)}
 											value={graphDescription}
 										/>
 
-										<FormLabel className="pt-7"> Visibility</FormLabel>
-										<Box className="pl-5" textAlign="left">
+										<FormLabel className="pt-7 ml-6"> Visibility</FormLabel>
+										<Box className="pl-5 ml-3" textAlign="left">
 											<Switch
 												onChange={handleSwitchToggle}
 												isChecked={graphVisibility}
@@ -302,30 +401,89 @@ export default function UploadFile() {
 												Publically Available
 											</Switch>
 										</Box>
-
-										{/* Buttons */}
-										<div className="flex flex-row gap-4 justify-center mt-7">
-											<Button
-												className="border rounded-lg p-2"
-												rightIcon={<RepeatIcon />}
-												onClick={handleRemoveFile}
-											>
-												Start Over
-											</Button>
-
-											<Button
-												colorScheme="blue"
-												className="w-fit"
-												onClick={handleSaveClick}
-												isLoading={isLoading}
-												loadingText="Saving graph..."
-											>
-												Save graph to your account
-											</Button>
-										</div>
 									</FormControl>
 								</form>
-							</SlideFade>
+								<div className="flex flex-row justify-between mt-7 px-6">
+									<Button onClick={handlePrevStep}>Back</Button>
+									<Button
+										mt={4}
+										onClick={handleNextStep}
+										colorScheme="blue"
+										isDisabled={!selectedFile}
+									>
+										Next
+									</Button>
+								</div>
+								</>
+						)}
+						{/* Review and Save */}
+						{activeStep === 2 && (
+							<>
+								<Heading className="text-center text-4xl mt-6">
+									Review & Save
+								</Heading>
+
+								<Box
+									mt={6}
+									p={6}
+									borderWidth="1px"
+									borderRadius="lg"
+									shadow="md"
+									bg="gray.50"
+									maxWidth="600px"
+									mx="auto"
+									textAlign="left"
+								>
+									{selectedFile && (
+										<Text fontSize="lg" fontWeight="semibold" color="gray.700" mb={4}>
+											<strong>Graph File:</strong>{" "}
+											<span className="text-gray-600">
+												{selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
+											</span>
+										</Text>
+									)}
+									<Text fontSize="lg" fontWeight="semibold" color="gray.700" mb={4}>
+										<strong>Graph Name:</strong>{" "}
+										<span className="text-gray-600">{graphName || "N/A"}</span>
+									</Text>
+									<Text fontSize="lg" fontWeight="semibold" color="gray.700" mb={4}>
+										<strong>Description:</strong>{" "}
+										<span className="text-gray-600">{graphDescription || "N/A"}</span>
+									</Text>
+									<Text fontSize="lg" fontWeight="semibold" color="gray.700">
+										<strong>Visibility:</strong>{" "}
+										<span
+											className={`${
+												graphVisibility ? "text-green-500" : "text-red-500"
+											}`}
+										>
+											{graphVisibility ? "Public" : "Private"}
+										</span>
+									</Text>
+								</Box>
+
+								{/* Buttons */}
+								<Box className="flex justify-between mt-10 px-6">
+									<Button
+										variant="outline"
+										colorScheme="gray"
+										size="lg"
+										onClick={handlePrevStep}
+									>
+										Back
+									</Button>
+									<Button
+										colorScheme="blue"
+										size="lg"
+										onClick={handleSaveClick}
+										isLoading={isLoading}
+										loadingText="Saving..."
+										rightIcon={<CheckCircleIcon />}
+									>
+										Save graph to your account
+									</Button>
+								</Box>
+							</>
 						)}
 					</Box>
 				</div>
