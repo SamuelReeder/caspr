@@ -204,7 +204,7 @@ export default function CreateAccount() {
 										className="border rounded-lg p-2"
 										type="submit"
 										onClick={() => {
-											router.push("/");
+											router.push("/login");
 										}}
 									>
 										Login Instead
