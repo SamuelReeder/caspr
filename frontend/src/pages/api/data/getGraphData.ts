@@ -1,3 +1,10 @@
+/**
+ * Get the graph JSON from storage
+ * @param req The incoming request object
+ * @param res The outgoing response object
+ * @returns A message indicating the success of the operation
+ * @Samuel
+ */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbAdmin } from "@/config/firebaseAdmin";
 import { auth as adminAuth } from "firebase-admin";

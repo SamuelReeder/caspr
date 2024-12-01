@@ -192,7 +192,7 @@ export const getGraphData = async (graph: Graph): Promise<any> => {
 			headers["Authorization"] = `Bearer ${idToken}`;
 		}
 
-		const response = await apiClient(`/api/data/getGraph`, {
+		const response = await apiClient(`/api/data/getGraphData`, {
 			method: "POST",
 			headers,
 			body: JSON.stringify({ id: graph.id }),
