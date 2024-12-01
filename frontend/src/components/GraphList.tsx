@@ -4,7 +4,7 @@
  * @param {String} page - Page title
  * @returns {ReactElement} Graph list component
  */
-import { Divider, Heading, Select, Text } from "@chakra-ui/react";
+import { Divider, Heading, Select, Text, Tooltip } from "@chakra-ui/react";
 import { Graph, GraphListProps } from "@/types/graph";
 import { useEffect, useState } from "react";
 
@@ -24,7 +24,8 @@ const GraphList = ({
 	sortType,
 	setSortType,
 	filterType,
-	setFilterType
+	setFilterType,
+	search
 }: GraphListProps) => {
 	const { firestoreUser } = useAuth();
 
@@ -76,48 +77,62 @@ const GraphList = ({
 
 				<div className="ml-auto flex flex-row gap-2">
 					{setSortType && sortOptions && (
-						<Select
-							placeholder={
-								sortOptions.find((option) => option.value === sortType)
-									?.label || "Apply Sort"
-							}
-							size="sm"
-							onChange={(e) => {
-								setSortType(e.target.value);
-							}}
-							className="!min-w-[125px] !rounded-md"
-							variant="filled"
+						<Tooltip
+							label="Sorting and filtering cannot be applied while using the search bar"
+							aria-label="A tooltip"
+							isDisabled={search.length === 0}
 						>
-							{sortOptions
-								.filter((option) => option.value !== sortType)
-								.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-						</Select>
+							<Select
+								placeholder={
+									sortOptions.find((option) => option.value === sortType)
+										?.label || "Apply Sort"
+								}
+								size="sm"
+								onChange={(e) => {
+									setSortType(e.target.value);
+								}}
+								className="!min-w-[125px] !rounded-md"
+								variant="filled"
+								isDisabled={search.length > 0}
+							>
+								{sortOptions
+									.filter((option) => option.value !== sortType)
+									.map((option) => (
+										<option key={option.value} value={option.value}>
+											{option.label}
+										</option>
+									))}
+							</Select>
+						</Tooltip>
 					)}
 					{setFilterType && filterOptions && (
-						<Select
-							placeholder={
-								filterOptions.find((option) => option.value === filterType)
-									?.label || "Apply filter"
-							}
-							size="sm"
-							onChange={(e) => {
-								setFilterType(e.target.value);
-							}}
-							className="!min-w-[125px] !rounded-md"
-							variant="filled"
+						<Tooltip
+							label="Sorting and filtering cannot be applied while using the search bar"
+							aria-label="A tooltip"
+							isDisabled={search.length === 0}
 						>
-							{filterOptions
-								.filter((option) => option.value !== filterType)
-								.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-						</Select>
+							<Select
+								placeholder={
+									filterOptions.find((option) => option.value === filterType)
+										?.label || "Apply filter"
+								}
+								size="sm"
+								onChange={(e) => {
+									setFilterType(e.target.value);
+								}}
+								className="!min-w-[125px] !rounded-md"
+								variant="filled"
+								isDisabled={search.length > 0}
+							>
+								{filterOptions
+									.filter((option) => option.value !== filterType)
+									.map((option) => (
+										<option key={option.value} value={option.value}>
+											{option.label}
+										</option>
+									))}
+							</Select>
+						</Tooltip>
 					)}
 				</div>
 			</div>

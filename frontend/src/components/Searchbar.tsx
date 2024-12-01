@@ -5,18 +5,28 @@
  * @returns {ReactElement} Searchbar component
  */
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Input, Tooltip } from "@chakra-ui/react";
 import { Graph } from "@/types";
 import { getUser } from "@/api/firestore"
 
 interface SearchbarProps {
+	search: string;
+	setSearch: React.Dispatch<React.SetStateAction<string>>;
 	graphs: Graph[] | undefined;
 	setGraphs: React.Dispatch<React.SetStateAction<Graph[] | undefined>>;
+	sortType: String;
+	filterType: String;
 }
 
-const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
-	const [search, setSearch] = useState("");
+const Searchbar = ({ search, setSearch, graphs, setGraphs, sortType, filterType }: SearchbarProps) => {
 	const originalGraphsRef = useRef<[Graph | undefined, string][]>([]);
+
+	useEffect(() => {
+        console.log("search bar: ", graphs);
+        if (graphs && search === "") {
+            originalGraphsRef.current = graphs.map((graph) => [graph, ""]);
+        }
+    }, [sortType, filterType, graphs]);
 
 	useEffect(() => {
 		const fetchOwnerData = async () => {
@@ -78,13 +88,20 @@ const Searchbar = ({ graphs, setGraphs }: SearchbarProps) => {
 
 	return (
 		<Box className="mb-6">
-			<Input
-				type="text"
-				placeholder="Search for a graph"
-				value={search}
-				onChange={handleSearch}
-				className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-			/>
+            <Tooltip
+                label="Search cannot be applied while a sort or filter is applied"
+                aria-label="A tooltip"
+                isDisabled={sortType === "none" && filterType === "none"}
+            >
+                <Input
+                    isDisabled={sortType !== "none" || filterType !== "none"}
+                    type="text"
+                    placeholder="Search for a graph"
+                    value={search}
+                    onChange={handleSearch}
+                    className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+            </Tooltip>
 		</Box>
 	);
 };

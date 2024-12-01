@@ -34,6 +34,7 @@ export interface GraphListProps {
 	setSortType?: React.Dispatch<React.SetStateAction<string>>;
 	filterType?: string;
 	setFilterType?: React.Dispatch<React.SetStateAction<string>>;
+	search: string
 }
 
 /**

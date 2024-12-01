@@ -18,6 +18,7 @@ function SharedWithMe() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [sortType, setSortType] = useState("none");
 	const [filterType, setFilterType] = useState("none");
+	const [search, setSearch] = useState("");
 
 	const fetchUsersSharedGraphs = useCallback(async () => {
 		if (!firebaseUser?.email) return;
@@ -74,7 +75,7 @@ function SharedWithMe() {
 			<div className="p-8 flex flex-col w-full overflow-y-auto">
 				<div className="flex flex-row w-full">
 					<div className="flex flex-col gap-2 w-full">
-						<Searchbar graphs={graphs} setGraphs={setGraphs} />
+						<Searchbar search={search} setSearch={setSearch} graphs={graphs} setGraphs={setGraphs} sortType={sortType} filterType={filterType}/>
 						<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
 						<Text>Email: {firebaseUser.email}</Text>
 					</div>
@@ -90,6 +91,7 @@ function SharedWithMe() {
 					setSortType={setSortType}
 					filterType={filterType}
 					setFilterType={setFilterType}
+					search={search}
 				/>
 			</div>
 		</div>
