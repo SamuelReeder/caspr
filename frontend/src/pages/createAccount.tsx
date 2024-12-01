@@ -13,14 +13,19 @@ import {
 	Input,
 	InputGroup,
 	InputRightElement,
+	List,
+	ListIcon,
+	ListItem,
 	Text,
 	useToast
 } from "@chakra-ui/react";
 import { createAccountWithEmail, loginWithGoogle } from "@/api";
 
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { checkPasswordStrength } from "@/utils/passwordStrength";
+import { PasswordChecklist } from "@/types/passwordStrength";
 
 export default function CreateAccount() {
 	const toast = useToast();
@@ -34,6 +39,17 @@ export default function CreateAccount() {
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [googleLoading, setGoogleLoading] = useState<boolean>(false);
+	const [passwordStrength, setPasswordStrength] = useState("");
+	const [passwordColor, setPasswordColor] = useState("");
+	const [passwordChecklist, setPasswordChecklist] = useState<PasswordChecklist>(
+		{
+			hasUpperCase: false,
+			hasLowerCase: false,
+			hasNumbers: false,
+			hasSpecialChar: false,
+			sufficientLength: false
+		}
+	);
 
 	const handleSubmit = async () => {
 		// If user mistyped the password
@@ -142,9 +158,18 @@ export default function CreateAccount() {
 										type={showPassword ? "text" : "password"}
 										placeholder="Enter password"
 										_placeholder={{ opacity: 1, color: "gray.600" }}
-										onChange={(e) => setPassword(e.target.value)}
+										onChange={(e) => {
+											setPassword(e.target.value);
+											const strengthResult = checkPasswordStrength(
+												e.target.value
+											);
+											setPasswordStrength(strengthResult.strength);
+											setPasswordColor(strengthResult.color);
+											setPasswordChecklist(strengthResult.checklist);
+										}}
 										value={password}
 									/>
+
 									<InputRightElement width="4.5rem">
 										<Button
 											variant="ghost"
@@ -158,6 +183,119 @@ export default function CreateAccount() {
 										</Button>
 									</InputRightElement>
 								</InputGroup>
+
+								{password && (
+									<Text
+										fontSize="sm"
+										color={passwordColor}
+										mt={2}
+										textAlign="left"
+										pl={1}
+										fontWeight="medium"
+									>
+										Password Strength: {passwordStrength}
+									</Text>
+								)}
+
+								<List spacing={1} mt={2} fontSize="sm">
+									<ListItem
+										color={
+											passwordChecklist.sufficientLength
+												? "green.500"
+												: "gray.500"
+										}
+										display="flex"
+										alignItems="center"
+									>
+										<ListIcon
+											as={
+												passwordChecklist.sufficientLength
+													? CheckIcon
+													: CloseIcon
+											}
+											color={
+												passwordChecklist.sufficientLength
+													? "green.500"
+													: "gray.500"
+											}
+										/>
+										At least 8 characters
+									</ListItem>
+									<ListItem
+										color={
+											passwordChecklist.hasUpperCase ? "green.500" : "gray.500"
+										}
+										display="flex"
+										alignItems="center"
+									>
+										<ListIcon
+											as={
+												passwordChecklist.hasUpperCase ? CheckIcon : CloseIcon
+											}
+											color={
+												passwordChecklist.hasUpperCase
+													? "green.500"
+													: "gray.500"
+											}
+										/>
+										Contains uppercase letter
+									</ListItem>
+									<ListItem
+										color={
+											passwordChecklist.hasLowerCase ? "green.500" : "gray.500"
+										}
+										display="flex"
+										alignItems="center"
+									>
+										<ListIcon
+											as={
+												passwordChecklist.hasLowerCase ? CheckIcon : CloseIcon
+											}
+											color={
+												passwordChecklist.hasLowerCase
+													? "green.500"
+													: "gray.500"
+											}
+										/>
+										Contains lowercase letter
+									</ListItem>
+									<ListItem
+										color={
+											passwordChecklist.hasNumbers ? "green.500" : "gray.500"
+										}
+										display="flex"
+										alignItems="center"
+									>
+										<ListIcon
+											as={passwordChecklist.hasNumbers ? CheckIcon : CloseIcon}
+											color={
+												passwordChecklist.hasNumbers ? "green.500" : "gray.500"
+											}
+										/>
+										Contains number
+									</ListItem>
+									<ListItem
+										color={
+											passwordChecklist.hasSpecialChar
+												? "green.500"
+												: "gray.500"
+										}
+										display="flex"
+										alignItems="center"
+									>
+										<ListIcon
+											as={
+												passwordChecklist.hasSpecialChar ? CheckIcon : CloseIcon
+											}
+											color={
+												passwordChecklist.hasSpecialChar
+													? "green.500"
+													: "gray.500"
+											}
+										/>
+										Contains special character
+									</ListItem>
+								</List>
 
 								<FormLabel className="pt-7">Confirm Password</FormLabel>
 
