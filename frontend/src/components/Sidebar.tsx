@@ -1,35 +1,49 @@
-import { useState, useEffect } from "react";
+import {
+	ArrowForwardIcon,
+	AttachmentIcon,
+	ChevronRightIcon,
+	ExternalLinkIcon,
+	HamburgerIcon,
+	LockIcon,
+	Search2Icon,
+	SearchIcon,
+	UnlockIcon,
+	ViewIcon
+} from "@chakra-ui/icons";
 import { Button, Link, Text } from "@chakra-ui/react";
-import { ArrowForwardIcon, ChevronRightIcon, HamburgerIcon, LockIcon, ViewIcon, ExternalLinkIcon, AttachmentIcon, Search2Icon, SearchIcon, UnlockIcon } from "@chakra-ui/icons";
-import { useRouter } from "next/router";
+import { RiArrowRightUpLine, RiLockPasswordLine } from "react-icons/ri";
+import { useEffect, useState } from "react";
+
+import { MdShowChart } from "react-icons/md";
 import { universalLogout } from "@/api";
 import { useAuth } from "@/context";
-import { MdShowChart } from "react-icons/md"
-import { RiLockPasswordLine } from "react-icons/ri"
+import { useRouter } from "next/router";
 
 export default function Sidebar() {
-	const { firebaseUser } = useAuth()
+	const { firebaseUser } = useAuth();
 	const router = useRouter();
 	const currentRoute = location.pathname;
-	const [isCollapsed, setIsCollapsed] = useState<boolean>(JSON.parse(localStorage.getItem("sidebarCollapsed") || 'false'));
+	const [isCollapsed, setIsCollapsed] = useState<boolean>(
+		JSON.parse(localStorage.getItem("sidebarCollapsed") || "false")
+	);
 	const [isFullyExpanded, setIsFullyExpanded] = useState(true);
 
 	useEffect(() => {
 		if (!isCollapsed) {
-		  const timer = setTimeout(() => setIsFullyExpanded(true), 100);
-		  return () => clearTimeout(timer);
+			const timer = setTimeout(() => setIsFullyExpanded(true), 100);
+			return () => clearTimeout(timer);
 		} else {
-		  setIsFullyExpanded(false);
+			setIsFullyExpanded(false);
 		}
-	  }, [isCollapsed]);
+	}, [isCollapsed]);
 
 	useEffect(() => {
 		// Retrieve the collapsed state from localStorage
 		const collapsedState = localStorage.getItem("sidebarCollapsed");
 		if (collapsedState) {
-		  setIsCollapsed(JSON.parse(collapsedState));
+			setIsCollapsed(JSON.parse(collapsedState));
 		}
-	  }, []);
+	}, []);
 
 	const handleLogout = async () => {
 		try {
@@ -41,25 +55,27 @@ export default function Sidebar() {
 	};
 
 	const handleLogin = () => {
-		router.push("/login")
-	}
+		router.push("/login");
+	};
 
 	const toggleCollapse = () => {
 		const newCollapsedState = !isCollapsed;
 		setIsCollapsed(newCollapsedState);
 		// Save the collapsed state to localStorage
 		localStorage.setItem("sidebarCollapsed", JSON.stringify(newCollapsedState));
-	  };
+	};
 
 	return (
-		<div className={`bg-gray-800 text-white ${isCollapsed ? "w-20" : "w-60"} p-7 shadow-lg top-0 left-0 h-full transition-width duration-300 transition-ease`}>
+		<div
+			className={`bg-gray-800 text-white ${isCollapsed ? "w-20" : "w-60"} p-7 shadow-lg top-0 left-0 h-full transition-width duration-300 transition-ease`}
+		>
 			<div className="flex flex-col gap-4 h-full">
 				<div className="flex flex-row justify-between items-start">
 					{!isCollapsed && (
-					<div className="flex flex-col justify-center ml-10">
-						<img src="/favicon.ico" alt="Logo" style={{ height: '90px'}} />
-						<img src="/logo.png" alt="Logo" style={{ height: '30px'}} />
-					</div>
+						<div className="flex flex-col justify-center ml-10">
+							<img src="/favicon.ico" alt="Logo" style={{ height: "90px" }} />
+							<img src="/logo.png" alt="Logo" style={{ height: "30px" }} />
+						</div>
 					)}
 					<Button
 						onClick={toggleCollapse}
@@ -68,7 +84,11 @@ export default function Sidebar() {
 						colorScheme="white"
 						className={`p-3 ${isCollapsed ? "justify-center w-full" : ""} hover:bg-gray-500 hover:bg-opacity-50`}
 					>
-					{isCollapsed ? <ChevronRightIcon boxSize={5} /> : <HamburgerIcon boxSize={5} />}
+						{isCollapsed ? (
+							<ChevronRightIcon boxSize={5} />
+						) : (
+							<HamburgerIcon boxSize={5} />
+						)}
 					</Button>
 				</div>
 				{!isCollapsed && (
@@ -137,7 +157,8 @@ export default function Sidebar() {
 											Reset Password
 										</Button>
 									</Link>
-								</>)}
+								</>
+							)}
 							{!firebaseUser && (
 								<>
 									<Button
@@ -150,6 +171,18 @@ export default function Sidebar() {
 									</Button>
 								</>
 							)}
+							<Button
+								as="a"
+								href="https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing"
+								target="_blank"
+								rel="noopener noreferrer"
+								size="md"
+								className="w-full mt-2"
+								variant="link"
+							>
+								Open User Guide{" "}
+								<RiArrowRightUpLine className="ml-2" size={16} />
+							</Button>
 						</div>
 					</>
 				)}
@@ -157,7 +190,10 @@ export default function Sidebar() {
 					<>
 						{firebaseUser && (
 							<>
-								<Link href="/upload-file" className={`hover:text-gray-400 justify-center w-full mt-4`}>
+								<Link
+									href="/upload-file"
+									className={`hover:text-gray-400 justify-center w-full mt-4`}
+								>
 									<AttachmentIcon boxSize={5} />
 								</Link>
 
@@ -165,14 +201,20 @@ export default function Sidebar() {
 									className={`hover:text-gray-400 justify-center w-full mt-4`}
 									onClick={() => router.push("/")}
 								>
-									<MdShowChart size={20} color={currentRoute === "/" ? "gray" : ""}/>
+									<MdShowChart
+										size={20}
+										color={currentRoute === "/" ? "gray" : ""}
+									/>
 								</Link>
 
 								<Link
 									className={`hover:text-gray-400 justify-center w-full mt-4`}
 									onClick={() => router.push("/sharedWithMe")}
 								>
-									<ViewIcon boxSize={5} color={currentRoute === "/sharedWithMe" ? "gray" : ""}/>
+									<ViewIcon
+										boxSize={5}
+										color={currentRoute === "/sharedWithMe" ? "gray" : ""}
+									/>
 								</Link>
 							</>
 						)}
@@ -180,7 +222,10 @@ export default function Sidebar() {
 							className={`hover:text-gray-400 justify-center w-full mt-4`}
 							onClick={() => router.push("/explore")}
 						>
-							<SearchIcon boxSize={5} color={currentRoute === "/explore" ? "gray" : ""}/>
+							<SearchIcon
+								boxSize={5}
+								color={currentRoute === "/explore" ? "gray" : ""}
+							/>
 						</Link>
 
 						<div className="flex flex-col gap-2 mt-auto justify-center w-full">
@@ -202,16 +247,21 @@ export default function Sidebar() {
 							)}
 
 							{!firebaseUser && (
-								<>
-									<Link
-										className={`hover:text-gray-400 justify-center w-full mt-4 mb-4`}
-										onClick={handleLogin}
-									>
-										<LockIcon boxSize={5} />
-									</Link>
-								</>
+								<Link
+									className={`hover:text-gray-400 justify-center w-full mt-4 mb-4`}
+									onClick={handleLogin}
+								>
+									<LockIcon boxSize={5} />
+								</Link>
 							)}
 
+							<Link
+								href="https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing"
+								isExternal
+								className="hover:text-gray-400 justify-center w-full mt-4"
+							>
+								<RiArrowRightUpLine size={20} />{" "}
+							</Link>
 						</div>
 					</>
 				)}
