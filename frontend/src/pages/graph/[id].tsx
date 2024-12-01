@@ -142,6 +142,13 @@ const GraphPageContent = () => {
 				}
 			} catch (error) {
 				console.error("Error fetching graph data:", error);
+				toast({
+					title: "Error",
+					description: "Failed to fetch graph data",
+					status: "error",
+					duration: null,
+					isClosable: true
+				});
 				router.push("/");
 			} finally {
 				setLoading(false);

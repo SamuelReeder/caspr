@@ -33,7 +33,9 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { firebaseUser } = useAuth();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
-	const [switchDisabled, setSwitchDisabled] = useState(false);
+	const [switchDisabled, setSwitchDisabled] = useState<boolean>(
+		(graph?.owner ?? '') !== (firebaseUser?.uid ?? '')
+	);
 	const toast = useToast();
 
 	const handleSwitchToggle = () => {
@@ -84,26 +86,24 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		window.location.href = `${baseURL}/graph/${graph.graphURL}`;
 	};
 
-	console.log(owner)
-
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">
-				{graph.owner === firebaseUser?.uid && (
-					<div className="flex flex-col space-y-3">
-						<Heading className="hover:underline" size="md" onClick={handleOpenClick}>{graph.graphName}</Heading>
-						<Switch
-							aria-label="Enable Public Visibility"
-							fontSize="sm"
-							isChecked={publicGraph}
-							isDisabled={switchDisabled}
-							onChange={handleSwitchToggle}
-						>
-							{" "}
-							Public Visibility{" "}
-						</Switch>
-					</div>
-				)}
+
+				<div className="flex flex-col space-y-3">
+					<Heading className="hover:underline" size="md" onClick={handleOpenClick}>{graph.graphName}</Heading>
+					<Switch
+						aria-label="Enable Public Visibility"
+						fontSize="sm"
+						isChecked={publicGraph}
+						isDisabled={switchDisabled}
+						onChange={handleSwitchToggle}
+					>
+						{" "}
+						Public Visibility{" "}
+					</Switch>
+				</div>
+
 				<div className="flex flex-col">
 					<Text>{`by ${owner.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">

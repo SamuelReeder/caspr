@@ -127,7 +127,7 @@ export const fetchAllPublicGraphs = async (
 
 		const graphs = await graphDataResponse.json()
 		sortGraphs(graphs, sortType)
-		
+
 		return graphs;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
@@ -176,20 +176,37 @@ export const fetchAllUserAccessibleGraphs = async (
  * @Samuel
  */
 export const getGraphData = async (graph: Graph): Promise<any> => {
-	try {
-		const storage = getStorage(app);
-		const storageRef = ref(storage, graph.graphFileURL);
-		const downloadURL = await getDownloadURL(storageRef);
+	if (!graph || !graph.id) {
+		throw new Error("Invalid graph object");
+	}
 
-		const response = await fetch(downloadURL);
-		if (!response.ok) {
-			console.error("Error fetching graph data");
+	try {
+		const auth = getAuth();
+		const idToken = await auth.currentUser?.getIdToken();
+
+		const headers: Record<string, string> = {
+			"Content-Type": "application/json",
+		};
+
+		if (idToken) {
+			headers["Authorization"] = `Bearer ${idToken}`;
 		}
 
-		const jsonData = await response.json();
-		return jsonData;
+		const response = await apiClient(`/api/data/getGraph`, {
+			method: "POST",
+			headers,
+			body: JSON.stringify({ id: graph.id }),
+		});
+
+		if (!response.ok) {
+			throw new Error("Error fetching graph data");
+		}
+
+		const graphData = await response.json();
+		return graphData;
 	} catch (error) {
 		console.error("Error fetching graph data:", error);
+		throw error;
 	}
 };
 
