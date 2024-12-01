@@ -75,7 +75,14 @@ function SharedWithMe() {
 			<div className="p-8 flex flex-col w-full overflow-y-auto">
 				<div className="flex flex-row w-full">
 					<div className="flex flex-col gap-2 w-full">
-						<Searchbar search={search} setSearch={setSearch} graphs={graphs} setGraphs={setGraphs} sortType={sortType} filterType={filterType}/>
+						<Searchbar
+							search={search}
+							setSearch={setSearch}
+							graphs={graphs}
+							setGraphs={setGraphs}
+							sortType={sortType}
+							filterType={filterType}
+						/>
 						<Heading>Welcome, {firebaseUser?.displayName || "User"}</Heading>
 						<Text>Email: {firebaseUser.email}</Text>
 					</div>
