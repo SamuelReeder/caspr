@@ -4,22 +4,29 @@
  */
 import "tailwindcss/tailwind.css";
 
-import { ArrowBackIcon, CloseIcon, RepeatIcon } from "@chakra-ui/icons";
+import {
+	ArrowBackIcon,
+	CloseIcon,
+	DownloadIcon,
+	RepeatIcon
+} from "@chakra-ui/icons";
 import {
 	Box,
 	Button,
+	Divider,
 	FormControl,
 	FormLabel,
 	Heading,
 	IconButton,
 	Input,
 	SlideFade,
+	Switch,
 	Text,
 	Textarea,
-	useToast,
-	Switch
+	useToast
 } from "@chakra-ui/react";
 
+import { RiArrowRightUpLine } from "react-icons/ri";
 import { uploadGraph } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
@@ -37,6 +44,23 @@ export default function UploadFile() {
 	const toast = useToast();
 	const router = useRouter();
 	const { firebaseUser } = useAuth();
+
+	const handleDownloadExample = async (nodeNum: number) => {
+		try {
+			const fileUrl =
+				nodeNum === 10 ? "/10_node_example.json" : "/100_node_example.json";
+
+			const response = await fetch(fileUrl);
+			const blob = await response.blob();
+
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(blob);
+			link.download = `${nodeNum}_nodes_example.json`;
+			link.click();
+		} catch (error) {
+			console.error("Error downloading file:", error);
+		}
+	};
 
 	const handleSwitchToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setGraphVisibility(e.target.checked);
@@ -140,7 +164,7 @@ export default function UploadFile() {
 		<div className="bg-gray-800 h-screen overflow-auto relative">
 			<Button
 				leftIcon={<ArrowBackIcon color="white" />}
-				className="absolute top-4 left-4"
+				className="fixed top-4 left-4"
 				variant="ghost"
 				colorScheme="whiteAlpha"
 				onClick={() => {
@@ -149,7 +173,8 @@ export default function UploadFile() {
 			>
 				<Text color="white">Back to Home</Text>
 			</Button>
-			<div className="h-screen max-w-4xl mx-auto flex flex-col items-center justify-center">
+
+			<div className="h-full max-w-4xl mx-auto flex flex-col items-center justify-center">
 				<div className="bg-white rounded-lg p-8 shadow-md w-full">
 					<Box className="text-center">
 						<Heading className="text-center text-4xl">File Upload</Heading>
@@ -195,6 +220,49 @@ export default function UploadFile() {
 								</div>
 							)}
 						</div>
+
+						{/* Sample JSON Files */}
+						{!selectedFile && (
+							<div className="flex flex-col gap-2 mt-6">
+								<Divider orientation="horizontal" borderColor="gray.400" />
+								<Text className="pt-2">
+									Try our example files, which can be uploaded and opened. Not
+									sure where to start? Check out our User Guide.
+								</Text>
+
+								<div className="flex flex-row gap-2 justify-center w-full">
+									<Button
+										className="border rounded-lg p-2"
+										size="sm"
+										rightIcon={<DownloadIcon />}
+										onClick={() => handleDownloadExample(10)}
+									>
+										10 Node Example
+									</Button>
+
+									<Button
+										className="border rounded-lg p-2"
+										size="sm"
+										rightIcon={<DownloadIcon />}
+										onClick={() => handleDownloadExample(100)}
+									>
+										100 Node Example
+									</Button>
+
+									<Button
+										className="border rounded-lg p-2"
+										as="a"
+										href="https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing"
+										target="_blank"
+										rel="noopener noreferrer"
+										size="sm"
+									>
+										Open user guide{" "}
+										<RiArrowRightUpLine className="ml-2" size={16} />
+									</Button>
+								</div>
+							</div>
+						)}
 
 						{selectedFile && (
 							<SlideFade
