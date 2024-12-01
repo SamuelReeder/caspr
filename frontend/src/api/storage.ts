@@ -13,6 +13,7 @@ import { apiClient } from "@/utils/apiClient";
 import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/config/firebaseConfig";
+import { getAuth } from "firebase/auth";
 
 
 /**
@@ -206,11 +207,15 @@ export const updateGraphData = async (
 	}
 
 	try {
+		const auth = getAuth();
+		const idToken = await auth.currentUser?.getIdToken();
+
 		const id = graphID;
 		const graphDataResponse = await apiClient(`/api/data/updateGraph`, {
 			method: "PATCH",
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${idToken}`
 			},
 			body: JSON.stringify({
 				id: id,
@@ -221,7 +226,7 @@ export const updateGraphData = async (
 		return graphData;
 	} catch (error) {
 		console.error("Error fetching graphs:", error);
-		return [];
+		throw error;
 	}
 };
 

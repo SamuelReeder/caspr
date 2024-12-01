@@ -69,7 +69,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 			});
 		}
 	};
-	
+
 	const truncatedDescription =
 		graph.graphDescription.length > 100
 			? `${graph.graphDescription.substring(0, 100)}...`
@@ -89,19 +89,21 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">
-				<div className="flex flex-col space-y-3">
-					<Heading className="hover:underline" size="md" onClick={handleOpenClick}>{graph.graphName}</Heading>
-					<Switch
-						aria-label="Enable Public Visibility"
-						fontSize="sm"
-						isChecked={publicGraph}
-						isDisabled={switchDisabled}
-						onChange={handleSwitchToggle}
-					>
-						{" "}
-						Public Visibility{" "}
-					</Switch>
-				</div>
+				{graph.owner === firebaseUser?.uid && (
+					<div className="flex flex-col space-y-3">
+						<Heading className="hover:underline" size="md" onClick={handleOpenClick}>{graph.graphName}</Heading>
+						<Switch
+							aria-label="Enable Public Visibility"
+							fontSize="sm"
+							isChecked={publicGraph}
+							isDisabled={switchDisabled}
+							onChange={handleSwitchToggle}
+						>
+							{" "}
+							Public Visibility{" "}
+						</Switch>
+					</div>
+				)}
 				<div className="flex flex-col">
 					<Text>{`by ${owner.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
@@ -137,7 +139,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 
 				<Box className="flex flex-row gap-2">
 					<ShareButton graph={graph} />
-					<DeleteButton graph={graph}/>
+					<DeleteButton graph={graph} />
 				</Box>
 
 			</CardBody>
