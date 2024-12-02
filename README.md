@@ -8,6 +8,14 @@
   </p>
 </div>
 
+<!-- ABOUT THE PROJECT -->
+## Introduction
+[Try the project here!](https://caspr.vercel.app/)
+
+This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. It helps visualize relationships between variables in systems with many interdependent factors.
+
+For example, in an ML research application, our app is useful as it visualizes and compares the reasoning processes of AI agents and humans, enabling researchers to enhance the accuracy and reliability of AI forecasting systems and advance forecasting science.
+
 ## Application Preview
 
 <p align="center">
@@ -20,15 +28,7 @@
   <img width="49%" alt="image" src="https://github.com/user-attachments/assets/8edcb52b-1f8b-4568-941d-b0a90ff60002">
 </p>
 
-<!-- ABOUT THE PROJECT -->
-## Introduction
-[Try the project here!](https://caspr.vercel.app/)
-
-This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. It helps visualize relationships between variables in systems with many interdependent factors.
-
-For example, in an ML research application, our app is useful as it visualizes and compares the reasoning processes of AI agents and humans, enabling researchers to enhance the accuracy and reliability of AI forecasting systems and advance forecasting science. To summarize, key features include:
-
-### Key Features
+## Key Features
 - **Dynamic 3D Graph Visualization**: Our app brings causal diagrams to life! The 3D graph is generated dynamically from JSON data, where each node and edge represents crucial connections between elements. You can explore complex systems with ease.
 
 - **Smooth Graph Interaction**: Navigate the graph in a fully immersive 3D space. Zoom, pan, and rotate the graph freely to explore relationships from every angle. It's simple and intuitive, letting you focus on discovering insights.
