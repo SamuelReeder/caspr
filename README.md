@@ -1,13 +1,4 @@
-<div align="center">
-  <img alt="Logo" src="https://github.com/user-attachments/assets/b32d1018-18aa-4ab9-8589-9d96484585a6">
-  <h1> Caspr</h1>
-  <p>
-    Causal Analysis of Structure Paths and Relationships
-  </p>
-</div>
-
-<!-- ABOUT THE PROJECT -->
-## Introduction
+# Caspr - Causal Analysis and Structure Path Relationships
 This project is a web application designed to allow users to explore and interact with complex causal diagrams in a 3D environment. This tool can be leveraged across many domains of research including machine learning, economics, enviornmental, politics, and more. It helps visualize relationships between variables in systems with many interdependent factors. For example, in an ML research application, our app is useful as it visualizes and compares the reasoning processes of AI agents and humans, enabling researchers to enhance the accuracy and reliability of AI forecasting systems and advance forecasting science.
 
 - Try the application [here](https://caspr.vercel.app/)
