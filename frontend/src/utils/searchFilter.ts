@@ -1,4 +1,3 @@
-// searchFilter.ts
 import { Graph } from "@/types";
 import { getUser } from "@/api/firestore";
 
