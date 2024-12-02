@@ -14,7 +14,6 @@ export default async function handler(
 	res: NextApiResponse
 ) {
 	if (req.method !== "DELETE") {
-		console.log("HELLO", req.method)
 		return res.status(405).json({ message: "Method not allowed" });
 	}
 
