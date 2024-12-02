@@ -3,6 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import CausalDiagram from '../src/components/graphVisualization/CausalDiagram';
 import '@testing-library/jest-dom';
 import { act } from '@testing-library/react';
+import { ViewProvider } from "@/context/ViewContext";
 
 const nodes = [
   { id: '1', label: 'Node 1', category: 'A', value: 10 },
@@ -20,10 +21,15 @@ const edges = [
  
 jest.mock('@react-three/drei', () => ({
     OrbitControls: jest.fn((props) => {
-        props.onChange?.(); 
+        const mockControls = {
+            getPolarAngle: jest.fn().mockReturnValue(0),
+            getAzimuthalAngle: jest.fn().mockReturnValue(0),
+        };
+        if (props.ref) {
+            props.ref.current = mockControls;
+        }
         return null;
-      }),
-
+    }),
 }));
 
 jest.mock('@react-three/fiber', () => ({
@@ -88,9 +94,12 @@ beforeEach(() => {
     mockEdge.mockClear();
     });
     
-const renderWithChakra = (ui: React.ReactElement) => {
-    return render(<ChakraProvider>{ui}</ChakraProvider>);
-};
+    const renderWithChakra = (ui: React.ReactElement) => {
+        return render(
+            <ChakraProvider>
+                <ViewProvider>{ui}</ViewProvider>
+            </ChakraProvider>
+        );};
 
     test('renders without crashing', () => {
         const { container } = renderWithChakra(

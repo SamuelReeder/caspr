@@ -6,3 +6,9 @@ export interface NodeType extends d3.SimulationNodeDatum {
 	value: number;
 	category: string;
 }
+
+
+export interface Timestamp {
+	i: number,
+	nodes: NodeType[]
+}

@@ -13,6 +13,8 @@ import { apiClient } from "@/utils/apiClient";
 import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/config/firebaseConfig";
+import { list } from "postcss";
+import { List } from "postcss/lib/list";
 
 
 /**
@@ -28,7 +30,8 @@ export const uploadGraph = async (
 	graphFile: File,
 	graphName: string,
 	graphDescription: string,
-	graphVisibility: boolean
+	graphVisibility: boolean,
+	graphTags: String[]
 ): Promise<Graph | undefined> => {
 	try {
 		const storage = getStorage(app);
@@ -46,6 +49,7 @@ export const uploadGraph = async (
 			owner: firebaseUser?.uid || "",
 			graphName: graphName,
 			graphDescription: graphDescription,
+			graphTags: graphTags,
 			graphVisibility: graphVisibility,
 			graphFilePath: `graphs/${auth.currentUser?.uid}/${graphName}.json`,
 			graphFileURL: downloadURL,
