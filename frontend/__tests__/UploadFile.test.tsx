@@ -8,6 +8,8 @@ import customRender from "@/test-utils/render";
 import { uploadGraph } from "@/api/storage";
 import { useAuth } from "@/context";
 import { useRouter } from "next/router";
+import { parseGraphData } from "../src/utils/extractGraphData"
+import { parse } from "path";
 
 jest.mock("@/api/storage");
 const mockRouterPush = jest.fn();
@@ -21,6 +23,10 @@ jest.mock("@chakra-ui/react", () => ({
 	...jest.requireActual("@chakra-ui/react"),
 	useToast: () => mockToast
 }));
+
+jest.mock("../src/utils/extractGraphData", () => ({
+	parseGraphData: jest.fn()
+}))
 
 const mockFile = new File(['{"nodes": [], "links": []}'], "test-graph.json", {
 	type: "application/json"
@@ -63,6 +69,7 @@ describe("UploadFile Component", () => {
 		(uploadGraph as jest.Mock).mockResolvedValueOnce({
 			graphName: "test-graph"
 		});
+		(parseGraphData as jest.Mock).mockReturnValue(["data"]);
 		const router = useRouter();
 
 		customRender(<UploadFile />);
@@ -88,13 +95,16 @@ describe("UploadFile Component", () => {
 		});
 		fireEvent.click(saveButton);
 
+		expect(parseGraphData).toHaveBeenCalledWith('{"nodes": [], "links": []}')
+
 		await waitFor(() => {
 			expect(uploadGraph).toHaveBeenCalledWith(
 				null,
 				mockFile,
 				"Test Graph",
 				"Test Description",
-				false
+				false,
+				["data"]
 			);
 			expect(mockRouterPush).toHaveBeenCalledWith("/home");
 		});
@@ -110,6 +120,7 @@ describe("UploadFile Component", () => {
 			})
 		);
 	});
+
 
 	it("shows an error toast when upload fails", async () => {
 		(uploadGraph as jest.Mock).mockRejectedValueOnce(
