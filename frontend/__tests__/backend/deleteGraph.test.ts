@@ -97,7 +97,6 @@ describe("DELETE /api/data/deleteGraph", () => {
         expect(deleteObject).toHaveBeenCalledWith({someRef: true});
 
         // Graph Metadata gets deleted
-            // Verify Firestore interactions
         expect(dbAdmin.collection).toHaveBeenCalledWith(
             process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
         );
