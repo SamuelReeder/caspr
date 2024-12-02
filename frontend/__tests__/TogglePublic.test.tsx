@@ -25,19 +25,21 @@ const mockFile = new File(['{"nodes": [], "links": []}'], "test-graph.json", {
 	type: "application/json"
 });
 
-const mockGraph = {
+const mockGraph: Graph = {
 	id: "1",
 	owner: "Test",
 	graphName: "Test Title",
 	graphDescription: "Test Description",
+	graphTags: ["GDP"],
 	graphFileURL: "https://www.example.com",
 	graphURL: "https://www.example.com/1234",
+	graphFilePath: "/user/filepath.json",
 	graphVisibility: false,
 	createdAt: Timestamp.now(),
 	sharing: [],
 	sharedEmails: [],
 	presets: []
-} as Graph;
+}
 
 const mockUser = {
 	uid: "1",
@@ -123,12 +125,13 @@ describe("Toggle Public Button on MyGraphsCard Component", () => {
 			expect(mockToast).toHaveBeenCalledWith({
 				title: "Graph saved",
 				description: expect.stringContaining(
-					"Graph visibility updated for: Test Title"
+					"Set: Test Title to public"
 				),
 				status: "success",
-				duration: 1500,
+				duration: 2500,
 				isClosable: true
 			});
 		});
+
 	});
 });

@@ -8,7 +8,7 @@ import { createMocks } from "node-mocks-http";
 import type { NextApiRequest, NextApiResponse } from "next";
 jest.mock("@/config/firebaseAdmin");
 
-describe("POST /api/graphs/createGraph", () => {
+describe("POST /api/data/createGraph", () => {
 	const mockID = "TestUpdateGraphID";
 
 	const mockUpdateOneField = {
