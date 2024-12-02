@@ -2,6 +2,12 @@
 import { Graph } from "@/types";
 import { getUser } from "@/api/firestore";
 
+/**
+ * Maps all graph owners' names with their respective graph given an array of graphs
+ *
+ * @param graphs - The array of Graph objects to fetch owner data for
+ * @returns An array of Graph objects with a string representation of the graph owner's name
+ */
 export const fetchOwnerData = async (
 	graphs: Graph[]
 ): Promise<[Graph, string][]> => {
@@ -17,11 +23,16 @@ export const fetchOwnerData = async (
 	return [];
 };
 
+/**
+ * Maps all graph owners' names with their respective graph given an array of graphs
+ *
+ * @param searchValue - The current string value in the search bar
+ * @param originalGraphs - The array of graphs before any search filtering is applied to it
+ * @returns An array of filtered Graph objects based on the searchValue
+ */
 export const handleSearch = (
 	searchValue: string,
-	originalGraphs: [Graph, string][],
-	sortType: string,
-	filterType: string
+	originalGraphs: [Graph, string][]
 ): Graph[] => {
 	const value = searchValue.toLowerCase();
 
@@ -35,32 +46,28 @@ export const handleSearch = (
 
 		// Prioritize results by name, then description, then author
 		let prioritizedResults;
-		if (sortType === "none" && filterType === "none") {
-			prioritizedResults = filteredResults.sort((a, b) => {
-				const aNameMatch = a[0].graphName.toLowerCase().includes(value) ? 1 : 0;
-				const bNameMatch = b[0].graphName.toLowerCase().includes(value) ? 1 : 0;
-				const aDescriptionMatch = a[0].graphDescription
-					.toLowerCase()
-					.includes(value)
-					? 1
-					: 0;
-				const bDescriptionMatch = b[0].graphDescription
-					.toLowerCase()
-					.includes(value)
-					? 1
-					: 0;
-				const aAuthorMatch = a[1].toLowerCase().includes(value) ? 1 : 0;
-				const bAuthorMatch = b[1].toLowerCase().includes(value) ? 1 : 0;
+		prioritizedResults = filteredResults.sort((a, b) => {
+			const aNameMatch = a[0].graphName.toLowerCase().includes(value) ? 1 : 0;
+			const bNameMatch = b[0].graphName.toLowerCase().includes(value) ? 1 : 0;
+			const aDescriptionMatch = a[0].graphDescription
+				.toLowerCase()
+				.includes(value)
+				? 1
+				: 0;
+			const bDescriptionMatch = b[0].graphDescription
+				.toLowerCase()
+				.includes(value)
+				? 1
+				: 0;
+			const aAuthorMatch = a[1].toLowerCase().includes(value) ? 1 : 0;
+			const bAuthorMatch = b[1].toLowerCase().includes(value) ? 1 : 0;
 
-				return (
-					bNameMatch - aNameMatch ||
-					bDescriptionMatch - aDescriptionMatch ||
-					bAuthorMatch - aAuthorMatch
-				);
-			});
-		} else {
-			prioritizedResults = filteredResults;
-		}
+			return (
+				bNameMatch - aNameMatch ||
+				bDescriptionMatch - aDescriptionMatch ||
+				bAuthorMatch - aAuthorMatch
+			);
+		});
 
 		return prioritizedResults.map((item) => item[0]);
 	} else {
