@@ -40,12 +40,7 @@ const Searchbar = ({
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value);
-		const filteredGraphs = handleSearch(
-			e.target.value,
-			originalGraphs,
-			sortType,
-			filterType
-		);
+		const filteredGraphs = handleSearch(e.target.value, originalGraphs);
 		setGraphs(filteredGraphs);
 	};
 
