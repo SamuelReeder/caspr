@@ -1,28 +1,25 @@
 /**
  * Upload File
- * @returns {ReactElement} Upload File
+ * @returns {ReactElement} Upload File page
  */
 import "tailwindcss/tailwind.css";
 
 import {
 	ArrowBackIcon,
+	CheckCircleIcon,
 	CloseIcon,
-	DownloadIcon,
-	CheckCircleIcon
+	DownloadIcon
 } from "@chakra-ui/icons";
 import {
 	Box,
 	Button,
 	Divider,
+	Flex,
 	FormControl,
 	FormLabel,
 	Heading,
 	IconButton,
 	Input,
-	Switch,
-	Text,
-	Textarea,
-	useToast,
 	Step,
 	StepIcon,
 	StepIndicator,
@@ -31,8 +28,13 @@ import {
 	StepStatus,
 	StepTitle,
 	Stepper,
+	Switch,
+	Text,
+	Textarea,
 	useSteps,
-  } from "@chakra-ui/react";
+	useToast
+} from "@chakra-ui/react";
+
 import { RiArrowRightUpLine } from "react-icons/ri";
 import { uploadGraph } from "@/api";
 import { useAuth } from "@/context/AuthContext";
@@ -42,14 +44,20 @@ import { validateJSON } from "@/utils/validateJSON";
 
 const steps = [
 	{ title: "Select File", description: "Choose the JSON file to upload" },
-	{ title: "Configure Details", description: "Provide details about your graph" },
-	{ title: "Review & Save", description: "Review the details and save the graph" },
+	{
+		title: "Configure Details",
+		description: "Provide details about your graph"
+	},
+	{
+		title: "Review & Save",
+		description: "Review the details and save the graph"
+	}
 ];
 
 export default function UploadFile() {
 	const { activeStep, setActiveStep } = useSteps({
 		index: 0,
-		count: steps.length,
+		count: steps.length
 	});
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [graphName, setGraphName] = useState("");
@@ -120,27 +128,27 @@ export default function UploadFile() {
 			try {
 				const fileContent = await file.text();
 				const validationResult = validateJSON(fileContent);
-	
+
 				if (!validationResult.isValid) {
 					toast({
 						title: "Invalid Graph Data",
 						description: validationResult.errorMessage,
 						status: "error",
 						duration: 5000,
-						isClosable: true,
+						isClosable: true
 					});
 					setSelectedFile(null);
 					return;
 				}
-	
+
 				toast({
 					title: "File Uploaded",
 					description: "Graph data is valid.",
 					status: "success",
 					duration: 5000,
-					isClosable: true,
+					isClosable: true
 				});
-	
+
 				setSelectedFile(file);
 			} catch (error) {
 				toast({
@@ -148,8 +156,9 @@ export default function UploadFile() {
 					description: "An error occurred while reading the file.",
 					status: "error",
 					duration: 5000,
-					isClosable: true,
+					isClosable: true
 				});
+				console.error(error);
 				setSelectedFile(null);
 			}
 		} else {
@@ -158,12 +167,12 @@ export default function UploadFile() {
 				description: "Only JSON files are allowed.",
 				status: "error",
 				duration: 5000,
-				isClosable: true,
+				isClosable: true
 			});
 			setSelectedFile(null);
 		}
 	};
-	
+
 	const handleNextStep = () => {
 		if (activeStep === 1) {
 			if (!graphName.trim() || !graphDescription.trim()) {
@@ -172,7 +181,7 @@ export default function UploadFile() {
 					description: "Both name and description are required.",
 					status: "error",
 					duration: 5000,
-					isClosable: true,
+					isClosable: true
 				});
 				return;
 			}
@@ -183,7 +192,7 @@ export default function UploadFile() {
 	};
 	const handlePrevStep = () => {
 		if (activeStep > 0) {
-		  setActiveStep(activeStep - 1);
+			setActiveStep(activeStep - 1);
 		}
 	};
 	const handleSaveClick = async () => {
@@ -259,14 +268,14 @@ export default function UploadFile() {
 							{steps.map((step, index) => (
 								<Step key={index}>
 									<StepIndicator>
-									<StepStatus
-										complete={<StepIcon />}
-										incomplete={<StepNumber />}
-										active={<StepNumber />}
-									/>
+										<StepStatus
+											complete={<StepIcon />}
+											incomplete={<StepNumber />}
+											active={<StepNumber />}
+										/>
 									</StepIndicator>
 									<Box flexShrink="0">
-									<StepTitle>{step.title}</StepTitle>
+										<StepTitle>{step.title}</StepTitle>
 									</Box>
 									<StepSeparator />
 								</Step>
@@ -275,7 +284,9 @@ export default function UploadFile() {
 						{/* Upload File */}
 						{activeStep === 0 && (
 							<>
-								<Heading className="text-center text-4xl mt-6">File Upload</Heading>
+								<Heading className="text-center text-4xl mt-6">
+									File Upload
+								</Heading>
 								<Text className="pt-2">
 									Upload your JSON data to be used in your graph.
 								</Text>
@@ -293,7 +304,9 @@ export default function UploadFile() {
 									<input
 										type="file"
 										accept=".json"
-										onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+										onChange={(e) =>
+											handleFileChange(e.target.files?.[0] || null)
+										}
 										className="hidden"
 										id="fileInput"
 									/>
@@ -324,8 +337,8 @@ export default function UploadFile() {
 									<div className="flex flex-col gap-2 mt-6">
 										<Divider orientation="horizontal" borderColor="gray.400" />
 										<Text className="pt-2">
-											Try our example files, which can be uploaded and opened. Not
-											sure where to start? Check out our User Guide.
+											Try our example files, which can be uploaded and opened.
+											Not sure where to start? Check out our User Guide.
 										</Text>
 
 										<div className="flex flex-row gap-2 justify-center w-full">
@@ -374,12 +387,16 @@ export default function UploadFile() {
 						{/* Add Details */}
 						{activeStep === 1 && (
 							<>
-								<Heading className="text-center text-4xl mt-6">Add Details</Heading>
+								<Heading className="text-center text-4xl mt-6">
+									Add Details
+								</Heading>
 								<form>
 									<FormControl>
 										{/* Graph Name */}
-										<FormLabel className="pt-7 ml-6">Graph Name <span style={{ color: "red" }}>*</span></FormLabel>
-										
+										<FormLabel className="pt-7 ml-6">
+											Graph Name <span style={{ color: "red" }}>*</span>
+										</FormLabel>
+
 										<Input
 											maxWidth="800px"
 											className="w-full p-2 border rounded-lg  ml-6"
@@ -390,7 +407,9 @@ export default function UploadFile() {
 										/>
 
 										{/* Graph Description */}
-										<FormLabel className="pt-7 ml-6">Graph Description <span style={{ color: "red" }}>*</span></FormLabel>
+										<FormLabel className="pt-7 ml-6">
+											Graph Description <span style={{ color: "red" }}>*</span>
+										</FormLabel>
 										<Textarea
 											maxWidth="800px"
 											className="w-full p-2 border rounded-lg ml-6"
@@ -413,7 +432,9 @@ export default function UploadFile() {
 									</FormControl>
 								</form>
 								<div className="flex flex-row justify-between mt-7 px-6">
-									<Button onClick={handlePrevStep}>Back</Button>
+									<Button variant="outline" onClick={handlePrevStep}>
+										Back
+									</Button>
 									<Button
 										mt={4}
 										onClick={handleNextStep}
@@ -423,7 +444,7 @@ export default function UploadFile() {
 										Next
 									</Button>
 								</div>
-								</>
+							</>
 						)}
 						{/* Review and Save */}
 						{activeStep === 2 && (
@@ -444,46 +465,79 @@ export default function UploadFile() {
 									textAlign="left"
 								>
 									{selectedFile && (
-										<Text fontSize="lg" fontWeight="semibold" color="gray.700" mb={4}>
-											<strong>Graph File:</strong>{" "}
-											<span className="text-gray-600">
-												{selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
-											</span>
-										</Text>
+										<Flex alignItems="center" mb={4}>
+											<Text
+												fontSize="lg"
+												fontWeight="semibold"
+												color="gray.700"
+												mr={2}
+											>
+												<Text as="span" className="font-bold">
+													Graph File:
+												</Text>
+											</Text>
+											<Text as="span" fontSize="lg" color="gray.600">
+												{selectedFile.name} (
+												{(selectedFile.size / 1024).toFixed(2)} KB)
+											</Text>
+										</Flex>
 									)}
-									<Text fontSize="lg" fontWeight="semibold" color="gray.700" mb={4}>
-										<strong>Graph Name:</strong>{" "}
-										<span className="text-gray-600">{graphName || "N/A"}</span>
-									</Text>
-									<Text fontSize="lg" fontWeight="semibold" color="gray.700" mb={4}>
-										<strong>Description:</strong>{" "}
-										<span className="text-gray-600">{graphDescription || "N/A"}</span>
-									</Text>
-									<Text fontSize="lg" fontWeight="semibold" color="gray.700">
-										<strong>Visibility:</strong>{" "}
-										<span
-											className={`${
-												graphVisibility ? "text-green-500" : "text-red-500"
-											}`}
+
+									<Flex alignItems="center" mb={4}>
+										<Text
+											fontSize="lg"
+											fontWeight="semibold"
+											color="gray.700"
+											mr={2}
+										>
+											Graph Name:
+										</Text>
+										<Text as="span" fontSize="lg" color="gray.600">
+											{graphName || "N/A"}
+										</Text>
+									</Flex>
+
+									<Flex alignItems="center" mb={4}>
+										<Text
+											fontSize="lg"
+											fontWeight="semibold"
+											color="gray.700"
+											mr={2}
+										>
+											Description:
+										</Text>
+										<Text as="span" fontSize="lg" color="gray.600">
+											{graphDescription || "N/A"}
+										</Text>
+									</Flex>
+
+									<Flex alignItems="center">
+										<Text
+											fontSize="lg"
+											fontWeight="semibold"
+											color="gray.700"
+											mr={2}
+										>
+											Visibility:
+										</Text>
+										<Text
+											as="span"
+											fontSize="lg"
+											color={graphVisibility ? "green.500" : "red.500"}
 										>
 											{graphVisibility ? "Public" : "Private"}
-										</span>
-									</Text>
+										</Text>
+									</Flex>
 								</Box>
 
 								{/* Buttons */}
 								<Box className="flex justify-between mt-10 px-6">
-									<Button
-										variant="outline"
-										colorScheme="gray"
-										size="lg"
-										onClick={handlePrevStep}
-									>
+									<Button variant="outline" size="md" onClick={handlePrevStep}>
 										Back
 									</Button>
 									<Button
 										colorScheme="blue"
-										size="lg"
+										size="md"
 										onClick={handleSaveClick}
 										isLoading={isLoading}
 										loadingText="Saving..."
