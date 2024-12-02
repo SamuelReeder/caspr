@@ -22,10 +22,7 @@ import {
 	Switch,
 	Text,
 	Textarea,
-	useToast
-} from "@chakra-ui/react";
-
-import {
+	useToast,
 	Step,
 	StepIcon,
 	StepIndicator,
