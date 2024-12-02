@@ -24,7 +24,7 @@ export const fetchOwnerData = async (
 };
 
 /**
- * Maps all graph owners' names with their respective graph given an array of graphs
+ * Applies search filtering to a given list of graphs
  *
  * @param searchValue - The current string value in the search bar
  * @param originalGraphs - The array of graphs before any search filtering is applied to it
@@ -46,8 +46,7 @@ export const handleSearch = (
 		);
 
 		// Prioritize results by name, then description, then author
-		let prioritizedResults;
-		prioritizedResults = filteredResults.sort((a, b) => {
+		const prioritizedResults = filteredResults.sort((a, b) => {
 			const aNameMatch = a[0].graphName.toLowerCase().includes(value) ? 1 : 0;
 			const bNameMatch = b[0].graphName.toLowerCase().includes(value) ? 1 : 0;
 			const aDescriptionMatch = a[0].graphDescription
