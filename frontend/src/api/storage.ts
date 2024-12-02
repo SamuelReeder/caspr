@@ -6,12 +6,14 @@ import { app, auth } from "@/config/firebaseConfig";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Graph } from "@/types/graph";
 import { Timestamp } from "firebase/firestore";
-import { User } from "firebase/auth";
+import { User, getAuth } from "firebase/auth";
 import { createGraph, getSharedGraphs } from "@/api";
 import { apiClient } from "@/utils/apiClient";
 import { sortGraphs } from "@/utils/sortGraphs";
 import { v4 as uuidv4 } from "uuid";
-import { getAuth } from "firebase/auth";
+import { db } from "@/config/firebaseConfig";
+import { list } from "postcss";
+import { List } from "postcss/lib/list";
 
 /**
  * Upload a graph via a JSON file to Firebase Storage and add metadata to Firestore.
@@ -26,7 +28,8 @@ export const uploadGraph = async (
 	graphFile: File,
 	graphName: string,
 	graphDescription: string,
-	graphVisibility: boolean
+	graphVisibility: boolean,
+	graphTags: String[]
 ): Promise<Graph | undefined> => {
 	try {
 		const storage = getStorage(app);
@@ -44,6 +47,7 @@ export const uploadGraph = async (
 			owner: firebaseUser?.uid || "",
 			graphName: graphName,
 			graphDescription: graphDescription,
+			graphTags: graphTags,
 			graphVisibility: graphVisibility,
 			graphFilePath: `graphs/${auth.currentUser?.uid}/${graphName}.json`,
 			graphFileURL: downloadURL,

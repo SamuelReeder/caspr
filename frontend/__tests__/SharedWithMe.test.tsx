@@ -69,7 +69,43 @@ const mockOwners: { [key: string]: { name: string } } = {
 	owner2: { name: "owner2" }
 };
 
+const mockSortOptions = [
+	{ value: "Name (A-Z)", label: "Name (A-Z)" },
+	{ value: "Name (Z-A)", label: "Name(Z-A)" },
+	{ value: "Newest First", label: "Newest First" },
+	{ value: "Oldest First", label: "Oldest First" },
+	{ value: "None", label: "None" }
+];
+
+const mockFilterOptions = [
+	{ value: "Public Only", label: "Public Only" },
+	{ value: "Private Only", label: "Private Only" },
+	{ value: "None", label: "None" }
+];
+
 describe("Shared With Me Page Component", () => {
+	beforeAll(() => {
+		global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: true,
+				status: 200,
+				json: () => Promise.resolve([]),
+				headers: new Headers(),
+				redirected: false,
+				statusText: "OK",
+				type: "basic",
+				url: "",
+				clone: jest.fn(),
+				body: null,
+				bodyUsed: false,
+				arrayBuffer: jest.fn(),
+				blob: jest.fn(),
+				formData: jest.fn(),
+				text: jest.fn()
+			} as Response)
+		);
+	});
+
 	beforeEach(() => {
 		jest.clearAllMocks();
 
@@ -91,7 +127,7 @@ describe("Shared With Me Page Component", () => {
 
 	it("renders the home page", async () => {
 		renderWithAuthContext(mockUser as User);
-		expect(await screen.findAllByText(/Shared With Me/i)).toHaveLength(2);
+		expect(await screen.findAllByText(/Shared With Me/i)).toHaveLength(1);
 		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument;
 		expect(await screen.findByText(/Email: test@gmail.com/i)).toBeInTheDocument;
 	});
@@ -107,7 +143,7 @@ describe("Shared With Me Page Component", () => {
 			await screen.findAllByRole("button", { name: /Share/i })
 		).toHaveLength(2);
 		expect(
-			await screen.findAllByRole("button", { name: /Open/i })
+			await screen.findAllByRole("button", { name: /Delete/i })
 		).toHaveLength(2);
 	});
 
@@ -160,6 +196,38 @@ describe("Shared With Me Page Component", () => {
 				screen.queryByText(/Enter email address and press Enter/i)
 			).not.toBeInTheDocument();
 			expect(screen.queryByText(/Make graph public/i)).not.toBeInTheDocument();
+		});
+	});
+
+	it("renders the public visibility toggles correctly", async () => {
+		renderWithAuthContext(mockUser as User);
+		const switchElements = await screen.findAllByLabelText(
+			/Enable Public Visibility/i
+		);
+		expect(switchElements[0]).toBeChecked();
+		expect(switchElements[1]).not.toBeChecked();
+
+		await act(async () => {
+			fireEvent.click(switchElements[0]);
+			fireEvent.click(switchElements[1]);
+		});
+
+		expect(switchElements[0]).not.toBeChecked();
+		expect(switchElements[1]).toBeChecked();
+	});
+
+	it("renders the Select elements with correct options", async () => {
+		renderWithAuthContext(mockUser as User);
+
+		const selectElements = await screen.findAllByRole("combobox");
+		expect(selectElements[0]).toBeInTheDocument();
+		expect(selectElements[1]).toBeInTheDocument();
+
+		mockSortOptions.forEach(async (option) => {
+			expect(await screen.findByText(option.label)).toBeInTheDocument();
+		});
+		mockFilterOptions.forEach(async (option) => {
+			expect(await screen.findByText(option.label)).toBeInTheDocument();
 		});
 	});
 });

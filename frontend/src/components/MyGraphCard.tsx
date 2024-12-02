@@ -17,21 +17,19 @@ import {
 	ModalOverlay,
 	Switch,
 	Text,
-	useToast,
 	Tooltip,
-	useDisclosure
+	useDisclosure,
+	useToast
 } from "@chakra-ui/react";
+import { DeleteButton, ShareButton } from "@/components";
+import React, { useState } from "react";
 
 import { MyGraphCardProps } from "@/types";
-import React, { useState } from "react";
-import { DeleteButton, ShareButton } from "@/components";
-import { updateGraphData } from "@/api/storage";
 import formatDate from "@/utils/formatDate";
-import { useAuth } from "@/context";
+import { updateGraphData } from "@/api/storage";
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { firebaseUser } = useAuth();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
 	const [switchDisabled, setSwitchDisabled] = useState<boolean>(
 		(graph?.owner ?? '') !== (firebaseUser?.uid ?? '')
@@ -52,7 +50,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 		try {
 			const updateValues = { graphVisibility: visibility };
 			await updateGraphData(graph.id, updateValues);
-			graph.graphVisibility = visibility
+			graph.graphVisibility = visibility;
 
 			toast({
 				title: "Graph saved",
@@ -91,7 +89,13 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 			<CardHeader className="flex justify-between">
 
 				<div className="flex flex-col space-y-3">
-					<Heading className="hover:underline" size="md" onClick={handleOpenClick}>{graph.graphName}</Heading>
+					<Heading
+						className="hover:underline"
+						size="md"
+						onClick={handleOpenClick}
+					>
+						{graph.graphName}
+					</Heading>
 					<Switch
 						aria-label="Enable Public Visibility"
 						fontSize="sm"
@@ -108,7 +112,6 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 					<Text>{`by ${owner.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">
 						Created: {formatDate(graph.createdAt)}
-
 					</Text>
 				</div>
 			</CardHeader>
@@ -141,7 +144,6 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 					<ShareButton graph={graph} />
 					<DeleteButton graph={graph} />
 				</Box>
-
 			</CardBody>
 
 			<Modal isOpen={isOpen} onClose={onClose}>

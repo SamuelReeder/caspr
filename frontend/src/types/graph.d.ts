@@ -11,6 +11,7 @@ export interface Graph {
 	graphName: string;
 	graphDescription: string;
 	graphVisibility: boolean;
+	graphTags: String[],
 	graphFilePath: string;
 	graphFileURL: string;
 	graphURL: string;
@@ -34,6 +35,7 @@ export interface GraphListProps {
 	setSortType?: React.Dispatch<React.SetStateAction<string>>;
 	filterType?: string;
 	setFilterType?: React.Dispatch<React.SetStateAction<string>>;
+	search: string
 }
 
 /**
