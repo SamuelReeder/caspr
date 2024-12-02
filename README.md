@@ -1,6 +1,8 @@
 <div align="center">
-  <h1> Caspr</h1>
+  <img alt="Logo" src="https://github.com/user-attachments/assets/93577115-6182-452d-8f28-8e5d0a618fcb">
 
+  <h1>Caspr</h1>
+  
   <p>
     Causal Analysis of Structure Paths and Relationships
   </p>
