@@ -39,9 +39,10 @@ export const handleSearch = (
 	if (value.length > 0) {
 		const filteredResults = originalGraphs.filter(
 			(item) =>
-				item[0].graphName.toLowerCase().includes(value) ||
-				item[0].graphDescription.toLowerCase().includes(value) ||
-				item[1].toLowerCase().includes(value)
+				item[0]?.graphName.toLowerCase().includes(value) || // item[0] is the graph object and item[1] is the owner as a string
+				item[0]?.graphDescription.toLowerCase().includes(value) ||
+				item[1]?.toLowerCase().includes(value) ||
+				item[0]?.graphTags.some((tag) => tag.toLowerCase().includes(value))
 		);
 
 		// Prioritize results by name, then description, then author
@@ -61,11 +62,22 @@ export const handleSearch = (
 				: 0;
 			const aAuthorMatch = a[1].toLowerCase().includes(value) ? 1 : 0;
 			const bAuthorMatch = b[1].toLowerCase().includes(value) ? 1 : 0;
+			const aTagMatch = a[0]?.graphTags.some((tag) =>
+				tag.toLowerCase().includes(value)
+			)
+				? 1
+				: 0;
+			const bTagMatch = b[0]?.graphTags.some((tag) =>
+				tag.toLowerCase().includes(value)
+			)
+				? 1
+				: 0;
 
 			return (
 				bNameMatch - aNameMatch ||
 				bDescriptionMatch - aDescriptionMatch ||
-				bAuthorMatch - aAuthorMatch
+				bAuthorMatch - aAuthorMatch ||
+				bTagMatch - aTagMatch
 			);
 		});
 

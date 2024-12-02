@@ -11,6 +11,7 @@ export interface Graph {
 	graphName: string;
 	graphDescription: string;
 	graphVisibility: boolean;
+	graphTags: String[],
 	graphFilePath: string;
 	graphFileURL: string;
 	graphURL: string;

@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import React from "react";
-import Home from "@/pages";
+import Index from "@/pages";
 import customRender from "@/test-utils/render";
 import { fetchCurrUserGraphs } from "@/api/storage";
 import { AuthContext } from "@/context/AuthContext";
@@ -9,6 +9,25 @@ import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 
 const mockRouterPush = jest.fn();
+global.fetch = jest.fn(() =>
+	Promise.resolve({
+		ok: true,
+		status: 200,
+		json: () => Promise.resolve([]),
+		headers: new Headers(),
+		redirected: false,
+		statusText: "OK",
+		type: "basic",
+		url: "",
+		clone: jest.fn(),
+		body: null,
+		bodyUsed: false,
+		arrayBuffer: jest.fn(),
+		blob: jest.fn(),
+		formData: jest.fn(),
+		text: jest.fn()
+	} as Response)
+);
 jest.mock("next/router", () => ({
 	useRouter: jest.fn(() => ({
 		push: mockRouterPush
@@ -59,6 +78,20 @@ const mockGraphs = [
 	}
 ];
 
+const mockSortOptions = [
+	{ value: "Name (A-Z)", label: "Name (A-Z)" },
+	{ value: "Name (Z-A)", label: "Name(Z-A)" },
+	{ value: "Newest First", label: "Newest First" },
+	{ value: "Oldest First", label: "Oldest First" },
+	{ value: "None", label: "None" }
+];
+
+const mockFilterOptions = [
+	{ value: "Public Only", label: "Public Only" },
+	{ value: "Private Only", label: "Private Only" },
+	{ value: "None", label: "None" }
+];
+
 describe("Home page Component", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -71,14 +104,14 @@ describe("Home page Component", () => {
 			<AuthContext.Provider
 				value={{ firebaseUser, firestoreUser: null, loading: false }}
 			>
-				<Home />
+				<Index />
 			</AuthContext.Provider>
 		);
 	};
 
 	it("renders the home page when authenticated", async () => {
 		renderWithAuthContext(mockUser as User);
-		expect(await screen.findAllByText(/My Graphs/i)).toHaveLength(2);
+		expect(await screen.findAllByText(/My Graphs/i)).toHaveLength(1);
 		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument();
 		expect(
 			await screen.findByText(/Email: test@gmail.com/i)
@@ -96,7 +129,7 @@ describe("Home page Component", () => {
 			await screen.findAllByRole("button", { name: /Share/i })
 		).toHaveLength(2);
 		expect(
-			await screen.findAllByRole("button", { name: /Open/i })
+			await screen.findAllByRole("button", { name: /Delete/i })
 		).toHaveLength(2);
 	});
 
@@ -112,7 +145,9 @@ describe("Home page Component", () => {
 		expect(
 			await screen.findByPlaceholderText(/Enter email address and press Enter/i)
 		).toBeInTheDocument();
-		expect(await screen.findByText(/Make graph public/i)).toBeInTheDocument();
+		expect(
+			await screen.findByText(/Share with new people/i)
+		).toBeInTheDocument();
 		expect(
 			await screen.findByRole("button", { name: /Share/i })
 		).toBeInTheDocument();
@@ -140,6 +175,38 @@ describe("Home page Component", () => {
 			expect(screen.queryByText(/Make graph public/i)).not.toBeInTheDocument();
 		});
 	});
+
+	it("renders the public visibility toggles correctly", async () => {
+		renderWithAuthContext(mockUser as User);
+		const switchElements = await screen.findAllByLabelText(
+			/Enable Public Visibility/i
+		);
+		expect(switchElements[0]).toBeChecked();
+		expect(switchElements[1]).not.toBeChecked();
+
+		await act(async () => {
+			fireEvent.click(switchElements[0]);
+			fireEvent.click(switchElements[1]);
+		});
+
+		expect(switchElements[0]).not.toBeChecked();
+		expect(switchElements[1]).toBeChecked();
+	});
+
+	it("renders the Select elements with correct options", async () => {
+		renderWithAuthContext(mockUser as User);
+
+		const selectElements = await screen.findAllByRole("combobox");
+		expect(selectElements[0]).toBeInTheDocument();
+		expect(selectElements[1]).toBeInTheDocument();
+
+		mockSortOptions.forEach(async (option) => {
+			expect(await screen.findByText(option.label)).toBeInTheDocument();
+		});
+		mockFilterOptions.forEach(async (option) => {
+			expect(await screen.findByText(option.label)).toBeInTheDocument();
+		});
+	});
 });
 
 describe("Error Handling", () => {
@@ -154,14 +221,14 @@ describe("Error Handling", () => {
 			<AuthContext.Provider
 				value={{ firebaseUser, firestoreUser: null, loading: false }}
 			>
-				<Home />
+				<Index />
 			</AuthContext.Provider>
 		);
 	};
 
 	it("it doesn't load graphs when not authenticated", () => {
 		renderWithAuthContext(null);
-		expect(mockRouterPush).toHaveBeenCalledWith("/");
+		expect(mockRouterPush).toHaveBeenCalledWith("/explore");
 		expect(screen.queryByText(/My Graphs/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(/Graph 1/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(/Description 1/i)).not.toBeInTheDocument();
@@ -203,7 +270,7 @@ describe("Loading Screen Component", () => {
 			<AuthContext.Provider
 				value={{ firebaseUser, firestoreUser: null, loading: true }}
 			>
-				<Home />
+				<Index />
 			</AuthContext.Provider>
 		);
 	};
