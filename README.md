@@ -1,11 +1,13 @@
-<div align="center">
-  <img alt="Logo" src="https://github.com/user-attachments/assets/93577115-6182-452d-8f28-8e5d0a618fcb">
-
-  <h1>Caspr</h1>
-  
-  <p>
-    Causal Analysis of Structure Paths and Relationships
-  </p>
+<div id="user-content-toc">
+  <ul align="center" style="list-style: none;">
+    <img alt="Logo" src="https://github.com/user-attachments/assets/93577115-6182-452d-8f28-8e5d0a618fcb">
+    <summary>
+      <h1>Caspr</h1>
+        <p>
+          Causal Analysis of Structure Paths and Relationships
+        </p>
+    </summary>
+  </ul>
 </div>
 
 <!-- ABOUT THE PROJECT -->
