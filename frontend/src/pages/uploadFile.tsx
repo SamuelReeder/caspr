@@ -8,7 +8,7 @@ import {
 	ArrowBackIcon,
 	CloseIcon,
 	DownloadIcon,
-	RepeatIcon
+	CheckCircleIcon
 } from "@chakra-ui/icons";
 import {
 	Box,
@@ -33,7 +33,6 @@ import {
 	Stepper,
 	useSteps,
   } from "@chakra-ui/react";
-import { CheckCircleIcon } from "@chakra-ui/icons";
 import { RiArrowRightUpLine } from "react-icons/ri";
 import { uploadGraph } from "@/api";
 import { useAuth } from "@/context/AuthContext";
@@ -166,8 +165,20 @@ export default function UploadFile() {
 	};
 	
 	const handleNextStep = () => {
+		if (activeStep === 1) {
+			if (!graphName.trim() || !graphDescription.trim()) {
+				toast({
+					title: "Incomplete Details",
+					description: "Both name and description are required.",
+					status: "error",
+					duration: 5000,
+					isClosable: true,
+				});
+				return;
+			}
+		}
 		if (activeStep < steps.length - 1) {
-		  setActiveStep(activeStep + 1);
+			setActiveStep(activeStep + 1);
 		}
 	};
 	const handlePrevStep = () => {
@@ -367,7 +378,8 @@ export default function UploadFile() {
 								<form>
 									<FormControl>
 										{/* Graph Name */}
-										<FormLabel className="pt-7 ml-6">Graph Name</FormLabel>
+										<FormLabel className="pt-7 ml-6">Graph Name <span style={{ color: "red" }}>*</span></FormLabel>
+										
 										<Input
 											maxWidth="800px"
 											className="w-full p-2 border rounded-lg  ml-6"
@@ -378,7 +390,7 @@ export default function UploadFile() {
 										/>
 
 										{/* Graph Description */}
-										<FormLabel className="pt-7 ml-6">Graph Description</FormLabel>
+										<FormLabel className="pt-7 ml-6">Graph Description <span style={{ color: "red" }}>*</span></FormLabel>
 										<Textarea
 											maxWidth="800px"
 											className="w-full p-2 border rounded-lg ml-6"
