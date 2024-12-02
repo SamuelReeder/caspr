@@ -179,47 +179,49 @@ const GraphList = ({
 				</div>
 			)}
 
-			<div className="flex justify-center items-center w-full">
-				<div className="flex justify-center items-center mt-4 gap-4">
-					<Button
-						onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-						disabled={currentPage === 1}
-					>
-						Previous
-					</Button>
-					<Text mx={4}>
-						Page {currentPage} of {totalPages}
-					</Text>
-					<Button
-						onClick={() =>
-							setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-						}
-						disabled={currentPage === totalPages}
-					>
-						Next
-					</Button>
-					Show:
-					<Box w="90px">
-						<Select
-							size="sm"
-							onChange={(e) => {
-								setItemsPerPage(Number(e.target.value));
-								setCurrentPage(1);
-							}}
-							className="!rounded-md"
-							variant="filled"
+			{currentGraphs.length !== 0 && (
+				<div className="flex justify-center items-center w-full">
+					<div className="flex justify-center items-center mt-4 gap-4">
+						<Button
+							onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+							disabled={currentPage === 1}
 						>
-							<option value="" disabled>
-								Items per page
-							</option>
-							<option value={10}>10</option>
-							<option value={25}>25</option>
-							<option value={50}>50</option>
-						</Select>
-					</Box>
-					entries
+							Previous
+						</Button>
+						<Text mx={4}>
+							Page {currentPage} of {totalPages}
+						</Text>
+						<Button
+							onClick={() =>
+								setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+							}
+							disabled={currentPage === totalPages}
+						>
+							Next
+						</Button>
+						Show:
+						<Box w="90px">
+							<Select
+								size="sm"
+								onChange={(e) => {
+									setItemsPerPage(Number(e.target.value));
+									setCurrentPage(1);
+								}}
+								className="!rounded-md"
+								variant="filled"
+							>
+								<option value="" disabled>
+									Items per page
+								</option>
+								<option value={10}>10</option>
+								<option value={25}>25</option>
+								<option value={50}>50</option>
+							</Select>
+						</Box>
+						entries
+					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };
