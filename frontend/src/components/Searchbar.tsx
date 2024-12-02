@@ -1,13 +1,14 @@
+import { Box, Input, Tooltip } from "@chakra-ui/react";
 /**
  * Searchbar component
  * @param {Graph[]} graphs - Array of graph data
  * @param {React.Dispatch<React.SetStateAction<Graph[] | undefined>>} setGraphs - Function to set the graph data
  * @returns {ReactElement} Searchbar component
  */
-import React, { useState, useEffect, useRef } from "react";
-import { Box, Input, Tooltip } from "@chakra-ui/react";
-import { Graph } from "@/types";
+import React, { useEffect, useState } from "react";
 import { fetchOwnerData, handleSearch } from "@/utils/searchFilter";
+
+import { Graph } from "@/types";
 
 interface SearchbarProps {
 	search: string;
@@ -36,7 +37,7 @@ const Searchbar = ({
 			};
 			fetchData();
 		}
-	}, [graphs, sortType, filterType]);
+	}, [graphs, sortType, filterType, originalGraphs.length]);
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value);
