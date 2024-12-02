@@ -32,6 +32,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { validateJSON } from "@/utils/validateJSON";
+import { parseGraphData } from "@/utils/extractGraphData";
 
 export default function UploadFile() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -129,13 +130,17 @@ export default function UploadFile() {
 					return;
 				}
 
+				// Parse Graph Data Before Uploading
+				const graphTags = parseGraphData(fileContent);
+
 				// If validation passes, proceed with uploading
 				const graph = await uploadGraph(
 					firebaseUser,
 					selectedFile,
 					graphName,
 					graphDescription,
-					graphVisibility
+					graphVisibility,
+					graphTags
 				);
 
 				toast({
