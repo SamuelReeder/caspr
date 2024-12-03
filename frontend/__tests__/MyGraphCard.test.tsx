@@ -112,4 +112,5 @@ describe("GraphObject renders correctly", () => {
 
     window.location = originalLocation;
   });
+  
 });
