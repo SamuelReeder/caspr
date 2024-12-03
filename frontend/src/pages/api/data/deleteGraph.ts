@@ -5,10 +5,9 @@
  * @returns 200 when graph is successfully deleted
  */
 import type { NextApiRequest, NextApiResponse } from "next";
-
 import { dbAdmin } from "@/config/firebaseAdmin";
-import { getStorage, ref, deleteObject } from "firebase/storage";
 import { auth } from "firebase-admin";
+import { getStorage } from "firebase-admin/storage";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -18,8 +17,7 @@ export default async function handler(
 		return res.status(405).json({ message: "Method not allowed" });
 	}
 
-	const graphID = req.body.graphID;
-	const graphFilePath = req.body.graphFilePath;
+	const { graphID, graphFilePath } = req.body;
 
 	if (!graphID || typeof graphID !== "string") {
 		return res.status(400).json({ message: "Invalid graph ID" });
@@ -66,16 +64,17 @@ export default async function handler(
 		}
 
 		// Remove Graph File
-		const storage = getStorage();
-		const fileRef = ref(storage, graphFilePath);
-		await deleteObject(fileRef);
+		const bucket = getStorage().bucket(
+			process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+		);
+		await bucket.file(graphFilePath).delete();
 
-		// Remove Graph File from Firebase
+		// Remove Graph File Metadata
 		await graphRef.delete();
 
 		res.status(200).json({ message: "Graph Deleted Successfully" });
 	} catch (error) {
-		console.error("Error fetching graphs:", error);
-		res.status(500).json({ message: "Error fetching graphs" });
+		console.error("Error deleting graph:", error);
+		res.status(500).json({ message: "Error deleting graph" });
 	}
 }

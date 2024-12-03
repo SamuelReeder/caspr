@@ -4,38 +4,80 @@
 import handler from "@/pages/api/data/deleteGraph";
 import { createMocks } from "node-mocks-http";
 import { dbAdmin } from "@/config/firebaseAdmin";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getStorage, ref, deleteObject } from "firebase/storage";
+import admin from "firebase-admin";
+import { getStorage } from "firebase-admin/storage";
 
-// Mock Firebase Storage
-jest.mock("firebase/storage", () => ({
-    getStorage: jest.fn(),
-    ref: jest.fn(),
-    deleteObject: jest.fn(),
-  }));
+jest.mock("firebase-admin", () => ({
+	apps: [],
+	initializeApp: jest.fn(),
+	credential: {
+		cert: jest.fn()
+	},
+	firestore: jest.fn(() => ({
+		collection: jest.fn()
+	})),
+	auth: jest.fn(() => ({
+		verifyIdToken: jest.fn()
+	})),
+	storage: jest.fn(() => ({
+		bucket: jest.fn()
+	}))
+}));
 
-jest.mock("@/config/firebaseAdmin");
-
+jest.mock("firebase-admin/storage", () => ({
+	getStorage: jest.fn(() => ({
+		bucket: jest.fn(() => ({
+			file: jest.fn().mockReturnValue({
+				delete: jest.fn().mockResolvedValue(null)
+			})
+		}))
+	}))
+}));
 
 describe("DELETE /api/data/deleteGraph", () => {
-	const mockID = "mockID"
-    const mockFilePath = "mockID/graph.json"
+	const mockID = "mockID";
+	const mockFilePath = "mockID/graph.json";
+	const mockUserUid = "mockUserUid";
+	const mockToken = "mockToken";
 
-    let deleteMock: jest.Mock;
+	let deleteMock: jest.Mock;
+	let docMock: jest.Mock;
+	let verifyIdTokenMock: jest.Mock;
+	let bucketMock: jest.Mock;
 
 	beforeEach(() => {
-        deleteMock = jest.fn();
-
-		// Set up dbAdmin.collection().doc().update()
-		(dbAdmin.collection as jest.Mock).mockReturnValue({
-			doc: jest.fn().mockReturnValue({
-				delete: deleteMock
+		deleteMock = jest.fn();
+		docMock = jest.fn().mockReturnValue({
+			delete: deleteMock,
+			get: jest.fn().mockResolvedValue({
+				exists: true,
+				data: jest.fn(() => ({
+					owner: mockUserUid
+				}))
 			})
 		});
-        
-        (getStorage as jest.Mock).mockReturnValue({ someStorage: true});
-        (ref as jest.Mock).mockReturnValue({someRef: true});
-        (deleteObject as jest.Mock).mockResolvedValue(null);
+
+		(dbAdmin.collection as jest.Mock).mockReturnValue({
+			doc: docMock
+		});
+
+		bucketMock = jest.fn().mockReturnValue({
+			file: jest.fn((filePath) => ({
+				delete: jest.fn(() => {
+					if (filePath === mockFilePath) return Promise.resolve();
+					throw new Error("File does not exist");
+				})
+			}))
+		});
+
+		(getStorage as jest.Mock).mockReturnValue({
+			bucket: bucketMock
+		});
+
+		verifyIdTokenMock = jest.fn().mockResolvedValue({ uid: mockUserUid });
+		(admin.auth as jest.Mock).mockReturnValue({
+			verifyIdToken: verifyIdTokenMock
+		});
 	});
 
 	afterEach(() => {
@@ -43,7 +85,7 @@ describe("DELETE /api/data/deleteGraph", () => {
 	});
 
 	it("should return status code: 405 if the method is not DELETE", async () => {
-		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+		const { req, res } = createMocks({
 			method: "POST"
 		});
 
@@ -55,10 +97,10 @@ describe("DELETE /api/data/deleteGraph", () => {
 		});
 	});
 
-	it("should return status code: 400 if UID is missing or invalid", async () => {
-        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+	it("should return status code: 400 if graphID is invalid", async () => {
+		const { req, res } = createMocks({
 			method: "DELETE",
-			body: { graphID: "", graphFilePath: mockFilePath  }
+			body: { graphID: "", graphFilePath: mockFilePath }
 		});
 
 		await handler(req, res);
@@ -69,10 +111,103 @@ describe("DELETE /api/data/deleteGraph", () => {
 		});
 	});
 
-    it("should return status code: 400 if graphFilePath is missing or invalid", async () => {
-        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+	it("should delete a graph and file successfully", async () => {
+		const fileDeleteMock = jest.fn().mockResolvedValue(null);
+
+		bucketMock.mockReturnValue({
+			file: jest.fn(() => ({
+				delete: fileDeleteMock
+			}))
+		});
+
+		const { req, res } = createMocks({
 			method: "DELETE",
-			body: { graphID: mockID, graphFilePath: ""  }
+			body: { graphID: mockID, graphFilePath: mockFilePath },
+			headers: { authorization: `Bearer ${mockToken}` }
+		});
+
+		await handler(req, res);
+
+		// Verify storage calls
+		expect(admin.auth().verifyIdToken).toHaveBeenCalledWith(mockToken);
+		expect(getStorage).toHaveBeenCalled();
+		expect(bucketMock).toHaveBeenCalledWith(
+			process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+		);
+		expect(bucketMock().file).toHaveBeenCalledWith(mockFilePath);
+		expect(fileDeleteMock).toHaveBeenCalled();
+
+		// Graph Metadata gets deleted
+		expect(dbAdmin.collection).toHaveBeenCalledWith(
+			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
+		);
+		expect(docMock).toHaveBeenCalledWith(mockID);
+		expect(deleteMock).toHaveBeenCalled();
+
+		expect(res._getStatusCode()).toBe(200);
+		expect(JSON.parse(res._getData())).toEqual({
+			message: "Graph Deleted Successfully"
+		});
+	});
+
+	it("should return status code: 500 if there is an error deleting graphs", async () => {
+		deleteMock.mockRejectedValue(new Error("Firestore error"));
+
+		const { req, res } = createMocks({
+			method: "DELETE",
+			body: { graphID: mockID, graphFilePath: mockFilePath },
+			headers: { authorization: `Bearer ${mockToken}` }
+		});
+
+		await handler(req, res);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(JSON.parse(res._getData())).toEqual({
+			message: "Error deleting graph"
+		});
+	});
+	it("should return status code 403 if user does not own the graph", async () => {
+		docMock.mockReturnValue({
+			get: jest.fn().mockResolvedValue({
+				exists: true,
+				data: jest.fn().mockReturnValue({
+					owner: "otherUserUID"
+				})
+			})
+		});
+
+		const { req, res } = createMocks({
+			method: "DELETE",
+			body: { graphID: mockID, graphFilePath: mockFilePath },
+			headers: { authorization: `Bearer ${mockToken}` }
+		});
+
+		await handler(req, res);
+
+		expect(res._getStatusCode()).toBe(403);
+		expect(JSON.parse(res._getData())).toEqual({
+			error: "No permission to delete this graph"
+		});
+	});
+	it("should return status code 401 if authorization header is missing", async () => {
+		const { req, res } = createMocks({
+			method: "DELETE",
+			body: { graphID: mockID, graphFilePath: mockFilePath }
+		});
+
+		await handler(req, res);
+
+		expect(res._getStatusCode()).toBe(401);
+		expect(JSON.parse(res._getData())).toEqual({
+			error: "Unauthorized"
+		});
+	});
+
+	it("should return status code 400 if graphFilePath is invalid", async () => {
+		const { req, res } = createMocks({
+			method: "DELETE",
+			body: { graphID: mockID, graphFilePath: "" },
+			headers: { authorization: `Bearer ${mockToken}` }
 		});
 
 		await handler(req, res);
@@ -82,43 +217,21 @@ describe("DELETE /api/data/deleteGraph", () => {
 			message: "Invalid graph URL"
 		});
 	});
+	it("should return status code 401 if token verification fails", async () => {
+		verifyIdTokenMock.mockRejectedValue(new Error("Invalid token"));
 
-	it("should delete graphs and storage file returning code: 200", async () => {
-        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+		const { req, res } = createMocks({
 			method: "DELETE",
-			body: { graphID: mockID, graphFilePath: mockFilePath}
+			body: { graphID: mockID, graphFilePath: mockFilePath },
+			headers: { authorization: `Bearer ${mockToken}` }
 		});
 
 		await handler(req, res);
 
-        // Verify storage calls
-        expect(getStorage).toHaveBeenCalledTimes(1);
-        expect(ref).toHaveBeenCalledWith({ someStorage: true}, mockFilePath);
-        expect(deleteObject).toHaveBeenCalledWith({someRef: true});
-
-        // Graph Metadata gets deleted
-        expect(dbAdmin.collection).toHaveBeenCalledWith(
-            process.env.NEXT_FIREBASE_GRAPH_COLLECTION || ""
-        );
-        expect(dbAdmin.collection(process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "").doc).toHaveBeenCalledWith(mockID);
-        expect(deleteMock).toHaveBeenCalled();
-		expect(res._getStatusCode()).toEqual(200);
-		expect(JSON.parse(res._getData())).toEqual({ message: "Graph Deleted Successfully" });
-	});
-
-	it("should return status code: 500 if there is an error deleting graphs", async () => {
-		deleteMock.mockRejectedValue(new Error("Firestore error"));
-
-        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-			method: "DELETE",
-			body: { graphID: mockID, graphFilePath: mockFilePath}
-		});
-
-		await handler(req, res);
-
-		expect(res._getStatusCode()).toEqual(500);
+		expect(verifyIdTokenMock).toHaveBeenCalledWith(mockToken);
+		expect(res._getStatusCode()).toBe(401);
 		expect(JSON.parse(res._getData())).toEqual({
-			message: "Error fetching graphs"
+			error: "Invalid token"
 		});
 	});
 });
