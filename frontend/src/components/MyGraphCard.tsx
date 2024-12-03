@@ -27,12 +27,14 @@ import React, { useState } from "react";
 import { MyGraphCardProps } from "@/types";
 import formatDate from "@/utils/formatDate";
 import { updateGraphData } from "@/api/storage";
+import { useAuth } from "@/context";
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
+	const { firebaseUser } = useAuth();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
 	const [switchDisabled, setSwitchDisabled] = useState<boolean>(
-		(graph?.owner ?? '') !== (firebaseUser?.uid ?? '')
+		(graph?.owner ?? "") !== (firebaseUser?.uid ?? "")
 	);
 	const toast = useToast();
 
@@ -87,7 +89,6 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">
-
 				<div className="flex flex-col space-y-3">
 					<Heading
 						className="hover:underline"
