@@ -9,180 +9,204 @@ import { Graph, SharedUser, User } from "@/types";
 import { Timestamp } from "firebase/firestore";
 
 jest.mock("@/config/firebaseAdmin");
+jest.mock("firebase-admin", () => ({
+    ...jest.requireActual("firebase-admin"),
+    auth: jest.fn(() => ({
+        verifyIdToken: jest.fn((token) => {
+            if (token === "valid-token") {
+                return Promise.resolve({
+                    uid: "123",
+                    email: "test@gmail.com",
+                });
+            }
+            return Promise.reject(new Error("Invalid token"));
+        }),
+    })),
+}));
 
 const mockUser: User = {
-	uid: "123",
-	name: "Test User",
-	email: "test@gmail.com",
-	photoURL: "TestURL.com",
-	createdAt: Timestamp.now(),
-	roles: []
+    uid: "123",
+    name: "Test User",
+    email: "test@gmail.com",
+    photoURL: "TestURL.com",
+    createdAt: Timestamp.now(),
+    roles: [],
 };
 
 const mockSharedUser: SharedUser = {
-	email: "test@example.com",
-	status: "accepted",
-	role: 0,
-	presetAccess: [],
-	addedAt: Timestamp.now(),
-	addedBy: "admin@example.com"
+    email: "test@example.com",
+    status: "accepted",
+    role: 0,
+    presetAccess: [],
+    addedAt: Timestamp.now(),
+    addedBy: "admin@example.com",
 };
 
 const mockGraph: Graph = {
-	id: "test-graph-id",
-	owner: mockUser.uid,
-	graphName: "Test Graph",
-	graphDescription: "Test Description",
-	graphVisibility: true,
-	graphFileURL: "http://example.com/graph.png",
-	graphURL: "http://example.com/graph",
-	createdAt: Timestamp.now(),
-	sharing: [mockSharedUser],
-	sharedEmails: ["test@example.com"],
-	presets: [
-		{
-			name: "Preset 1",
-			updated: Timestamp.now(),
-			filters: ["filter1"],
-			pathways: ["pathway1"],
-			view: null
-		},
-		{
-			name: "Preset 2",
-			updated: Timestamp.now(),
-			filters: ["filter2"],
-			pathways: ["pathway2"],
-			view: null
-		}
-	]
+    id: "test-graph-id",
+    owner: mockUser.uid,
+    graphName: "Test Graph",
+    graphDescription: "Test Description",
+    graphVisibility: true,
+    graphFileURL: "http://example.com/graph.png",
+    graphURL: "http://example.com/graph",
+    createdAt: Timestamp.now(),
+    sharing: [mockSharedUser],
+    sharedEmails: ["test@example.com"],
+    presets: [
+        {
+            name: "Preset 1",
+            updated: Timestamp.now(),
+            filters: ["filter1"],
+            pathways: ["pathway1"],
+            view: null,
+        },
+        {
+            name: "Preset 2",
+            updated: Timestamp.now(),
+            filters: ["filter2"],
+            pathways: ["pathway2"],
+            view: null,
+        },
+    ],
+    graphTags: [],
+    graphFilePath: "",
 };
 
 describe("POST /api/data/unshareGraph", () => {
-	let graphDocMock: jest.Mock;
-	let graphUpdateMock: jest.Mock;
+    let graphDocMock: jest.Mock;
+    let graphUpdateMock: jest.Mock;
 
-	beforeEach(() => {
-		graphDocMock = jest.fn();
-		graphUpdateMock = jest.fn().mockResolvedValue(true);
-		(dbAdmin.collection as jest.Mock).mockReturnValue({
-			doc: jest.fn().mockReturnValue({
-				get: graphDocMock,
-				update: graphUpdateMock
-			})
-		});
-	});
+    beforeEach(() => {
+        graphDocMock = jest.fn();
+        graphUpdateMock = jest.fn().mockResolvedValue(true);
 
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
+        (dbAdmin.collection as jest.Mock).mockReturnValue({
+            doc: jest.fn().mockReturnValue({
+                get: graphDocMock,
+                update: graphUpdateMock,
+            }),
+        });
+    });
 
-	it("should return status code 405 if method isn't POST", async () => {
-		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-			method: "GET"
-		});
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
 
-		await handler(req, res);
+    it("should return status code 405 if method isn't POST", async () => {
+        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+            method: "GET",
+        });
 
-		expect(res._getStatusCode()).toEqual(405);
-		expect(res._getData()).toEqual('{"message":"Method not allowed"}');
-	});
+        await handler(req, res);
 
-	it("should return status code 400 if graphId or email is missing", async () => {
-		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-			method: "POST",
-			body: {}
-		});
+        expect(res._getStatusCode()).toEqual(405);
+        expect(res._getData()).toEqual('{"message":"Method not allowed"}');
+    });
 
-		await handler(req, res);
+    it("should return status code 400 if graphId or email is missing", async () => {
+        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+            method: "POST",
+            headers: { authorization: "Bearer valid-token" },
+            body: {},
+        });
 
-		expect(res._getStatusCode()).toEqual(400);
-		expect(res._getData()).toEqual(
-			'{"error":"Graph ID and email are required"}'
-		);
-	});
+        await handler(req, res);
 
-	it("should return status code 404 for non-existent graph", async () => {
-		graphDocMock.mockResolvedValue({ exists: false });
+        expect(res._getStatusCode()).toEqual(400);
+        expect(res._getData()).toEqual(
+            '{"error":"Graph ID and email are required"}'
+        );
+    });
 
-		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-			method: "POST",
-			body: {
-				graphId: "invalid-id",
-				email: "test@example.com"
-			}
-		});
+    it("should return status code 404 for non-existent graph", async () => {
+        graphDocMock.mockResolvedValue({ exists: false });
 
-		await handler(req, res);
+        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+            method: "POST",
+            headers: { authorization: "Bearer valid-token" },
+            body: {
+                graphId: "invalid-id",
+                email: "test@example.com",
+            },
+        });
 
-		expect(res._getStatusCode()).toEqual(404);
-		expect(res._getData()).toEqual('{"error":"Graph not found"}');
-	});
+        await handler(req, res);
 
-	it("should unshare graph successfully", async () => {
-		graphDocMock.mockResolvedValue({
-			exists: true,
-			data: () => ({
-				...mockGraph,
-				sharing: [mockSharedUser],
-				sharedEmails: ["test@example.com"]
-			})
-		});
+        expect(res._getStatusCode()).toEqual(404);
+        expect(res._getData()).toEqual('{"error":"Graph not found"}');
+    });
 
-		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-			method: "POST",
-			body: {
-				graphId: "test-graph-id",
-				email: "test@example.com"
-			}
-		});
+    it("should unshare graph successfully", async () => {
+        graphDocMock.mockResolvedValue({
+            exists: true,
+            data: () => ({
+                ...mockGraph,
+                sharing: [mockSharedUser],
+                sharedEmails: ["test@example.com"],
+            }),
+        });
 
-		await handler(req, res);
+        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+            method: "POST",
+            headers: { authorization: "Bearer valid-token" },
+            body: {
+                graphId: "test-graph-id",
+                email: "test@example.com",
+            },
+        });
 
-		expect(res._getStatusCode()).toEqual(200);
-		expect(res._getData()).toEqual('{"message":"Graph unshared successfully"}');
-		expect(graphUpdateMock).toHaveBeenCalled();
-	});
+        await handler(req, res);
 
-	it("should return status code 404 if user not found in sharing list", async () => {
-		graphDocMock.mockResolvedValue({
-			exists: true,
-			data: () => ({
-				...mockGraph,
-				sharing: [],
-				sharedEmails: []
-			})
-		});
+        expect(res._getStatusCode()).toEqual(200);
+        expect(res._getData()).toEqual(
+            '{"message":"Graph unshared successfully"}'
+        );
+        expect(graphUpdateMock).toHaveBeenCalled();
+    });
 
-		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-			method: "POST",
-			body: {
-				graphId: "test-graph-id",
-				email: "nonexistent@example.com"
-			}
-		});
+    it("should return status code 404 if user not found in sharing list", async () => {
+        graphDocMock.mockResolvedValue({
+            exists: true,
+            data: () => ({
+                ...mockGraph,
+                sharing: [],
+                sharedEmails: [],
+            }),
+        });
 
-		await handler(req, res);
+        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+            method: "POST",
+            headers: { authorization: "Bearer valid-token" },
+            body: {
+                graphId: "test-graph-id",
+                email: "nonexistent@example.com",
+            },
+        });
 
-		expect(res._getStatusCode()).toEqual(404);
-		expect(res._getData()).toEqual(
-			'{"error":"User not found in sharing list"}'
-		);
-	});
+        await handler(req, res);
 
-	it("should return status code 500 if there was an error unsharing the graph", async () => {
-		graphUpdateMock.mockRejectedValue(new Error("Firestore error"));
+        expect(res._getStatusCode()).toEqual(404);
+        expect(res._getData()).toEqual(
+            '{"error":"User not found in sharing list"}'
+        );
+    });
 
-		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-			method: "POST",
-			body: {
-				graphId: "test-graph-id",
-				email: "test@example.com"
-			}
-		});
+    it("should return status code 500 if there was an error unsharing the graph", async () => {
+        graphUpdateMock.mockRejectedValue(new Error("Firestore error"));
 
-		await handler(req, res);
+        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+            method: "POST",
+            headers: { authorization: "Bearer valid-token" },
+            body: {
+                graphId: "test-graph-id",
+                email: "test@example.com",
+            },
+        });
 
-		expect(res._getStatusCode()).toEqual(500);
-		expect(res._getData()).toEqual('{"error":"Error unsharing graph"}');
-	});
+        await handler(req, res);
+
+        expect(res._getStatusCode()).toEqual(500);
+        expect(res._getData()).toEqual('{"error":"Error unsharing graph"}');
+    });
 });
