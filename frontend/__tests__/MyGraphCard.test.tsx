@@ -6,27 +6,34 @@ import MyGraphObject from "../src/components/MyGraphCard";
 import React from "react";
 import { Timestamp } from "firebase/firestore"; // Import Timestamp
 import customRender from "@/test-utils/render";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { deleteGraph } from "@/api";
+
+jest.mock("@/api", () => ({
+	deleteGraph: jest.fn(),
+}));
+
+const sampleGraph:Graph = {
+	id: "1",
+	owner: "Kevin",
+	graphName: "Test Title",
+	graphDescription: "Test Description",
+	graphTags: ["GDP"],
+	graphFileURL: "https://www.google.com",
+	graphFilePath: "/1/Test Title.json",
+	graphURL: "1234",
+	graphVisibility: true,
+	createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+	sharing: [],
+	sharedEmails: [],
+	presets: []
+}
 
 describe("GraphObject renders correctly", () => {
 	test("renders GraphObject component", () => {
 		customRender(
 			<MyGraphObject
-				graph={
-					{
-						id: "1",
-						owner: "Kevin",
-						graphName: "Test Title",
-						graphDescription: "Test Description",
-						graphFileURL: "https://www.google.com",
-						graphURL: "1234",
-						graphVisibility: true,
-						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
-						sharing: [],
-						sharedEmails: [],
-						presets: []
-					} as Graph
-				}
+				graph={sampleGraph}
 				owner={
 					{
 						uid: "1",
@@ -52,21 +59,7 @@ describe("GraphObject renders correctly", () => {
 	test("renders GraphObject button", () => {
 		customRender(
 			<MyGraphObject
-				graph={
-					{
-						id: "1",
-						owner: "Kevin",
-						graphName: "Test Title",
-						graphDescription: "Test Description",
-						graphFileURL: "https://www.google.com",
-						graphURL: "1234",
-						graphVisibility: true,
-						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
-						sharing: [],
-						sharedEmails: [],
-						presets: []
-					} as Graph
-				}
+				graph={sampleGraph}
 				owner={
 					{
 						uid: "1",
@@ -81,11 +74,13 @@ describe("GraphObject renders correctly", () => {
 		);
 		
 
-		const buttonElement = screen.getByText(/Share/i);
-		expect(buttonElement).toBeInTheDocument();
+		const shareButton = screen.getByText(/Share/i);
+		const deleteButton = screen.getByText(/Delete/i);
+		expect(deleteButton).toBeInTheDocument();
+		expect(shareButton).toBeInTheDocument();
 	});
 	
-	test("navigates to the correct page when Open button is clicked", () => {
+	test("navigates to the correct page when graph title is clicked", () => {
     const originalLocation = window.location;
 		Object.defineProperty(window, 'location', {
 			writable: true,
@@ -94,21 +89,7 @@ describe("GraphObject renders correctly", () => {
 
     customRender(
       <MyGraphObject
-        graph={
-          {
-            id: "1",
-            owner: "Kevin",
-            graphName: "Test Title",
-            graphDescription: "Test Description",
-            graphFileURL: "https://www.google.com",
-            graphURL: "1234",
-            graphVisibility: true,
-            createdAt: Timestamp.fromDate(new Date("2023-09-01")),
-            sharing: [],
-            sharedEmails: [],
-            presets: [],
-          } as Graph
-        }
+        graph={sampleGraph}
         owner={
           {
             uid: "1",
@@ -122,7 +103,7 @@ describe("GraphObject renders correctly", () => {
       />
     );
 
-    const openButton = screen.getByText(/Open/i);
+    const openButton = screen.getByText(/Test Title/i);
     fireEvent.click(openButton);
 
 		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -131,4 +112,5 @@ describe("GraphObject renders correctly", () => {
 
     window.location = originalLocation;
   });
+  
 });

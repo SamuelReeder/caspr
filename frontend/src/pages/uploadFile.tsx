@@ -203,20 +203,6 @@ export default function UploadFile() {
 			if (selectedFile) {
 				// Validate the file content before uploading
 				const fileContent = await selectedFile.text();
-				const validationResult = validateJSON(fileContent);
-
-				if (!validationResult.isValid) {
-					console.error("Invalid graph data:", validationResult.errorMessage);
-					toast({
-						title: "Invalid graph data",
-						description: validationResult.errorMessage,
-						status: "error",
-						duration: 5000,
-						isClosable: true
-					});
-					setIsLoading(false);
-					return;
-				}
 
 				// Parse Graph Data Before Uploading
 				const graphTags = parseGraphData(fileContent);
@@ -384,6 +370,7 @@ export default function UploadFile() {
 									onClick={handleNextStep}
 									colorScheme="blue"
 									isDisabled={!selectedFile}
+									aria-label="step 0 next"
 								>
 									Next
 								</Button>
