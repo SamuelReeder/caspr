@@ -63,13 +63,10 @@ const ShareButton: React.FC<ShareButtonProps> = ({ graph }) => {
 		const checkPermission = async () => {
 			if (!firestoreUser) return;
 
-			console.log(firestoreUser.email, graph.owner, graph.sharedEmails);
-
 			if (
 				graph.owner === firestoreUser.uid ||
 				(graph.sharedEmails && graph.sharedEmails.includes(firestoreUser.email))
 			) {
-				 console.log("Can share");
 				setCanShare(true);
 			} else {
 				setCanShare(false);
