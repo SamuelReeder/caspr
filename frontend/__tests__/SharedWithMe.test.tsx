@@ -1,13 +1,15 @@
 import "@testing-library/jest-dom";
+
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
+import { getSharedGraphs, getUser } from "@/api";
+
+import { AuthContext } from "@/context/AuthContext";
+import { User as FirestoreUser } from "@/types";
 import React from "react";
 import SharedWithMe from "@/pages/sharedWithMe";
-import customRender from "@/test-utils/render";
-import { AuthContext } from "@/context/AuthContext";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
-import { getSharedGraphs, getUser } from "@/api";
-import { User as FirestoreUser } from "@/types";
+import customRender from "@/test-utils/render";
 
 const mockRouterPush = jest.fn();
 jest.mock("next/router", () => ({
@@ -119,7 +121,11 @@ describe("Shared With Me Page Component", () => {
 	const renderWithAuthContext = () => {
 		return customRender(
 			<AuthContext.Provider
-				value={{ firebaseUser: mockUser as User, firestoreUser: mockUser as FirestoreUser, loading: false }}
+				value={{
+					firebaseUser: mockUser as User,
+					firestoreUser: mockUser as FirestoreUser,
+					loading: false
+				}}
 			>
 				<SharedWithMe />
 			</AuthContext.Provider>
@@ -129,8 +135,10 @@ describe("Shared With Me Page Component", () => {
 	it("renders the home page", async () => {
 		renderWithAuthContext();
 		expect(await screen.findAllByText(/Shared With Me/i)).toHaveLength(1);
-		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument;
-		expect(await screen.findByText(/Email: test@gmail.com/i)).toBeInTheDocument;
+		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument();
+		expect(
+			await screen.findByText(/Email: test@gmail.com/i)
+		).toBeInTheDocument();
 	});
 
 	it("renders the mock graph data in the home page", async () => {
@@ -170,11 +178,13 @@ describe("Shared With Me Page Component", () => {
 		expect(await screen.findByText(/Share graph/i)).toBeInTheDocument();
 		expect(
 			await screen.findByPlaceholderText(/Enter email address and press Enter/i)
-		).toBeInTheDocument;
-		expect(await screen.findByRole("button", { name: /Share/i }))
-			.toBeInTheDocument;
-		expect(await screen.findByRole("button", { name: /Cancel/i }))
-			.toBeInTheDocument;
+		).toBeInTheDocument();
+		expect(
+			await screen.findByRole("button", { name: /Share/i })
+		).toBeInTheDocument();
+		expect(
+			await screen.findByRole("button", { name: /Cancel/i })
+		).toBeInTheDocument();
 	});
 
 	it("closes the share modal when the cancel button is clicked", async () => {
@@ -187,7 +197,7 @@ describe("Shared With Me Page Component", () => {
 		});
 		expect(
 			await screen.findByPlaceholderText(/Enter email address and press Enter/i)
-		).toBeInTheDocument;
+		).toBeInTheDocument();
 		const cancelButton = await screen.findByRole("button", { name: /Cancel/i });
 		await act(async () => {
 			fireEvent.click(cancelButton);
@@ -264,7 +274,7 @@ describe("Shared With Me Page Component", () => {
 	it("handles errors when fetching shared graphs", async () => {
 		const consoleErrorSpy = jest
 			.spyOn(console, "error")
-			.mockImplementation(() => { });
+			.mockImplementation(() => {});
 		(getSharedGraphs as jest.Mock).mockRejectedValue(
 			new Error("Error fetching shared graphs")
 		);
