@@ -1,5 +1,5 @@
 /**
- * Index (Login/landing page)
+ * Login page
  * @returns {ReactElement} Login page
  */
 import "tailwindcss/tailwind.css";
@@ -24,7 +24,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 
-export default function Index() {
+function Login() {
 	const toast = useToast();
 	const router = useRouter();
 	const { firebaseUser } = useAuth();
@@ -103,7 +103,7 @@ export default function Index() {
 				<div className="bg-white rounded-lg p-8 shadow-md w-[80%]">
 					<Box className="text-center">
 						<div className="flex flex-col items-center justify-center w-full">
-							<img src="/favicon.ico" alt="Logo" style={{ height: '100px'}} />
+							<img src="/favicon.ico" alt="Logo" style={{ height: "100px" }} />
 						</div>
 						<Heading className="text-center text-4xl">Welcome to Caspr</Heading>
 						<Text className="pt-2">Log in to your account</Text>
@@ -201,3 +201,5 @@ export default function Index() {
 		</div>
 	);
 }
+
+export default Login;
