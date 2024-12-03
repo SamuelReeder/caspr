@@ -129,21 +129,20 @@ We welcome contributions from the community! Here are some requirements:
 4. **Branching Strategy**: Use a branching strategy with a prefix for the category and a name for the exact purpose of the branch. Such as `feature/<name>` or `fix/<name>` or `test/<name>`. Submit pull requests for 2-3 reviews before merging to main.
 
 And Here are some ways in which you can contribute:
+1. Reporting Bugs
+    * **Check existing issues:** Before reporting a new bug, please check the github issues tab to see if it's already been reported.
+    * **Provide details:** When reporting a bug, please include as much detail as possible, including steps to reproduce the issue, expected behavior, 1  actual behavior, and your environment (operating system, browser, etc.).
 
-Reporting Bugs
-* **Check existing issues:** Before reporting a new bug, please check the github issues tab to see if it's already been reported.
-* **Provide details:** When reporting a bug, please include as much detail as possible, including steps to reproduce the issue, expected behavior, 1  actual behavior, and your environment (operating system, browser, etc.).
+2. Suggesting Enhancements
+    * **Open an issue:**  If you have an idea for a new feature or improvement, please open an issue on the github issues tab with a clear description of your suggestion.
+    * **Discuss your idea:**  We encourage you to discuss your proposal with the community before starting any work to ensure it aligns with the project's goals and direction.
 
-Suggesting Enhancements
-* **Open an issue:**  If you have an idea for a new feature or improvement, please open an issue on the github issues tab with a clear description of your suggestion.
-* **Discuss your idea:**  We encourage you to discuss your proposal with the community before starting any work to ensure it aligns with the project's goals and direction.
-
-Submitting Code Changes
-* **Fork the repository:** Fork the project to your own GitHub account.
-* **Create a branch:** Create a new branch for your changes.
-* **Follow coding style:** Adhere to the project's coding style and conventions. Again, all files should be formatted according to the included Prettier configuration file.
-* **Write tests:**  Include tests for your code changes.
-* **Open a pull request:** Submit a pull request with a clear description of your changes.
+3. Submitting Code Changes
+    * **Fork the repository:** Fork the project to your own GitHub account.
+    * **Create a branch:** Create a new branch for your changes.
+    * **Follow coding style:** Adhere to the project's coding style and conventions. Again, all files should be formatted according to the included Prettier configuration file.
+    * **Write tests:**  Include tests for your code changes.
+    * **Open a pull request:** Submit a pull request with a clear description of your changes.
 
 We appreciate your contributions and look forward to collaborating with you to improve this project!
 
