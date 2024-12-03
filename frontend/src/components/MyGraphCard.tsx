@@ -89,7 +89,6 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	return (
 		<Card maxW="full">
 			<CardHeader className="flex justify-between">
-
 				<div className="flex flex-col space-y-3">
 					<Heading
 						className="hover:underline"
