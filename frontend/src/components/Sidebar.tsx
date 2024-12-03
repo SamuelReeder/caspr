@@ -74,7 +74,7 @@ export default function Sidebar() {
 					{!isCollapsed && (
 						<div className="flex flex-col justify-center ml-10">
 							<img src="/favicon.ico" alt="Logo" style={{ height: "90px" }} />
-							<img src="/logo.png" alt="Logo" style={{ height: "30px" }} />
+							<img src="/logo.png" alt="Caspr" style={{ height: "30px" }} />
 						</div>
 					)}
 					<Button
