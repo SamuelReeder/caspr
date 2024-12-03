@@ -7,6 +7,8 @@ import { fetchCurrUserGraphs } from "@/api/storage";
 import { AuthContext } from "@/context/AuthContext";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
+import { User as FirestoreUser } from "@/types";
+
 
 const mockRouterPush = jest.fn();
 global.fetch = jest.fn(() =>
@@ -99,10 +101,10 @@ describe("Home page Component", () => {
 		(fetchCurrUserGraphs as jest.Mock).mockResolvedValue(mockGraphs);
 	});
 
-	const renderWithAuthContext = (firebaseUser: User | null) => {
+	const renderWithAuthContext = () => {
 		return customRender(
 			<AuthContext.Provider
-				value={{ firebaseUser, firestoreUser: null, loading: false }}
+				value={{ firebaseUser: mockUser as User, firestoreUser: mockUser as FirestoreUser, loading: false }}
 			>
 				<Index />
 			</AuthContext.Provider>
@@ -110,7 +112,7 @@ describe("Home page Component", () => {
 	};
 
 	it("renders the home page when authenticated", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		expect(await screen.findAllByText(/My Graphs/i)).toHaveLength(1);
 		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument();
 		expect(
@@ -119,7 +121,7 @@ describe("Home page Component", () => {
 	});
 
 	it("renders the mock graph data in the home page", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		expect(await screen.findByText(/Graph 1/i)).toBeInTheDocument();
 		expect(await screen.findByText(/Description 1/i)).toBeInTheDocument();
 		expect(await screen.findByText(/Graph 2/i)).toBeInTheDocument();
@@ -134,7 +136,7 @@ describe("Home page Component", () => {
 	});
 
 	it("opens the share modal when the Share button is clicked", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		const shareButtons = await screen.findAllByRole("button", {
 			name: /Share/i
 		});
@@ -157,7 +159,7 @@ describe("Home page Component", () => {
 	});
 
 	it("closes the share modal when the cancel button is clicked", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		const shareButtons = await screen.findAllByRole("button", {
 			name: /Share/i
 		});
@@ -177,7 +179,7 @@ describe("Home page Component", () => {
 	});
 
 	it("renders the public visibility toggles correctly", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		const switchElements = await screen.findAllByLabelText(
 			/Enable Public Visibility/i
 		);
@@ -194,7 +196,7 @@ describe("Home page Component", () => {
 	});
 
 	it("renders the Select elements with correct options", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 
 		const selectElements = await screen.findAllByRole("combobox");
 		expect(selectElements[0]).toBeInTheDocument();
