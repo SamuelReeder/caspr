@@ -32,7 +32,7 @@
 ## Key Features
 - **Our Secure Account System**: Create an account and log in to securely save, manage, and share your graphs. Caspr uses Firebase Authentication to protect your information. Caspr allows login and account creation via Google, convenient password reset, and easy-to-use graph access control with permissions to ensure your data remains private and secure.
 
-- **Dynamic 3D Graph Visualization**: Our app brings causal diagrams to life! The 3D graph is generated dynamically from JSON data, where each node and edge represents crucial connections between elements. You can explore complex systems with ease.
+- **Dynamic 3D Graph Visualization**: Caspr brings causal diagrams to life! The 3D graph is generated dynamically from JSON data, where each node and edge represents crucial connections between elements. You can explore complex systems with ease.
 
 - **Smooth Graph Interaction**: Navigate the graph in a fully immersive 3D space. Zoom, pan, and rotate the graph freely to explore relationships from every angle. It's simple and intuitive, letting you focus on discovering insights.
 
