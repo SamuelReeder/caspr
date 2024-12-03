@@ -7,8 +7,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { dbAdmin } from "@/config/firebaseAdmin";
-import { db } from "@/config/firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { Graph } from "@/types";
 
 export default async function handler(
