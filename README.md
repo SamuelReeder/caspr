@@ -14,12 +14,12 @@ For instance, in machine learning research, Caspr facilitates the visualization 
 
 <p align="center">
   <img width="49%" alt="image" src="/images/login_page.jpg">
-  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/751138b8-bfae-464f-96b6-976353a611e8">
+  <img width="49%" alt="image" src="/images/my_graphs_page.jpg">
 </p>
 
 <p align="center">
   <img width="49%" alt="image" src="/images/upload_file_page.jpg">
-  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/8edcb52b-1f8b-4568-941d-b0a90ff60002">
+  <img width="49%" alt="image" src="/images/graph_view.jpg">
 </p>
 
 ## Key Features
