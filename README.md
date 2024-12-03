@@ -3,9 +3,9 @@
   <h1>Caspr</h1>
 </div>
 
-Caspr (Causal Analysis and Structure Path Relationships) is a web application that empowers users to explore complex causal diagrams in an intuitive 3D environment. By transforming data into interactive visualizations, Caspr reveals intricate relationships between variables in multifaceted systems across diverse research domains, including machine learning, economics, environmental studies, and political science. Simply upload a formatted JSON file with nodes, edges, and details to see the data come to life.
+Caspr (Causal Analysis and Structure Path Relationships) is a web application that empowers users to explore complex causal diagrams in an intuitive 3D environment. By transforming data into interactive visualizations, Caspr reveals intricate relationships between variables in multifaceted systems across diverse research domains, including machine learning, economics, environmental studies, and political science.
 
-For instance, in machine learning research, Caspr facilitates the visualization and comparison of reasoning processes between AI agents and humans, enabling researchers to refine AI forecasting systems and advance predictive capabilities.
+For instance, in machine learning research, Caspr facilitates the visualization and comparison of reasoning processes between AI agents and humans, enabling researchers to refine AI forecasting systems and advance predictive capabilities. Simply upload a formatted JSON file with nodes, edges, and details to see the data come to life.
 
 - Try the application at [caspr.vercel.app](https://caspr.vercel.app/)
 - See the [application user guide](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing) for more detailed user instructions
