@@ -116,7 +116,7 @@ export default function UploadFile() {
 				// Validate the file content before uploading
 				const fileContent = await selectedFile.text();
 				const validationResult = validateJSON(fileContent);
-
+				console.log(validationResult)
 				if (!validationResult.isValid) {
 					console.error("Invalid graph data:", validationResult.errorMessage);
 					toast({
