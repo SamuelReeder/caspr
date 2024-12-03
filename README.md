@@ -138,7 +138,7 @@ Suggesting Enhancements
 * **Open an issue:**  If you have an idea for a new feature or improvement, please open an issue on the github issues tab with a clear description of your suggestion.
 * **Discuss your idea:**  We encourage you to discuss your proposal with the community before starting any work to ensure it aligns with the project's goals and direction.
 
-**Submitting Code Changes**
+Submitting Code Changes
 * **Fork the repository:** Fork the project to your own GitHub account.
 * **Create a branch:** Create a new branch for your changes.
 * **Follow coding style:** Adhere to the project's coding style and conventions. Again, all files should be formatted according to the included Prettier configuration file.
