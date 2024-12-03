@@ -137,6 +137,26 @@ Every update to the **main** branch goes through a series of verification and va
 
 Due to permission conflicts, deployment is done on a identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
 
+## Contributing
+We welcome contributions from the community!  Here's how you can get involved:
+
+Reporting Bugs
+* **Check existing issues:** Before reporting a new bug, please check the github issues tab to see if it's already been reported.
+* **Provide details:** When reporting a bug, please include as much detail as possible, including steps to reproduce the issue, expected behavior, 1  actual behavior, and your environment (operating system, browser, etc.).
+
+Suggesting Enhancements
+* **Open an issue:**  If you have an idea for a new feature or improvement, please open an issue on the github issues tab with a clear description of your suggestion.
+* **Discuss your idea:**  We encourage you to discuss your proposal with the community before starting any work to ensure it aligns with the project's goals and direction.
+
+**Submitting Code Changes**
+* **Fork the repository:** Fork the project to your own GitHub account.
+* **Create a branch:** Create a new branch for your changes.
+* **Follow coding style:** Adhere to the project's coding style and conventions. All files should be formatted according to the included Prettier configuration file.
+* **Write tests:**  Include tests for your code changes.
+* **Open a pull request:** Submit a pull request with a clear description of your changes.
+
+We appreciate your contributions and look forward to collaborating with you to improve this project!
+
 ## Licences
 - This project is distributed under the MIT License. See LICENSE.txt for more information. 
 - This license was chosen as it is a very permissive open-source license.  Anyone can use, modify, and distribute this project's code for any purpose, as long as they include the original license and copyright notice.
