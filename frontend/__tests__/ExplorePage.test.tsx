@@ -4,6 +4,7 @@ import { screen, waitFor } from "@testing-library/react";
 
 import { AuthContext } from "@/context/AuthContext";
 import Explore from "@/pages/explore";
+import { User as FirestoreUser } from "@/types";
 import React from "react";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
@@ -35,27 +36,58 @@ const mockUser: Partial<User> = {
 const mockGraphs = [
 	{
 		id: "1",
-		graphName: "Graph 1",
+		graphName: "Shared Graph 1",
 		graphDescription: "Description 1",
-		owner: mockUser.uid,
+		owner: "owner1",
+		ownerName: "user1",
 		graphVisibility: true,
 		graphURL: "http://test.com/1",
+		graphFilePath: "/graphs/456/graph1.json",
 		graphFileURL: "http://test.com/file1",
-		createdAt: Timestamp.now()
+		createdAt: Timestamp.now(),
+		sharing: [],
+		sharedEmails: ["test@gmail.com"],
+		presets: []
 	},
 	{
 		id: "2",
-		graphName: "Graph 2",
+		graphName: "Shared Graph 2",
 		graphDescription: "Description 2",
-		owner: mockUser.uid,
+		owner: "owner2",
+		ownerName: "user2",
 		graphVisibility: false,
 		graphURL: "http://test.com/2",
+		graphFilePath: "/graphs/567/graph2.json",
 		graphFileURL: "http://test.com/file2",
-		createdAt: Timestamp.now()
+		createdAt: Timestamp.now(),
+		sharing: [],
+		sharedEmails: ["test@gmail.com"],
+		presets: []
 	}
 ];
 
 describe("Explore page Component", () => {
+	beforeAll(() => {
+		global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: true,
+				status: 200,
+				json: () => Promise.resolve([]),
+				headers: new Headers(),
+				redirected: false,
+				statusText: "OK",
+				type: "basic",
+				url: "",
+				clone: jest.fn(),
+				body: null,
+				bodyUsed: false,
+				arrayBuffer: jest.fn(),
+				blob: jest.fn(),
+				formData: jest.fn(),
+				text: jest.fn()
+			} as Response)
+		);
+	});
 	beforeEach(() => {
 		jest.clearAllMocks();
 
@@ -65,7 +97,11 @@ describe("Explore page Component", () => {
 	const renderWithAuthContext = (firebaseUser: User | null) => {
 		return customRender(
 			<AuthContext.Provider
-				value={{ firebaseUser, firestoreUser: null, loading: false }}
+				value={{
+					firebaseUser: firebaseUser,
+					firestoreUser: mockUser as FirestoreUser,
+					loading: false
+				}}
 			>
 				<Explore />
 			</AuthContext.Provider>
@@ -74,15 +110,18 @@ describe("Explore page Component", () => {
 
 	it("renders the explore page with welcome text", async () => {
 		renderWithAuthContext(mockUser as User);
-		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument;
-		expect(await screen.findByText(/Email: test@gmail.com/i)).toBeInTheDocument;
+		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument();
+		expect(
+			await screen.findByText(/Email: test@gmail.com/i)
+		).toBeInTheDocument();
 	});
 
-	it("redirects to login page when user is not logged in", () => {
+	it("allows users to view the page while not logged in", async () => {
 		renderWithAuthContext(null);
-		expect(mockRouterPush).toHaveBeenCalledWith("/");
-		expect(screen.findByText(/Welcome, Test User/i)).not.toBeInTheDocument;
-		expect(screen.findByText(/Email: test@gmail.com/i)).not.toBeInTheDocument;
+		expect(await screen.findByText(/Welcome, Guest/i)).toBeInTheDocument();
+		expect(
+			await screen.queryByText(/Email: test@gmail.com/i)
+		).not.toBeInTheDocument();
 	});
 
 	it("renders the mock graph data in the explore page", async () => {
