@@ -10,6 +10,22 @@ import { Timestamp } from "firebase/firestore";
 
 jest.mock("@/config/firebaseAdmin");
 
+jest.mock("firebase-admin", () => ({
+    ...jest.requireActual("firebase-admin"),
+    auth: jest.fn(() => ({
+        verifyIdToken: jest.fn((token) => {
+            if (token === "valid-token") {
+                return Promise.resolve({
+                    uid: "123",
+                    email: "test@gmail.com",
+                });
+            }
+            return Promise.reject(new Error("Invalid token"));
+        }),
+    })),
+}));
+
+
 const mockUser: User = {
 	uid: "123",
 	name: "Test User",
@@ -45,7 +61,9 @@ const mockGraph: Graph = {
 			pathways: ["pathway2"],
 			view: null
 		}
-	]
+	],
+	graphTags: [],
+	graphFilePath: ""
 };
 
 describe("POST /api/data/shareGraph", () => {
@@ -81,35 +99,37 @@ describe("POST /api/data/shareGraph", () => {
 	it("should return status code 400 if graphId or email is missing", async () => {
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "POST",
-			body: {}
+			headers: { authorization: "Bearer valid-token" }, // Valid token
+			body: {},
 		});
-
+	
 		await handler(req, res);
-
+	
 		expect(res._getStatusCode()).toEqual(400);
-		expect(res._getData()).toEqual(
-			'{"error":"Graph ID and email are required"}'
-		);
+		expect(res._getData()).toEqual('{"error":"Graph ID and email are required"}');
 	});
+	
 
 	it("should return status code 404 for non-existent graph", async () => {
 		graphDocMock.mockResolvedValue({ exists: false });
-
+	
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "POST",
+			headers: { authorization: "Bearer valid-token" }, // Valid token
 			body: {
 				graphId: "invalid-id",
 				email: "test@example.com",
 				presetNames: ["Preset 1"],
-				role: 0
-			}
+				role: 0,
+			},
 		});
-
+	
 		await handler(req, res);
-
+	
 		expect(res._getStatusCode()).toEqual(404);
 		expect(res._getData()).toEqual('{"error":"Graph not found"}');
 	});
+	
 
 	it("should share graph successfully", async () => {
 		graphDocMock.mockResolvedValue({
@@ -117,43 +137,54 @@ describe("POST /api/data/shareGraph", () => {
 			data: () => ({
 				...mockGraph,
 				presets: [{ name: "Preset 1" }],
-				sharedEmails: []
-			})
+				sharedEmails: [],
+			}),
 		});
-
+	
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "POST",
+			headers: { authorization: "Bearer valid-token" }, // Valid token
 			body: {
 				graphId: "test-graph-id",
 				email: "newuser@example.com",
 				presetNames: ["Preset 1"],
-				role: 0
-			}
+				role: 0,
+			},
 		});
-
+	
 		await handler(req, res);
-
+	
 		expect(res._getStatusCode()).toEqual(200);
 		expect(res._getData()).toEqual('{"message":"Graph shared successfully"}');
 		expect(graphUpdateMock).toHaveBeenCalled();
 	});
+	
 
 	it("should return status code 500 if there was an error sharing the graph", async () => {
+		graphDocMock.mockResolvedValue({
+			exists: true,
+			data: () => ({
+				...mockGraph,
+				presets: [{ name: "Preset 1" }],
+			}),
+		});
 		graphUpdateMock.mockRejectedValue(new Error("Firestore error"));
-
+	
 		const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
 			method: "POST",
+			headers: { authorization: "Bearer valid-token" }, // Valid token
 			body: {
 				graphId: "test-graph-id",
 				email: "newuser@example.com",
 				presetNames: ["Preset 1"],
-				role: 0
-			}
+				role: 0,
+			},
 		});
-
+	
 		await handler(req, res);
-
+	
 		expect(res._getStatusCode()).toEqual(500);
 		expect(res._getData()).toEqual('{"error":"Error sharing graph"}');
 	});
+	
 });
