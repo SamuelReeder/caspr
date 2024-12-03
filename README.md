@@ -1,14 +1,14 @@
 <div align="center">
   <img alt="Logo" src="https://github.com/user-attachments/assets/2887aa3f-b9c9-4bf9-8e0d-c0633570fe0c">
-  <h1>Caspr - Causal Analysis and Structure Path Relationships</h1>
+  <h1>Caspr</h1>
 </div>
 
-This project is a web application built to allow users to explore and interact with complex causal diagrams in a 3D environment. Caspr helps visualize relationships between variables in systems with many interdependent factors through intuitive data visualization and tools. Caspr can be leveraged across many domains of research including machine learning, economics, enviornmental studies, politics, and more. Simply upload a formatted JSON file with nodes, edges, and details to see the data come to life.
+Caspr (Causal Analysis and Structure Path Relationships) is a web application that empowers users to explore complex causal diagrams in an intuitive 3D environment. By transforming data into interactive visualizations, Caspr reveals intricate relationships between variables in multifaceted systems across diverse research domains, including machine learning, economics, environmental studies, and political science. Simply upload a formatted JSON file with nodes, edges, and details to see the data come to life.
 
-For example, in an ML research application, our app is useful as it visualizes and compares the reasoning processes of AI agents and humans, enabling researchers to enhance the accuracy and reliability of AI forecasting systems and advance forecasting science.
+For instance, in machine learning research, Caspr facilitates the visualization and comparison of reasoning processes between AI agents and humans, enabling researchers to refine AI forecasting systems and advance predictive capabilities.
 
-- Try the application [here](https://caspr.vercel.app/)
-- See the application user guide [here](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing)
+- Try the application at [caspr.vercel.app](https://caspr.vercel.app/)
+- See the [application user guide](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing) for more detailed user instructions
 
 ## Application Preview
 
