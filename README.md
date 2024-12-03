@@ -3,9 +3,11 @@
   <h1>Caspr</h1>
 </div>
 
-**The Problem:** Researchers across diverse fields grapple with understanding complex systems comprised of numerous interconnected variables and causal relationships. Traditional visualization methods, such as 2D diagrams and static displays, prove inadequate in capturing the intricate interplay of these factors. This limitation hinders comprehension of the system's dynamics, restricts exploration and analysis, and impedes effective knowledge sharing and collaboration.
+### The Problem
+Researchers across diverse fields grapple with understanding complex systems comprised of numerous interconnected variables and causal relationships. Traditional visualization methods, such as 2D diagrams and static displays, prove inadequate in capturing the intricate interplay of these factors. This limitation hinders comprehension of the system's dynamics, restricts exploration and analysis, and impedes effective knowledge sharing and collaboration.
 
-**Our Solution:** Caspr (Causal Analysis and Structure Path Relationships) is a web application that empowers users to explore complex causal diagrams in an intuitive 3D environment. By transforming data into interactive visualizations, Caspr reveals intricate relationships between variables in multifaceted systems across diverse research domains, including machine learning, economics, environmental studies, and political science. Simply upload a formatted JSON file to see the data come to life.
+### Our Solution
+Caspr (Causal Analysis and Structure Path Relationships) is a web application that empowers users to explore complex causal diagrams in an intuitive 3D environment. By transforming data into interactive visualizations, Caspr reveals intricate relationships between variables in multifaceted systems across diverse research domains, including machine learning, economics, environmental studies, and political science. Simply upload a formatted JSON file to see the data come to life.
 
 - Try the application at [caspr.vercel.app](https://caspr.vercel.app/)
 - See the [application user guide](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing) for more detailed user instructions
