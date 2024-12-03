@@ -65,15 +65,15 @@ This is an open source project built for the Machine Learning Group in the Depar
 <!-- RUNNING THE APPLICATION SECTION -->
 ## Running the Application
 
-The application can be accessed in two ways:
-1. **Live Deployment**: Use the [live deployment here](https://caspr.vercel.app/).
-2. **Local Setup**: Follow these steps to run the application locally.
+#### The application can be accessed in one of two ways
+- **Live Deployment**: Access the live deployment at [caspr.vercel.app](https://caspr.vercel.app/).
+- **Local Setup**: Follow the steps below to run the application locally.
 
-### Requirements
+#### Requirements for Running Locally
 - **Node.js**: Install Node.js from the [official website](https://nodejs.org/en).
 - **npm**: Comes with Node.js and is necessary for managing dependencies.
 
-### Installation
+#### Local Installation Steps
 - Clone the repository from the main branch:
   ```bash
   git clone https://github.com/csc301-2024-f/project-19-Machine-Learning-Group.git
@@ -92,20 +92,18 @@ The application can be accessed in two ways:
   ```
 - Access the app at [http://localhost:3000/](http://localhost:3000/).
 
-### Building for Production
+#### Building for Production
 To prepare the app for production:
 ```bash
 npm run build
 ```
 
-### Testing
-- Run the test: `npm test`
-
-### Linting/formatting
+#### Testing, Linting, and Formatting
+- Run the test suites: `npm test`
 - Lint the app: `npm run lint`
 - Format with Prettier: `npx prettier --write .`
 
-### External Dependencies and 3rd Party Software
+#### External Dependencies and 3rd Party Software
 Our project relies on several external dependencies and third-party libraries to enhance functionality and simplify development. Below is a summary of the key dependencies:
 - **Next.js**: The React framework for building server-rendered and static web applications. It provides features like routing, server-side rendering, and static site generation.
   - [Next.js Documentation](https://nextjs.org/docs)
