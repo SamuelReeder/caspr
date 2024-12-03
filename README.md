@@ -120,25 +120,15 @@ Our project relies on several external dependencies and third-party libraries to
 - **npm**: The Node package manager is used to manage the project’s dependencies and run scripts.
   - [npm Documentation](https://docs.npmjs.com/)
 
-## Development Requirements
-1. **Code Formatting**: Use Prettier for code formatting.
+## Contributing and Development Requirements
+We welcome contributions from the community! Here are some requirements:
+
+1. **Code Formatting**: Ensure the Prettier extension is set up as the formatter in VS Code as all files should adhere to the Prettier confirguration found in this repository.
 2. **Commit Standards**: Follow conventional commit standards to ensure clarity and consistency.
 3. **Documentation**: Maintain detailed docstrings for all functions and files. Include `@param`, `@returns` entries alongside a description of the component.
 4. **Branching Strategy**: Use a branching strategy with a prefix for the category and a name for the exact purpose of the branch. Such as `feature/<name>` or `fix/<name>` or `test/<name>`. Submit pull requests for 2-3 reviews before merging to main.
 
-## Deployment and Github Workflow
-
-Every update to the **main** branch goes through a series of verification and validation steps before mergeing. The Github workflow proceeds as follows
-1. Identify new features and bug fixes
-2. Create Jira ticket and determine designee and reviewers
-3. Crate Feature or Bug Fix Branch
-4. Initiate pull request and get at least 2 approvals
-5. Merge into main
-
-Due to permission conflicts, deployment is done on a identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
-
-## Contributing
-We welcome contributions from the community!  Here's how you can get involved:
+And Here are some ways in which you can contribute:
 
 Reporting Bugs
 * **Check existing issues:** Before reporting a new bug, please check the github issues tab to see if it's already been reported.
@@ -151,11 +141,22 @@ Suggesting Enhancements
 **Submitting Code Changes**
 * **Fork the repository:** Fork the project to your own GitHub account.
 * **Create a branch:** Create a new branch for your changes.
-* **Follow coding style:** Adhere to the project's coding style and conventions. All files should be formatted according to the included Prettier configuration file.
+* **Follow coding style:** Adhere to the project's coding style and conventions. Again, all files should be formatted according to the included Prettier configuration file.
 * **Write tests:**  Include tests for your code changes.
 * **Open a pull request:** Submit a pull request with a clear description of your changes.
 
 We appreciate your contributions and look forward to collaborating with you to improve this project!
+
+## Deployment and Github Workflow
+
+Every update to the **main** branch goes through a series of verification and validation steps before mergeing. The Github workflow proceeds as follows
+1. Identify new features and bug fixes
+2. Create Jira ticket and determine designee and reviewers
+3. Crate Feature or Bug Fix Branch
+4. Initiate pull request and get at least 2 approvals
+5. Merge into main
+
+Due to permission conflicts, deployment is done on a identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
 
 ## Licences
 - This project is distributed under the MIT License. See LICENSE.txt for more information. 
