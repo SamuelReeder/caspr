@@ -9,6 +9,7 @@ import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
 import { apiClient } from "@/utils/apiClient";
 import { db } from "@/config/firebaseConfig";
 import { sortGraphs } from "@/utils/sortGraphs";
+import { getAuth } from "firebase/auth";
 
 /**
  * Get a user document from Firestore.
@@ -66,7 +67,6 @@ export const createUser = async (user: User): Promise<void> => {
  * @Danny @Samuel
  */
 export const createGraph = async (graph: Graph): Promise<void> => {
-	
 	try {
 		const response = await apiClient("/api/data/createGraph", {
 			method: "POST",
@@ -234,9 +234,15 @@ export const shareGraphWithUser = async (
 	role = 0
 ): Promise<boolean> => {
 	try {
+		const auth = getAuth();
+		const idToken = await auth.currentUser?.getIdToken();
+
 		const response = await apiClient("/api/data/shareGraph", {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${idToken}`
+			},
 			body: JSON.stringify({ graphId, email, presetNames, role })
 		});
 
@@ -264,9 +270,15 @@ export const unshareGraphFromUser = async (
 	email: string
 ): Promise<boolean> => {
 	try {
+		const auth = getAuth();
+		const idToken = await auth.currentUser?.getIdToken();
+
 		const response = await apiClient("/api/data/unshareGraph", {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${idToken}`
+			},
 			body: JSON.stringify({ graphId, email })
 		});
 
@@ -319,7 +331,7 @@ export const getSharedGraphs = async (
  * @param uid - The user ID to update in the shared users list.
  * @returns A promise that resolves to true if the share was accepted.
  * @Samuel
- * TODO: move to server side
+ * TODO: move to server side, but currently unused
  */
 export const acceptShareInvite = async (
 	graphId: string,
@@ -327,7 +339,11 @@ export const acceptShareInvite = async (
 	uid: string
 ): Promise<boolean> => {
 	try {
-		const graphRef = doc(db, process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "", graphId);
+		const graphRef = doc(
+			db,
+			process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "",
+			graphId
+		);
 		const graphSnap = await getDoc(graphRef);
 
 		if (!graphSnap.exists()) return false;
@@ -349,78 +365,6 @@ export const acceptShareInvite = async (
 		return true;
 	} catch (error) {
 		console.error("Error accepting invite:", error);
-		return false;
-	}
-};
-
-/**
- * Get accessible presets for a user in a shared graph
- * @param graphId - The ID of the graph document.
- * @param email - The email of the user to get presets for.
- * @returns A promise that resolves to an array of accessible presets.
- * @Samuel
- * TODO: move to server side
- */
-export const getUserAccessiblePresets = async (
-	graphId: string,
-	email: string
-): Promise<Preset[]> => {
-	try {
-		const graphRef = doc(db, process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "", graphId);
-		const graphSnap = await getDoc(graphRef);
-
-		if (!graphSnap.exists()) return [];
-
-		const graph = graphSnap.data() as Graph;
-		const userShare = graph.sharing?.find((u) => u.email === email);
-
-		if (!userShare || userShare.status !== "accepted") return [];
-
-		return (
-			graph.presets?.filter((p) => userShare.presetAccess.includes(p.name)) ||
-			[]
-		);
-	} catch (error) {
-		console.error("Error getting accessible presets:", error);
-		return [];
-	}
-};
-
-/**
- * Share specific presets with a user in a shared graph
- * @param graphId - The ID of the graph document.
- * @param email - The email of the user to share with.
- * @param presetNames - The names of the presets to share.
- * @returns A promise that resolves to true if the share was successful.
- * @Samuel
- * TODO: move to server side
- */
-export const updatePresetAccess = async (
-	graphId: string,
-	email: string,
-	presetNames: string[]
-): Promise<boolean> => {
-	try {
-		const graphRef = doc(db, process.env.NEXT_FIREBASE_GRAPH_COLLECTION || "", graphId);
-		const graphSnap = await getDoc(graphRef);
-
-		if (!graphSnap.exists()) return false;
-
-		const graph = graphSnap.data() as Graph;
-		const sharing = graph.sharing || [];
-		const userIndex = sharing.findIndex((u) => u.email === email);
-
-		if (userIndex === -1) return false;
-
-		const validPresets = presetNames.filter((name) =>
-			graph.presets?.some((p) => p.name === name)
-		);
-
-		sharing[userIndex].presetAccess = validPresets;
-		await updateDoc(graphRef, { sharing });
-		return true;
-	} catch (error) {
-		console.error("Error updating preset access:", error);
 		return false;
 	}
 };

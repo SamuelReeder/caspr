@@ -94,10 +94,16 @@ const NavBar: React.FC<NavBarProps> = ({
 				/>
 			</Link>
 			<Avatar src="/favicon.ico" size="sm" mr={3} /> 
-			<Tabs index={selectedTab} onChange={(index) => setSelectedTab(index)}>
+			<Tabs index={selectedTab} onChange={(index) => setSelectedTab(index)} variant="unstyled">
 				<TabList>
 					{diagrams.map((diagram) => (
-						<Tab key={diagram.id} p={2} color={'white'}>
+						<Tab
+							key={diagram.id}
+							p={2}
+							color={selectedTab === diagram.id ? 'white' : 'gray.400'}
+							bg={selectedTab === diagram.id ? 'gray.700' : 'transparent'}
+							_selected={{ color: 'white', bg: 'gray.700' }}
+						>
 							{diagram.label}
 							<IconButton
 								aria-label="Delete Diagram"

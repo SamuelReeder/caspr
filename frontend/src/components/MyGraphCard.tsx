@@ -27,11 +27,15 @@ import React, { useState } from "react";
 import { MyGraphCardProps } from "@/types";
 import formatDate from "@/utils/formatDate";
 import { updateGraphData } from "@/api/storage";
+import { useAuth } from "@/context";
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
+	const { firebaseUser } = useAuth();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
-	const [switchDisabled, setSwitchDisabled] = useState(false);
+	const [switchDisabled, setSwitchDisabled] = useState<boolean>(
+		(graph?.owner ?? "") !== (firebaseUser?.uid ?? "")
+	);
 	const toast = useToast();
 
 	const handleSwitchToggle = () => {
@@ -104,6 +108,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 						Public Visibility{" "}
 					</Switch>
 				</div>
+
 				<div className="flex flex-col">
 					<Text>{`by ${owner.name || "unknown"}`}</Text>
 					<Text fontSize="sm" color="gray.500">

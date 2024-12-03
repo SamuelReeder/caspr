@@ -7,9 +7,9 @@
  */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbAdmin } from "@/config/firebaseAdmin";
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { auth } from "firebase-admin";
 import { Preset, SharedUser } from "@/types";
-import { Timestamp } from "firebase-admin/firestore";
 import validateEmail from "@/utils/validateEmail";
 
 export default async function handler(
@@ -21,6 +21,22 @@ export default async function handler(
 	}
 
 	const { graphId, email, presetNames, role = 0 } = req.body;
+
+	const authHeader = req.headers.authorization;
+	if (!authHeader?.startsWith("Bearer ")) {
+		return res.status(401).json({ error: "Unauthorized" });
+	}
+
+	let userEmail;
+	let userUid;
+	try {
+		const token = authHeader.split("Bearer ")[1];
+		const decodedToken = await auth().verifyIdToken(token);
+		userEmail = decodedToken.email;
+		userUid = decodedToken.uid;
+	} catch (error) {
+		return res.status(401).json({ error: "Invalid token" });
+	}
 
 	if (!graphId || !email) {
 		return res.status(400).json({ error: "Graph ID and email are required" });
@@ -41,7 +57,17 @@ export default async function handler(
 		}
 
 		const graph = graphSnap.data();
+		if (!graph) {
+			return res.status(500).json({ error: "Failed to retrieve graph data" });
+		}
+
 		const sharedEmails = graph?.sharedEmails || [];
+
+		if (graph.owner !== userUid && !sharedEmails.includes(userEmail)) {
+			return res
+				.status(403)
+				.json({ error: "No permission to share this graph" });
+		}
 
 		if (sharedEmails.includes(email)) {
 			return res.status(200).json({ message: "Already shared" });
@@ -58,7 +84,7 @@ export default async function handler(
 			role,
 			presetAccess: validPresets,
 			addedAt: Timestamp.now(),
-			addedBy: req.headers["x-user-email"]?.toString() || ""
+			addedBy: userEmail || ""
 		};
 
 		await graphRef.update({
