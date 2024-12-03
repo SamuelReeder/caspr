@@ -22,7 +22,8 @@ describe("POST /api/graphs/createGraph", () => {
 		createdAt: Timestamp.now(),
 		sharing: [],
 		sharedEmails: ["test@example.com"],
-		presets: []
+		presets: [],
+		graphTags: []
 	};
 
 	let addMock: jest.Mock;
@@ -86,7 +87,8 @@ describe("POST /api/graphs/createGraph", () => {
 			createdAt: mockGraph.createdAt,
 			sharing: mockGraph.sharing,
 			sharedEmails: mockGraph.sharedEmails,
-			presets: mockGraph.presets
+			presets: mockGraph.presets,
+			graphTags: mockGraph.graphTags
 		});
 
 		expect(res._getStatusCode()).toBe(200);

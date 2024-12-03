@@ -30,7 +30,9 @@ export default async function handler(
 
 	const authHeader = req.headers.authorization;
 	if (!authHeader || !authHeader.startsWith("Bearer ")) {
-		return res.status(401).json({ error: "Missing or invalid Authorization header" });
+		return res
+			.status(401)
+			.json({ error: "Missing or invalid Authorization header" });
 	}
 
 	const idToken = authHeader.split("Bearer ")[1];
@@ -57,12 +59,20 @@ export default async function handler(
 
 		// Enforce ownership and shared user rules
 		const isOwner = graphData.owner === userUid;
-		if (!isOwner && !graphData.sharedEmails?.includes(userEmail) ) {
-			return res.status(403).json({ error: "Unauthorized: Insufficient permissions" });
+		if (!isOwner && !graphData.sharedEmails?.includes(userEmail)) {
+			return res
+				.status(403)
+				.json({ error: "Unauthorized: Insufficient permissions" });
 		}
 
 		// Enforce field restrictions
-		const restrictedFieldsForOwners = ["createdAt", "id", "graphFileURL", "graphFilePath", "graphURL"];
+		const restrictedFieldsForOwners = [
+			"createdAt",
+			"id",
+			"graphFileURL",
+			"graphFilePath",
+			"graphURL"
+		];
 		const restrictedFieldsForSharedUsers = [
 			...restrictedFieldsForOwners,
 			"graphVisibility",
@@ -81,12 +91,13 @@ export default async function handler(
 
 		if (invalidFields.length > 0) {
 			return res.status(400).json({
-				error: `Update contains restricted fields: ${invalidFields.join(", ")}`,
+				error: `Update contains restricted fields: ${invalidFields.join(", ")}`
 			});
 		}
 
 		// Update the graph
 		await graphRef.update(updates);
+		res.status(200).json({ updatedGraph: id });
 	} catch (error) {
 		console.error(`Error updating graph ${id}:`, error);
 		res.status(500).json({ message: "Error fetching graphs" });
