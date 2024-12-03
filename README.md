@@ -30,6 +30,8 @@
 </p>
 
 ## Key Features
+- **Our Secure Account System**: Create an account and log in to securely save, manage, and share your graphs. Caspr uses Firebase Authentication to protect your information and offers features like password reset, login and account creation via Google, and access control to ensure your data remains private and secure.
+
 - **Dynamic 3D Graph Visualization**: Our app brings causal diagrams to life! The 3D graph is generated dynamically from JSON data, where each node and edge represents crucial connections between elements. You can explore complex systems with ease.
 
 - **Smooth Graph Interaction**: Navigate the graph in a fully immersive 3D space. Zoom, pan, and rotate the graph freely to explore relationships from every angle. It's simple and intuitive, letting you focus on discovering insights.
@@ -47,12 +49,10 @@
 
 - **Connection Type and Direction Indicators**: Easily differentiate between causal and inhibitory connections using color-coded edges (black for causal, red for inhibitory), and follow the arrows to see the direction of influence between nodes.
 <div align="center">
-  <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="50%">
+  <img src="/images/filtering_edges.gif" alt="Node Description" width="60%" height="20%">
 </div>
 
-- **Authentication and Permissions**: Securely log in to save and manage graphs.
-
-- **Graph Uploading and Sharing**: Upload JSON files to create custom causal graphs and choose to share them publicly, keep them private, or share to specific emails.
+- **Graph Uploading and Sharing**: Upload JSON files to create custom causal graphs and choose to share them publicly, keep them private, or share to specific users. Additionally, use the generated public link to easily share your graph. To view graphs shared to you, view the shared with me page in the sidebar.
 
 - **Explore Page**: Browse and explore public graphs created by other users.
 
