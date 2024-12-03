@@ -13,7 +13,7 @@ For instance, in machine learning research, Caspr facilitates the visualization 
 ## Application Preview
 
 <p align="center">
-  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/00164608-852c-4eec-a541-c8545e65e418">
+  <img width="49%" alt="image" src="/images/login_page.jpg">
   <img width="49%" alt="image" src="https://github.com/user-attachments/assets/751138b8-bfae-464f-96b6-976353a611e8">
 </p>
 
