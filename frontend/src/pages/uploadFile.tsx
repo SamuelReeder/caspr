@@ -418,7 +418,7 @@ export default function UploadFile() {
 												isChecked={graphVisibility}
 												aria-label="Enable Public Visibility"
 											>
-												Publically Available
+												Publicly Available
 											</Switch>
 										</Box>
 									</FormControl>
