@@ -96,14 +96,23 @@ const GraphSideBar: React.FC<GraphSideBarProps> = ({
 				return;
 			}
 
-			if (
-				!firestoreUser ||
-				(!graph?.sharedEmails?.includes(firestoreUser.email) &&
-					graph?.owner != firestoreUser.uid)
-			) {
+			if (!firestoreUser) {
 				toast({
 					title: "Error",
 					description: "You must be logged in to save presets",
+					status: "error",
+					duration: 2000
+				});
+				return;
+			}
+
+			if (
+				!graph?.sharedEmails?.includes(firestoreUser.email) &&
+				graph?.owner != firestoreUser.uid
+			) {
+				toast({
+					title: "Error",
+					description: "The graph must be shared with you to save presets",
 					status: "error",
 					duration: 2000
 				});
