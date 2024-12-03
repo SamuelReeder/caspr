@@ -9,24 +9,27 @@ import {
 	unshareGraphFromUser
 } from "@/api";
 import { Timestamp } from "firebase/firestore";
-import { Graph, User } from "@/types";
+import { Graph, User as FirestoreUser } from "@/types";
 import customRender from "@/test-utils/render";
+import { AuthContext } from "@/context";
+import { User } from "firebase/auth";
 
-const mockUser: User = {
+const mockUser: Partial<User> = {
 	uid: "123",
-	name: "Test User",
+	displayName: "Test User",
 	email: "test@gmail.com",
 	photoURL: "TestURL.com",
-	createdAt: Timestamp.now(),
-	roles: []
+	metadata: {
+		creationTime: Timestamp.now().toDate().toString(),
+		lastSignInTime: Timestamp.now().toDate().toString()
+	} as User["metadata"]
 };
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const mockGraph: Graph = {
 	id: "test-graph-id",
-	owner: mockUser.uid,
-	ownerName: "User",
+	owner: mockUser.uid || "",
 	graphName: "Test Graph",
 	graphDescription: "Test Description",
 	graphVisibility: true,
@@ -51,7 +54,8 @@ const mockGraph: Graph = {
 			pathways: ["pathway2"],
 			view: null
 		}
-	]
+	],
+	graphTags: []
 };
 
 Object.assign(navigator, {
@@ -69,7 +73,7 @@ jest.mock("@chakra-ui/react", () => ({
 jest.mock("@/api", () => ({
 	loginWithEmail: jest.fn(() =>
 		Promise.resolve({
-			firebaseUser: mockUser,
+			firebaseUser: mockUser as User,
 			firestoreUser: mockUser,
 			loading: false
 		})
@@ -80,13 +84,14 @@ jest.mock("@/api", () => ({
 	fetchCurrUserGraphs: jest.fn(() => Promise.resolve([mockGraph]))
 }));
 
+
 describe("ShareButton", () => {
 	beforeAll(async () => {
 		jest.clearAllMocks();
 
 		(loginWithEmail as jest.Mock).mockImplementation(() =>
 			Promise.resolve({
-				firebaseUser: null,
+				firebaseUser: mockUser,
 				firestoreUser: mockUser,
 				loading: false
 			})
@@ -103,28 +108,37 @@ describe("ShareButton", () => {
 		await loginWithEmail("test@gmail.com", "password");
 	});
 
+	// const renderComponent = () => {
+	// 	return customRender(<ShareButton graph={mockGraph} />);
+	// };
+
 	const renderComponent = () => {
-		return customRender(<ShareButton graph={mockGraph} />);
+		return customRender(
+			<AuthContext.Provider
+				value={{ firebaseUser: mockUser as User, firestoreUser: mockUser as FirestoreUser, loading: false }}
+			>
+				<ShareButton graph={mockGraph} />
+			</AuthContext.Provider>
+		);
 	};
 
-	test("renders share button and opens modal", () => {
+	
+	test("opens and closes modal", async () => {
 		renderComponent();
-
-		const shareButton = screen.getByText("Share");
-		fireEvent.click(shareButton);
-
+		fireEvent.click(screen.getByText("Share"));
 		expect(screen.getByText("Share Graph")).toBeInTheDocument();
-		expect(
-			screen.getByPlaceholderText("Enter email address and press Enter")
-		).toBeInTheDocument();
+		fireEvent.click(screen.getByText("Cancel"));
+		await waitFor(() => {
+			expect(screen.queryByText("Share Graph")).not.toBeInTheDocument();
+		});
 	});
 
-	test("prevents adding invalid email addresses", () => {
+	test("prevents adding invalid email addresses", async () => {
 		renderComponent();
 
 		fireEvent.click(screen.getByRole("button", { name: /Share/i }));
 
-		const emailInput = screen.getByPlaceholderText(
+		const emailInput = await screen.getByPlaceholderText(
 			"Enter email address and press Enter"
 		);
 		fireEvent.change(emailInput, { target: { value: "invalid-email" } });
@@ -158,29 +172,6 @@ describe("ShareButton", () => {
 				"test@example.com",
 				["Preset 1"]
 			);
-		});
-	});
-
-	test("renders share button initially", () => {
-		renderComponent();
-
-		expect(screen.getByText("Share")).toBeInTheDocument();
-	});
-
-	test("opens modal when share button clicked", () => {
-		renderComponent();
-
-		fireEvent.click(screen.getByText("Share"));
-		expect(screen.getByText("Share Graph")).toBeInTheDocument();
-	});
-
-	test("opens and closes modal", async () => {
-		renderComponent();
-		fireEvent.click(screen.getByText("Share"));
-		expect(screen.getByText("Share Graph")).toBeInTheDocument();
-		fireEvent.click(screen.getByText("Cancel"));
-		await waitFor(() => {
-			expect(screen.queryByText("Share Graph")).not.toBeInTheDocument();
 		});
 	});
 
@@ -315,7 +306,7 @@ describe("ShareButton", () => {
 		renderComponent();
 		fireEvent.click(screen.getByText("Share"));
 
-		const copyButton = screen.getByRole("button", { name: /copy/i });
+		const copyButton = screen.getByRole("button", { name: /Copy/i });
 		fireEvent.click(copyButton);
 
 		await waitFor(() => {
@@ -347,30 +338,6 @@ describe("ShareButton", () => {
 		});
 	});
 
-	// test("shows/hides public link when toggling switch", async () => {
-	// 	renderComponent();
-
-	// 	fireEvent.click(screen.getByText("Share"));
-
-	// 	expect(screen.queryByDisplayValue(`${baseURL}/graph/${mockGraph.graphURL}`)).toBeInTheDocument();
-
-	// 	const visibilitySwitch = screen.getByLabelText("Make graph public");
-	// 	fireEvent.click(visibilitySwitch);
-
-	// 	await waitFor(() => {
-	// 		expect(
-	// 			screen.queryByDisplayValue(mockGraph.graphURL)
-	// 		).not.toBeInTheDocument();
-	// 	});
-
-	// 	fireEvent.click(visibilitySwitch);
-
-	// 	await waitFor(() => {
-	// 		expect(
-	// 			screen.queryByDisplayValue(`${baseURL}/graph/${mockGraph.graphURL}`)
-	// 		).toBeInTheDocument();
-	// 	});
-	// });
 
 	test("unshares graph from existing user", async () => {
 		renderComponent();
