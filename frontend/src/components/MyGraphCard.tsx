@@ -27,12 +27,14 @@ import React, { useState } from "react";
 import { MyGraphCardProps } from "@/types";
 import formatDate from "@/utils/formatDate";
 import { updateGraphData } from "@/api/storage";
+import { useAuth } from "@/context";
 
 const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
+	const { firebaseUser } = useAuth();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
 	const [switchDisabled, setSwitchDisabled] = useState<boolean>(
-		graph.owner !== owner.id
+		!graph || !firebaseUser || graph.owner !== firebaseUser.uid
 	);
 	const toast = useToast();
 
