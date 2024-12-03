@@ -29,8 +29,8 @@ For instance, in machine learning research, Caspr facilitates the visualization 
 
 - **Node and Edge Information on Hover**: Curious about a specific node or edge? Just hover over it to see all the details, including node labels, categories, and edge relationships and strengths.
 <div align="center">
- <img src="/images/connection_description.jpg" alt="Connection Description" width="40%" height="40%">
-   <img src="/images/node_description.jpg" alt="Node Description" width="40%" height="40%">
+ <img src="/images/connection_description.png" alt="Connection Description" width="40%" height="40%">
+   <img src="/images/node_description.png" alt="Node Description" width="40%" height="40%">
  </div>
 
 - **Powerful Filtering and Searching**: Customize your view with filtering based on connection strength, or search for nodes by name, category, or ID. The graph instantly adjusts to show exactly what you need.
