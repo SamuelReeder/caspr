@@ -32,7 +32,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [publicGraph, setPublicGraph] = useState(graph.graphVisibility);
 	const [switchDisabled, setSwitchDisabled] = useState<boolean>(
-		(graph?.owner ?? '') !== (firebaseUser?.uid ?? '')
+		graph.owner !== owner.id
 	);
 	const toast = useToast();
 

@@ -7,6 +7,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { Timestamp } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { getSharedGraphs, getUser } from "@/api";
+import { User as FirestoreUser } from "@/types";
 
 const mockRouterPush = jest.fn();
 jest.mock("next/router", () => ({
@@ -44,7 +45,7 @@ const mockSharedGraphs = [
 		graphFileURL: "http://test.com/file1",
 		createdAt: Timestamp.now(),
 		sharing: [],
-		sharedEmails: [],
+		sharedEmails: ["test@gmail.com"],
 		presets: []
 	},
 	{
@@ -59,7 +60,7 @@ const mockSharedGraphs = [
 		graphFileURL: "http://test.com/file2",
 		createdAt: Timestamp.now(),
 		sharing: [],
-		sharedEmails: [],
+		sharedEmails: ["test@gmail.com"],
 		presets: []
 	}
 ];
@@ -115,10 +116,10 @@ describe("Shared With Me Page Component", () => {
 		});
 	});
 
-	const renderWithAuthContext = (firebaseUser: User | null) => {
+	const renderWithAuthContext = () => {
 		return customRender(
 			<AuthContext.Provider
-				value={{ firebaseUser, firestoreUser: null, loading: false }}
+				value={{ firebaseUser: mockUser as User, firestoreUser: mockUser as FirestoreUser, loading: false }}
 			>
 				<SharedWithMe />
 			</AuthContext.Provider>
@@ -126,14 +127,14 @@ describe("Shared With Me Page Component", () => {
 	};
 
 	it("renders the home page", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		expect(await screen.findAllByText(/Shared With Me/i)).toHaveLength(1);
 		expect(await screen.findByText(/Welcome, Test User/i)).toBeInTheDocument;
 		expect(await screen.findByText(/Email: test@gmail.com/i)).toBeInTheDocument;
 	});
 
 	it("renders the mock graph data in the home page", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		expect(await screen.findByText(/Shared Graph 1/i)).toBeInTheDocument();
 		expect(await screen.findByText(/Description 1/i)).toBeInTheDocument();
 		expect(await screen.findByText(/Shared Graph 2/i)).toBeInTheDocument();
@@ -153,13 +154,13 @@ describe("Shared With Me Page Component", () => {
 			return Promise.resolve(mockOwners[ownerId] || { name: "Unknown" });
 		});
 
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		expect(await screen.findByText(/owner1/i)).toBeInTheDocument();
 		expect(await screen.findByText(/owner2/i)).toBeInTheDocument();
 	});
 
 	it("opens the share modal when the Share button is clicked", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		const shareButtons = await screen.findAllByRole("button", {
 			name: /Share/i
 		});
@@ -177,7 +178,7 @@ describe("Shared With Me Page Component", () => {
 	});
 
 	it("closes the share modal when the cancel button is clicked", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		const shareButtons = await screen.findAllByRole("button", {
 			name: /Share/i
 		});
@@ -200,7 +201,7 @@ describe("Shared With Me Page Component", () => {
 	});
 
 	it("renders the public visibility toggles correctly", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 		const switchElements = await screen.findAllByLabelText(
 			/Enable Public Visibility/i
 		);
@@ -217,7 +218,7 @@ describe("Shared With Me Page Component", () => {
 	});
 
 	it("renders the Select elements with correct options", async () => {
-		renderWithAuthContext(mockUser as User);
+		renderWithAuthContext();
 
 		const selectElements = await screen.findAllByRole("combobox");
 		expect(selectElements[0]).toBeInTheDocument();
@@ -263,7 +264,7 @@ describe("Shared With Me Page Component", () => {
 	it("handles errors when fetching shared graphs", async () => {
 		const consoleErrorSpy = jest
 			.spyOn(console, "error")
-			.mockImplementation(() => {});
+			.mockImplementation(() => { });
 		(getSharedGraphs as jest.Mock).mockRejectedValue(
 			new Error("Error fetching shared graphs")
 		);
