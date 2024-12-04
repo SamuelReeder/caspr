@@ -174,7 +174,7 @@ export const fetchAllUserAccessibleGraphs = async (
  * @returns A promise that resolves to the graph data
  * @Samuel
  */
-export const getGraphData = async (graph: Graph): Promise<Graph> => {
+export const getGraphData = async (graph: Graph): Promise<any> => {
 	if (!graph || !graph.id) {
 		throw new Error("Invalid graph object");
 	}
