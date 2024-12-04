@@ -1,7 +1,7 @@
 /**
  * Graph list component
  * @param {Array} graphs - List of graphs
- * @param {String} page - Page title
+ * @param {string} page - Page title
  * @returns {ReactElement} Graph list component
  */
 import {
