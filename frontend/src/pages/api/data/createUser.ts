@@ -23,7 +23,8 @@ export default async function handler(
 		const userDocumentRef = dbAdmin
 			.collection(process.env.NEXT_FIREBASE_USER_COLLECTION || "")
 			.doc(user.uid);
-		await userDocumentRef.set({ user });
+		
+		await userDocumentRef.set(user);
 
 		res.status(200).json({ message: "Successfully created user" });
 	} catch (error) {

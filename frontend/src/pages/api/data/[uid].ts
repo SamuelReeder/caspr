@@ -45,7 +45,13 @@ export default async function handler(
 
 		const userData = userDoc.data();
 
-		res.status(200).json(userData as User);
+		if (!userData) {
+			return res.status(500).json({ error: "Failed to cast user data" });
+		}
+
+		const finalUserData = "user" in userData ? userData.user : userData;
+
+		return res.status(200).json(finalUserData as User);
 	} catch (error) {
 		console.error("Error while fetching user: ", error);
 		res.status(500).json({ error: "Error fetching user" });
