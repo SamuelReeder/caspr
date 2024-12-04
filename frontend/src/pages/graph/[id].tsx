@@ -78,7 +78,16 @@ const GraphPageContent = () => {
 		const fetchGraphData = async () => {
 			if (!id) return;
 
+			const urlParams = new URLSearchParams(window.location.search);
+			const authParam = urlParams.get("auth");
+
 			try {
+
+				if (authParam && !firebaseUser) {
+					// Wait for `firebaseUser` to be populated
+					return;
+				}
+				
 				const tempGraphs = firebaseUser
 					? await fetchAllUserAccessibleGraphs(firebaseUser)
 					: await fetchAllPublicGraphs(null);
