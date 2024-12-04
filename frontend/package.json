@@ -7,7 +7,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"test": "jest"
+		"test": "jest",
+		"test:json": "jest --json --outputFile=jest-results.json"
 	},
 	"dependencies": {
 		"@chakra-ui/icons": "^2.2.4",
