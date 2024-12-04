@@ -16,9 +16,9 @@ export const parseGraphData = (json: string) => {
     let parsed_data;
 
     if (isTimestampFormat(data)) {
-        parsed_data =  new Set<String>(data.timestamps.flatMap((timestamp: Timestamp) => timestamp.nodes.map((node: NodeType) => node.label)))
+        parsed_data =  new Set<string>(data.timestamps.flatMap((timestamp: Timestamp) => timestamp.nodes.map((node: NodeType) => node.label)))
     } else{
-        parsed_data = new Set<String>(data.nodes.flatMap((node: NodeType) => node.label))
+        parsed_data = new Set<string>(data.nodes.flatMap((node: NodeType) => node.label))
     }
     
     return [...parsed_data]

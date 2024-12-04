@@ -29,7 +29,7 @@ export const uploadGraph = async (
 	graphName: string,
 	graphDescription: string,
 	graphVisibility: boolean,
-	graphTags: String[]
+	graphTags: string[]
 ): Promise<Graph | undefined> => {
 	try {
 		const storage = getStorage(app);
