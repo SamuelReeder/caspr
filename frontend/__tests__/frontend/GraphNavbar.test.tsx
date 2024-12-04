@@ -2,14 +2,14 @@ import React from "react";
 import { screen, fireEvent } from "@testing-library/react";
 import customRender from "@/test-utils/render";
 import "@testing-library/jest-dom";
-import NavBar from "../src/components/GraphNavbar";
+import NavBar from "../../src/components/GraphNavbar";
 import { Graph } from "@/types/graph";
 import { useRouter } from "next/router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Timestamp } from "firebase/firestore";
 
 // Mock the ShareButton component
-jest.mock("../src/components/buttons/ShareButton", () => (props: any) => (
+jest.mock("../../src/components/buttons/ShareButton", () => (props: any) => (
 	<div>
 		ShareButton
 		<button onClick={() => props.onMakePublic(true)}>Make Public</button>

@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { Graph, User } from "@/types";
-import MyGraphObject from "../src/components/ExploreGraphCard";
+import MyGraphObject from "../../src/components/ExploreGraphCard";
 import React from "react";
 import { Timestamp } from "firebase/firestore";
 import customRender from "@/test-utils/render";

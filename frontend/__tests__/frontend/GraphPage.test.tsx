@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import GraphPage from "../src/pages/graph/[id]";
+import GraphPage from "../../src/pages/graph/[id]";
 import "@testing-library/jest-dom";
 import { fetchAllUserAccessibleGraphs, getGraphData } from "@/api";
 import { useAuth } from "@/context";
@@ -33,7 +33,7 @@ jest.mock("@/components", () => ({
 	FullScreenLoader: () => <div data-testid="full-screen-loader">Loading...</div>
 }));
 
-jest.mock("../src/components/graphVisualization/CausalDiagram", () => () => (
+jest.mock("../../src/components/graphVisualization/CausalDiagram", () => () => (
 	<div data-testid="causal-diagram">CausalDiagram</div>
 ));
 

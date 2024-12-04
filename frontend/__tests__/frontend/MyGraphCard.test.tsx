@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 
 import { Graph, User, SharedUser, Preset } from "@/types";
 
-import MyGraphObject from "../src/components/MyGraphCard";
+import MyGraphObject from "../../src/components/MyGraphCard";
 import React from "react";
 import { Timestamp } from "firebase/firestore"; // Import Timestamp
 import customRender from "@/test-utils/render";
