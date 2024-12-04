@@ -83,7 +83,7 @@ const MyGraphObject: React.FC<MyGraphCardProps> = ({ graph, owner }) => {
 
 	const handleOpenClick = () => {
 		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-		window.location.href = `${baseURL}/graph/${graph.graphURL}`;
+		window.location.href = `${baseURL}/graph/${graph.graphURL}?auth=${firebaseUser?.uid}`;
 	};
 
 	return (
