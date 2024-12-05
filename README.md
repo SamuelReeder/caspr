@@ -15,7 +15,8 @@
 
 ### Useful Links
 - Try the application at [caspr.vercel.app](https://caspr.vercel.app/)
-- See the [application user guide](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing) for more detailed user instructions
+- See our demo video [here](https://www.youtube.com/watch?v=6aORwIygIAM)
+- This readme is geared towards developers and is meant to serve as the project's technical documentation. For user instructions and guidance, see our [Application User Guide](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing)
 
 ## Application Preview
 
