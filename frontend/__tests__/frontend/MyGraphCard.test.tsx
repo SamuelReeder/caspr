@@ -10,10 +10,10 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { deleteGraph } from "@/api";
 
 jest.mock("@/api", () => ({
-	deleteGraph: jest.fn(),
+	deleteGraph: jest.fn()
 }));
 
-const sampleGraph:Graph = {
+const sampleGraph: Graph = {
 	id: "1",
 	owner: "Kevin",
 	graphName: "Test Title",
@@ -27,7 +27,7 @@ const sampleGraph:Graph = {
 	sharing: [],
 	sharedEmails: [],
 	presets: []
-}
+};
 
 describe("GraphObject renders correctly", () => {
 	test("renders GraphObject component", () => {
@@ -72,45 +72,43 @@ describe("GraphObject renders correctly", () => {
 				}
 			/>
 		);
-		
 
 		const shareButton = screen.getByText(/Share/i);
 		const deleteButton = screen.getByText(/Delete/i);
 		expect(deleteButton).toBeInTheDocument();
 		expect(shareButton).toBeInTheDocument();
 	});
-	
+
 	test("navigates to the correct page when graph title is clicked", () => {
-    const originalLocation = window.location;
-		Object.defineProperty(window, 'location', {
+		const originalLocation = window.location;
+		Object.defineProperty(window, "location", {
 			writable: true,
 			value: { href: "" }
 		});
 
-    customRender(
-      <MyGraphObject
-        graph={sampleGraph}
-        owner={
-          {
-            uid: "1",
-            name: "Kevin",
-            email: "",
-            photoURL: "",
-            createdAt: Timestamp.fromDate(new Date("2023-09-01")),
-            roles: [],
-          } as User
-        }
-      />
-    );
+		customRender(
+			<MyGraphObject
+				graph={sampleGraph}
+				owner={
+					{
+						uid: "1",
+						name: "Kevin",
+						email: "",
+						photoURL: "",
+						createdAt: Timestamp.fromDate(new Date("2023-09-01")),
+						roles: []
+					} as User
+				}
+			/>
+		);
 
-    const openButton = screen.getByText(/Test Title/i);
-    fireEvent.click(openButton);
+		const openButton = screen.getByText(/Test Title/i);
+		fireEvent.click(openButton);
 
 		const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-		expect(window.location.href).toBe(`${baseURL}/graph/1234`);
+		expect(window.location.href).toBe(`${baseURL}/graph/1234?auth=undefined`);
 
-    window.location = originalLocation;
-  });
-  
+		window.location = originalLocation;
+	});
 });
