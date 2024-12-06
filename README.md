@@ -15,7 +15,8 @@
 
 ### Useful Links
 - Try the application at [caspr.vercel.app](https://caspr.vercel.app/)
-- See the [application user guide](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing) for more detailed user instructions
+- See our demo video [here](https://www.youtube.com/watch?v=6aORwIygIAM)
+- This readme is geared towards developers and is meant to serve as the project's technical documentation. For user instructions and guidance, see our [Application User Guide](https://docs.google.com/document/d/1PY3aDcpMCG_7qnzSSssFF1nvCmY3Tb28pG5efoUcyBk/edit?usp=sharing)
 
 ## Application Preview
 
@@ -73,7 +74,8 @@
 #### Requirements for Running Locally
 - **Node.js**: Install Node.js from the [official website](https://nodejs.org/en).
 - **npm**: Comes with Node.js and is necessary for managing dependencies.
-
+- **Local environment configuration**: See the section below to ensure your local environment is configured properly for development.
+  
 #### Local Installation Steps
 - Clone the repository from the main branch:
   ```bash
@@ -87,11 +89,40 @@
   ```bash
   npm install
   ```
+- Add the .env file (see the Local Environment Configuration section below)
 - Start the development server:
   ```bash
   npm run dev
   ```
 - Access the app at [http://localhost:3000/](http://localhost:3000/).
+
+#### Local Environment Configuration
+Below is a list of the environment variables used in the project. Please reach out to a developer on the team to get the secret variables.
+
+```bash
+# Firebase configuration (public)
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyCVpcoqobwcNx37i4UqlvlnQQ5BiihdVU4
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=d-causal-visualization.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=d-causal-visualization
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=d-causal-visualization.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=252332401416
+NEXT_PUBLIC_FIREBASE_APP_ID=1:252332401416:web:68c696e3d17fc7308f82bd
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-KGPKJWZTD7
+
+# Firebase admin SDK credentials (secret)
+NEXT_FIREBASE_CLIENT_EMAIL=credential_here
+NEXT_FIREBASE_PRIVATE_KEY=credential_here
+NEXT_FIREBASE_DATABASE_URL=credential_here
+
+# Application URLs
+NEXT_PUBLIC_BASE_URL=http://localhost:3000/ 
+NEXT_PUBLIC_API_URL=http://localhost:3000/ 
+
+# Firebase collection names
+NEXT_FIREBASE_GRAPH_COLLECTION=graph_metadata 
+NEXT_FIREBASE_USER_COLLECTION=users 
+```
+
 
 #### Building for Production
 To prepare the app for production:
@@ -145,16 +176,11 @@ And Here are some ways in which you can contribute:
 
 We appreciate your contributions and look forward to collaborating with you to improve this project!
 
-## Deployment and Github Workflow
-
-Every update to the **main** branch goes through a series of verification and validation steps before mergeing. The Github workflow proceeds as follows
-1. Identify new features and bug fixes
-2. Create Jira ticket and determine designee and reviewers
-3. Crate Feature or Bug Fix Branch
-4. Initiate pull request and get at least 2 approvals
-5. Merge into main
-
-Due to permission conflicts, deployment is done on a identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
+## Deployment and Workflow
+Before code is pushed to the **main** branch, all pull requets must go through a series of verification and validation steps. The workflow proceeds as follows
+1. Make the change you'd like to make on your own branch
+2. Create a pull request, which developers will review
+3. Developers will merge and deploy at their discretion
 
 ## Licences
 - This project is distributed under the MIT License. See LICENSE.txt for more information. 
