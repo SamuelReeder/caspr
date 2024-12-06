@@ -3,7 +3,7 @@ import { screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import GraphSideBar from "../../src/components/GraphSideBar";
 import { NodeType, EdgeType } from "@/types";
-import data from "../../src/data/100nodes_example.json"; // Import the JSON data
+import data from "../../public/100_node_example.json"; // Import the JSON data
 import customRender from "@/test-utils/render";
 import { ViewProvider } from "@/context/ViewContext";
 
