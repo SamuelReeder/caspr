@@ -83,7 +83,7 @@
   ```
 - Navigate to the project directory:
   ```bash
-  cd frontend
+  cd app
   ```
 - Install dependencies:
   ```bash
