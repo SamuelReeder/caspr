@@ -176,16 +176,11 @@ And Here are some ways in which you can contribute:
 
 We appreciate your contributions and look forward to collaborating with you to improve this project!
 
-## Deployment and Github Workflow
-
-Every update to the **main** branch goes through a series of verification and validation steps before mergeing. The Github workflow proceeds as follows
-1. Identify new features and bug fixes
-2. Create Jira ticket and determine designee and reviewers
-3. Crate Feature or Bug Fix Branch
-4. Initiate pull request and get at least 2 approvals
-5. Merge into main
-
-Due to permission conflicts, deployment is done on a identical forked, private repository. For every milestone a new deployment is created via Vercel. Vercel, automatically detects commits into desired branches and creates a separate deployment. Note, separate `.env` file are used to seggregate production and development environements and privacy policies were adjusted to account for the production domain.
+## Deployment and Workflow
+Before code is pushed to the **main** branch, all pull requets must go through a series of verification and validation steps. The workflow proceeds as follows
+1. Make the change you'd like to make on your own branch
+2. Create a pull request, which developers will review
+3. Developers will merge and deploy at their discretion
 
 ## Licences
 - This project is distributed under the MIT License. See LICENSE.txt for more information. 
