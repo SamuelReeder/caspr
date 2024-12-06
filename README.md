@@ -89,7 +89,7 @@
   ```bash
   npm install
   ```
-- Add the .env file (see the Local Environment Configuration section below)
+- Add the `.env.local` file to the app folder (see the Local Environment Configuration section below)
 - Start the development server:
   ```bash
   npm run dev
@@ -97,7 +97,7 @@
 - Access the app at [http://localhost:3000/](http://localhost:3000/).
 
 #### Local Environment Configuration
-Below is a list of the environment variables used in the project. Please reach out to a developer on the team to get the secret variables.
+Below is a list of the environment variables used in the project. Add them to a `.env.local` folder inside the `/app` directory. Please reach out to a developer on the team to get the secret variables.
 
 ```bash
 # Firebase configuration (public)
