@@ -74,7 +74,8 @@
 #### Requirements for Running Locally
 - **Node.js**: Install Node.js from the [official website](https://nodejs.org/en).
 - **npm**: Comes with Node.js and is necessary for managing dependencies.
-
+- **Local environment configuration**: See the section below to ensure your local environment is configured properly for development.
+  
 #### Local Installation Steps
 - Clone the repository from the main branch:
   ```bash
@@ -88,11 +89,40 @@
   ```bash
   npm install
   ```
+- Add the .env file (see the Local Environment Configuration section below)
 - Start the development server:
   ```bash
   npm run dev
   ```
 - Access the app at [http://localhost:3000/](http://localhost:3000/).
+
+#### Local Environment Configuration
+Below is a list of the environment variables used in the project. Please reach out to a developer on the team to get the secret variables.
+
+```bash
+# Firebase configuration (public)
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyCVpcoqobwcNx37i4UqlvlnQQ5BiihdVU4
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=d-causal-visualization.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=d-causal-visualization
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=d-causal-visualization.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=252332401416
+NEXT_PUBLIC_FIREBASE_APP_ID=1:252332401416:web:68c696e3d17fc7308f82bd
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-KGPKJWZTD7
+
+# Firebase admin SDK credentials (secret)
+NEXT_FIREBASE_CLIENT_EMAIL=credential_here
+NEXT_FIREBASE_PRIVATE_KEY=credential_here
+NEXT_FIREBASE_DATABASE_URL=credential_here
+
+# Application URLs
+NEXT_PUBLIC_BASE_URL=http://localhost:3000/ 
+NEXT_PUBLIC_API_URL=http://localhost:3000/ 
+
+# Firebase collection names
+NEXT_FIREBASE_GRAPH_COLLECTION=graph_metadata 
+NEXT_FIREBASE_USER_COLLECTION=users 
+```
+
 
 #### Building for Production
 To prepare the app for production:
