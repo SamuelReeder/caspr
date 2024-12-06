@@ -3,6 +3,7 @@
 # dependencies
 
 frontend/node_modules/
+app/node_modules/
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -13,12 +14,16 @@ frontend/node_modules/
 # next.js
 frontend/.next/
 frontend/out/
+app/.next/
+app/out/
 
 # production
 frontend/build/
+app/build/
 
 # misc
 frontend/*.DS_Store
+app/*.DS_Store
 *.pem
 
 # debug
@@ -40,3 +45,5 @@ yarn-error.log*
 *.tsbuildinfo
 frontend/next-env.d.ts
 frontend/coverage
+app/next-env.d.ts
+app/coverage
